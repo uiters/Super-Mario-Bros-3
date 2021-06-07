@@ -13,6 +13,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 	CScene(id, filePath)
 {
 	key_handler = new CPlaySceneKeyHandler(this);
+	cam = Camera::GetInstance();
+	cam->SetCameraPosition(0, 0);
 }
 
 /*
@@ -245,15 +247,7 @@ void CPlayScene::Update(DWORD dt)
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return; 
 
-	// Update camera to follow mario
-	float cx, cy;
-	player->GetPosition(cx, cy);
-
-	CGame *game = CGame::GetInstance();
-	cx -= game->GetScreenWidth() / 2;
-	cy -= game->GetScreenHeight() / 2;
-
-	CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
+	cam->Update(dt, false, cxcount);
 }
 
 void CPlayScene::Render()
@@ -272,7 +266,7 @@ void CPlayScene::Unload()
 
 	objects.clear();
 	player = NULL;
-
+	Camera::GetInstance()->SetCameraPosition(0, 0);
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 }
 

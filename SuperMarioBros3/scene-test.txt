@@ -1,7 +1,7 @@
 # id	file_path	transparent_color_r	g	b
 [TEXTURES]
-0	Resources\mario.png	255	255	255
-20	Resources\misc.png	176	224	248
+0	Resources\Textures\mario.png	255	255	255
+20	Resources\Textures\misc.png	176	224	248
 
 
 # id	left	top	right	bottom	texture_id
