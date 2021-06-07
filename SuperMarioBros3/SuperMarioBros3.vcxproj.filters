@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Map Objects">
+      <UniqueIdentifier>{39d8ee2e-0fda-455e-b1ff-829b6b91a96c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map">
+      <UniqueIdentifier>{129a4625-593b-4a70-bf72-4f7b28e0811b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{422244ce-eb64-4cf6-8ad9-97f480fac665}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HUD">
+      <UniqueIdentifier>{8cbeb0d2-4de9-49c1-9cac-101beaafdde6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map Objects\Bricks">
+      <UniqueIdentifier>{59843b7e-6021-4508-91aa-6bc514188853}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map Objects\Enemies">
+      <UniqueIdentifier>{51a2e674-3df6-47e6-a4aa-e6e4f5191643}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map Objects\Items">
+      <UniqueIdentifier>{9abaada9-df27-4568-be86-eb4ee7b1e854}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map Objects\Others">
+      <UniqueIdentifier>{a33b3bb3-96ae-42de-abe0-e676c0462178}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map Objects\Player">
+      <UniqueIdentifier>{0eb4833e-9cc3-4c56-a8ad-1ccdb28e69f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map Objects\WorldMap">
+      <UniqueIdentifier>{35d352a8-9c1c-4ef7-bf10-d0c34385d7e4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Animations.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprites.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Textures.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Brick.cpp">
+      <Filter>Map Objects\Bricks</Filter>
+    </ClCompile>
+    <ClCompile Include="Goomba.cpp">
+      <Filter>Map Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Koopas.cpp">
+      <Filter>Map Objects\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Mario.cpp">
+      <Filter>Map Objects\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Map Objects\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="Portal.cpp">
+      <Filter>Map Objects\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="Font.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Brick.h">
+      <Filter>Map Objects\Bricks</Filter>
+    </ClInclude>
+    <ClInclude Include="Koopas.h">
+      <Filter>Map Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Goomba.h">
+      <Filter>Map Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Map Objects\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="Portal.h">
+      <Filter>Map Objects\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="Mario.h">
+      <Filter>Map Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyEventHandler.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Animations.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Header.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprites.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Textures.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Define.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="scene1.txt" />
+    <Text Include="scene2.txt" />
+    <Text Include="scene-test.txt" />
+    <Text Include="mario-sample.txt" />
+  </ItemGroup>
+</Project>
