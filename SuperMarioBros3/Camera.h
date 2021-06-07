@@ -26,6 +26,5 @@ public:
 	void Update(DWORD dt, int typeCamera, float& countx);
 	void Unload();
 	~Camera();
-
 };
 

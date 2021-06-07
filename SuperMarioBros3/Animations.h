@@ -19,13 +19,13 @@ public:
 	LPSPRITE GetSprite() { return sprite; }
 };
 
-typedef CAnimationFrame *LPANIMATION_FRAME;
+typedef CAnimationFrame* LPANIMATION_FRAME;
 
 class CAnimation
 {
 	DWORD lastFrameTime;
-	int currentFrame;
-	int defaultTime;
+	DWORD currentFrame;
+	DWORD defaultTime;
 	vector<LPANIMATION_FRAME> frames;
 public:
 	CAnimation(int defaultTime = 100) { this->defaultTime = defaultTime; lastFrameTime = -1; currentFrame = -1; }
@@ -34,11 +34,11 @@ public:
 	void Render(float x, float y, int alpha = 255);
 };
 
-typedef CAnimation *LPANIMATION;
+typedef CAnimation* LPANIMATION;
 
 class CAnimations
 {
-	static CAnimations * __instance;
+	static CAnimations* __instance;
 
 	unordered_map<int, LPANIMATION> animations;
 
@@ -47,7 +47,7 @@ public:
 	LPANIMATION Get(int id);
 	void Clear();
 
-	static CAnimations * GetInstance();
+	static CAnimations* GetInstance();
 };
 
 typedef vector<LPANIMATION> CAnimationSet;
@@ -59,15 +59,22 @@ typedef CAnimationSet* LPANIMATION_SET;
 */
 class CAnimationSets
 {
-	static CAnimationSets * __instance;
+	static CAnimationSets* __instance;
 
-	unordered_map<int, LPANIMATION_SET> animation_sets;
 
 public:
 	CAnimationSets();
 	void Add(int id, LPANIMATION_SET ani);
 	LPANIMATION_SET Get(unsigned int id);
-
-
-	static CAnimationSets * GetInstance();
+	unordered_map<int, LPANIMATION_SET> animation_sets;
+	void Clear()
+	{
+		for (auto x : animation_sets)
+		{
+			LPANIMATION_SET anis = x.second;
+			delete anis;
+		}
+		animation_sets.clear();
+	}
+	static CAnimationSets* GetInstance();
 };

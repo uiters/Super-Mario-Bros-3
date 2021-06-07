@@ -42,6 +42,7 @@ class CGame
 
 	unordered_map<int, LPSCENE> scenes;
 	int current_scene;
+	int pre_scene = -1;
 
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_SCENES(string line);
