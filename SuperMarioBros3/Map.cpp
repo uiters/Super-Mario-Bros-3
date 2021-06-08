@@ -2,6 +2,8 @@
 #include "Utils.h"
 #include "Game.h"
 #include "Define.h"
+#include "Mario.h"
+#include "PlayScene.h"
 CMap::CMap(int TileSetID, int TotalRowsOfMap, int TotalColumnsOfMap, int TotalRowsOfTileSet, int  TotalColumnsOfTileSet, int TotalTiles)
 {
 	TileSet = CTextures::GetInstance()->Get(TileSetID);
@@ -20,6 +22,7 @@ CMap::~CMap()
 
 void CMap::Render()
 {
+	Camera* cam = Camera::GetInstance();
 	float mx, my;
 	mx = cam->GetCameraPosition().x;
 	my = cam->GetCameraPosition().y;

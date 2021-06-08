@@ -63,17 +63,17 @@ D3DXVECTOR3 Camera::GetCameraPosition()
 
 void Camera::Update(DWORD dt, int typeCamera, float& countx)
 {
-	CGame* game = CGame::GetInstance();
 	// Update camera to follow mario
 	float cx, cy, mapheight, mapwidth;
 
-	mapheight = 4000;
-	mapwidth = 4000;
+	CMap* currentMap = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetMap();
 	CMario* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 
+	mapheight = currentMap->GetMapHeight();
+	mapwidth = currentMap->GetMapWidth();
 	player->GetPosition(cx, cy);
 	DebugOut(L"cx and cy = %d %d", cx, cy);
-	if (false)
+	if (false)// tail
 	{
 		if (player->nx > 0)
 			cx -= 8;

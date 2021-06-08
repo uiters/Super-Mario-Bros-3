@@ -1089,4 +1089,4 @@ Resources\Tilemap\world1-1.txt
 # Red FirePiranhaPlant
 72	7100	7101	7110	7111	1420
 [OBJECTS]
-Resources\Scene\World1-1\world1-1_Grid.txt
+Resources\Scene\World1-1\world1-1.txt

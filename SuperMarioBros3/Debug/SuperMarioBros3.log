@@ -1,0 +1,21 @@
+﻿  Animations.cpp
+D:\c++\new\Super-Mario-Bros-3\SuperMarioBros3\Animations.cpp(29,12): warning C4244: 'initializing': conversion from 'ULONGLONG' to 'DWORD', possible loss of data
+  Camera.cpp
+D:\c++\new\Super-Mario-Bros-3\SuperMarioBros3\Camera.cpp(51,20): warning C4018: '<': signed/unsigned mismatch
+D:\c++\new\Super-Mario-Bros-3\SuperMarioBros3\Camera.cpp(72,38): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\c++\new\Super-Mario-Bros-3\SuperMarioBros3\Camera.cpp(73,36): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\c++\new\Super-Mario-Bros-3\SuperMarioBros3\Camera.cpp(92,26): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\c++\new\Super-Mario-Bros-3\SuperMarioBros3\Camera.cpp(134,34): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\c++\new\Super-Mario-Bros-3\SuperMarioBros3\Camera.cpp(134,25): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Font.cpp
+  Map.cpp
+D:\c++\new\Super-Mario-Bros-3\SuperMarioBros3\Map.cpp(29,18): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+D:\c++\new\Super-Mario-Bros-3\SuperMarioBros3\Map.cpp(30,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+D:\c++\new\Super-Mario-Bros-3\SuperMarioBros3\Map.cpp(40,80): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\c++\new\Super-Mario-Bros-3\SuperMarioBros3\Map.cpp(40,41): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Map.h
+  main.cpp
+D:\c++\new\Super-Mario-Bros-3\SuperMarioBros3\main.cpp(117,19): warning C4244: 'initializing': conversion from 'ULONGLONG' to 'DWORD', possible loss of data
+D:\c++\new\Super-Mario-Bros-3\SuperMarioBros3\main.cpp(130,13): warning C4244: 'initializing': conversion from 'ULONGLONG' to 'DWORD', possible loss of data
+  Generating Code...
+  SuperMarioBros3.vcxproj -> D:\c++\new\Super-Mario-Bros-3\Debug\SuperMarioBros3.exe

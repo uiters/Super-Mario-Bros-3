@@ -1,6 +1,6 @@
 [SETTINGS]
 start	1
-#id		path					type		CameraMove
+#id		path					type		isCameraMove
 [SCENES]
 0	Resources\Scene\worldscene.txt	1				1
 1	Resources\Scene\World1-1\scene1.txt	2			0
