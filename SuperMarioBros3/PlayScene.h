@@ -10,7 +10,7 @@
 #include "Goomba.h"
 #include "Koopas.h"
 #include "Camera.h"
-#include "Map.h"
+#include "CMap.h"
 #include "Portal.h"
 
 #define GAMEDONE1_SPRITE_ID		50070

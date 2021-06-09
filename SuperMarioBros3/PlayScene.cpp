@@ -185,10 +185,112 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 			break;
 		case OBJECT_TYPE_GOOMBA:
 			obj = new CGoomba();
+			/*obj->SetTag(tag);
+			obj->SetType(MOVING);*/
 			break;
 		case OBJECT_TYPE_BRICK:
 			obj = new CBrick();
+			//obj->SetTag(tag);
+
 			break;
+		case OBJECT_TYPE_QUESTIONBRICK:
+			obj = new CBrick();
+
+			/*	obj = new CQuestionBrick(option_tag_1, option_tag_2);
+				if (tokens.size() >= 8)
+				{
+					int nboitem = atoi(tokens[7].c_str());
+					if (nboitem > 0)
+						((CQuestionBrick*)obj)->items = nboitem;
+				}
+				((CQuestionBrick*)obj)->start_y = y;*/
+			break;
+		case OBJECT_TYPE_BREAKABLEBRICK:
+			/*	obj = new CBreakableBrick();*/
+			obj = new CBrick();
+
+			break;
+		case OBJECT_TYPE_KOOPAS:
+			obj = new CKoopas();
+			/*obj->SetTag(tag);
+			((CKoopas*)obj)->start_tag = tag;
+			obj->SetType(MOVING);
+			((CKoopas*)obj)->start_x = x;
+			((CKoopas*)obj)->start_y = y;*/
+			break;
+		case OBJECT_TYPE_BOOMERANGBROTHER:
+			obj = new CBrick();
+
+			/*obj = new CBoomerangBrother();
+			obj->SetType(MOVING);
+			((CBoomerangBrother*)obj)->start_x = x;*/
+			break;
+		case OBJECT_TYPE_BLOCK:
+			/*	obj = new CBlock();*/
+			obj = new CBrick();
+
+			break;
+		case OBJECT_TYPE_ABYSS:
+			/*obj = new CAbyss();*/
+			obj = new CBrick();
+
+			break;
+		case OBJECT_TYPE_PIRANHAPLANT:
+			/*obj = new CPiranhaPlant();
+			((CPiranhaPlant*)obj)->SetLimitY(y);
+			obj->SetType(MOVING);*/
+			obj = new CBrick();
+
+			break;
+		case OBJECT_TYPE_FIREPIRANHAPLANT:
+			/*obj = new CFirePiranhaPlant(tag);
+			((CFirePiranhaPlant*)obj)->SetLimitY(y);
+			obj->SetType(MOVING);*/
+			obj = new CBrick();
+
+			break;
+		case OBJECT_TYPE_COIN:
+			/*obj = new CCoin(tag);
+			obj->SetType(IGNORE);*/
+			obj = new CBrick();
+
+			break;
+		case OBJECT_TYPE_CARD:
+			/*	obj = new CCard();*/
+			obj = new CBrick();
+
+			break;
+		case OBJECT_TYPE_FLOATINGWOOD:
+			/*obj = new CFloatingWood();*/
+			obj = new CBrick();
+
+			break;
+		case OBJECT_TYPE_PORTAL:
+		{
+			/*int scene_id = atoi(tokens[4].c_str());
+			int isToExtraScene = atoi(tokens[5].c_str());
+			float start_x = 0, start_y = 0;
+			start_x = atoi(tokens[6].c_str());
+			start_y = atoi(tokens[7].c_str());
+			obj = new CPortal(scene_id, start_x, start_y);
+			int pu = atoi(tokens[8].c_str());
+			if (pu == 1)
+				((CPortal*)obj)->pipeUp = true;
+			else
+				((CPortal*)obj)->pipeUp = false;
+			obj->SetTag(isToExtraScene);*/
+			obj = new CBrick();
+
+			break;
+		}
+		case GRID:
+		{
+			int gridCols = atoi(tokens[1].c_str());
+			int gridRows = atoi(tokens[2].c_str());
+			//grid = new Grid(gridCols, gridRows);
+			DebugOut(L"\nParseSection_GRID: Done");
+			break;
+		}
 		default:
 			DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 			return;
@@ -201,8 +303,17 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 			obj->SetAnimationSet(ani_set);
 			objects.push_back(obj);
 		}
+
+		// Insert objects to grid from file
+		if (object_type != OBJECT_TYPE_MARIO && object_type != GRID)
+		{
+			int gridCol = (int)atoi(tokens[tokens.size() - 1].c_str());
+			int gridRow = (int)atoi(tokens[tokens.size() - 2].c_str());
+			//Unit* unit = new Unit(grid, obj, gridRow, gridCol);
+		}
 	}
 	f.close();
+	//grid->Out();
 }
 
 void CPlayScene::_ParseSection_TILEMAP_DATA(string line)
@@ -290,26 +401,29 @@ void CPlayScene::Update(DWORD dt)
 {
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a more organized way 
-	if (player == NULL) return;
-	vector<LPGAMEOBJECT> coObjects;
-	coObjects.clear();
-	for (size_t i = 0; i < objects.size(); i++)
-		coObjects.push_back(objects[i]);
 
-	player->Update(dt, &coObjects);
+	vector<LPGAMEOBJECT> coObjects;
+	for (size_t i = 1; i < objects.size(); i++)
+	{
+		coObjects.push_back(objects[i]);
+	}
+
 	for (size_t i = 0; i < objects.size(); i++)
+	{
 		objects[i]->Update(dt, &coObjects);
+	}
+
+	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
+	if (player == NULL) return;
 
 	cam->Update(dt, isCameraAutoMove, cxcount);
 }
 
 void CPlayScene::Render()
 {
-	if (player == NULL) return;
 	current_map->Render();
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
-	player->Render();
 }
 
 /*

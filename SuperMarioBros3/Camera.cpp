@@ -41,21 +41,6 @@ void Camera::Setwidthheight(int x, int y)
 	this->height = y;
 }
 
-std::vector<LPGAMEOBJECT> Camera::GetlistinCamera(vector<LPGAMEOBJECT> obj)
-{
-	vector<LPGAMEOBJECT> list;
-	list.clear();
-	float x = cameraPosition.x;
-	float y = cameraPosition.y;
-
-	for (int i = 0; i < obj.size(); i++)
-	{
-		if (obj.at(i)->x > x && obj.at(i)->x <x + width && obj.at(i)->y >y && obj.at(i)->y < y + height)
-			list.push_back(obj.at(i));
-	}
-	return list;
-}
-
 D3DXVECTOR3 Camera::GetCameraPosition()
 {
 	return this->cameraPosition;
@@ -63,17 +48,19 @@ D3DXVECTOR3 Camera::GetCameraPosition()
 
 void Camera::Update(DWORD dt, int typeCamera, float& countx)
 {
+	CGame* game = CGame::GetInstance();
 	// Update camera to follow mario
-	float cx, cy, mapheight, mapwidth;
+	float cx, cy, mapHeight, mapWidth;
+
 
 	CMap* currentMap = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetMap();
 	CMario* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-
-	mapheight = currentMap->GetMapHeight();
-	mapwidth = currentMap->GetMapWidth();
+	mapHeight = currentMap->GetMapHeight();
+	mapWidth = currentMap->GetMapWidth();
+	//mapHeight = 4000;  mapWidth = 4000;
 	player->GetPosition(cx, cy);
 	DebugOut(L"cx and cy = %d %d", cx, cy);
-	if (false)// tail
+	if (false)
 	{
 		if (player->nx > 0)
 			cx -= 8;
@@ -84,7 +71,7 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 
 	if (typeCamera)
 	{
-		if (pos.x > mapwidth - SCREEN_WIDTH - 1)
+		if (pos.x > mapWidth - SCREEN_WIDTH - 1)
 			return;
 		countx = countx + CAMERA_SPEED_X * dt;
 		cx = countx;
@@ -94,12 +81,12 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 	}
 	else
 	{
-		if (mapwidth > SCREEN_WIDTH) {
+		if (mapWidth > SCREEN_WIDTH) {
 			if (cx + 5 < SCREEN_WIDTH / 2) {
 				cx = pos.x;
 			}
-			else if (cx + SCREEN_WIDTH / 2 > mapwidth - 1) {
-				cx = mapwidth - SCREEN_WIDTH;
+			else if (cx + SCREEN_WIDTH / 2 > mapWidth - 1) {
+				cx = mapWidth - SCREEN_WIDTH;
 			}
 			else {
 				cx = cx + 5 + SCREEN_WIDTH / 2 - SCREEN_WIDTH;
@@ -109,24 +96,24 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 			cx = 0;
 		}
 
-		if (mapheight > SCREEN_HEIGHT)
+		if (mapHeight > SCREEN_HEIGHT)
 		{
 			if (cy < SCREEN_HEIGHT - 32)
 			{
 				cy = 0;
 			}
-			else if (cy > mapheight - SCREEN_HEIGHT)
+			else if (cy > mapHeight - SCREEN_HEIGHT)
 			{
-				cy = mapheight - SCREEN_HEIGHT + 32;
+				cy = mapHeight - SCREEN_HEIGHT + 32;
 			}
-			else //if (cy < mapheight - SCREEN_HEIGHT)
+			else //if (cy < mapHeight - SCREEN_HEIGHT)
 			{
 				cy = cy - SCREEN_HEIGHT / 2 + 32;
 			}
 		}
 		else
 		{
-			cy = mapheight - SCREEN_HEIGHT;
+			cy = mapHeight - SCREEN_HEIGHT;
 		}
 		if (cy < 0) cy = 0;
 		//cy -= SCREEN_HEIGHT / 2;

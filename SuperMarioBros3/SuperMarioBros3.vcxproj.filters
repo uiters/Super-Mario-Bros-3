@@ -94,17 +94,14 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Map.cpp">
-      <Filter>Map</Filter>
-    </ClCompile>
-    <ClCompile Include="Map.h">
-      <Filter>Map</Filter>
-    </ClCompile>
     <ClCompile Include="WorldScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="IntroScene.cpp">
       <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="CMap.cpp">
+      <Filter>Map</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -165,11 +162,8 @@
     <ClInclude Include="IntroScene.h">
       <Filter>Scene</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="scene1.txt" />
-    <Text Include="scene2.txt" />
-    <Text Include="scene-test.txt" />
-    <Text Include="mario-sample.txt" />
+    <ClInclude Include="CMap.h">
+      <Filter>Map</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

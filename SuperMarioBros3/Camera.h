@@ -21,7 +21,6 @@ public:
 	D3DXVECTOR3 GetPositionInCamera(D3DXVECTOR3 position);
 	void SetCameraPosition(float x, float y);
 	void Setwidthheight(int x, int y);
-	std::vector<LPGAMEOBJECT> GetlistinCamera(vector<LPGAMEOBJECT> obj);
 	D3DXVECTOR3 GetCameraPosition();
 	void Update(DWORD dt, int typeCamera, float& countx);
 	void Unload();
