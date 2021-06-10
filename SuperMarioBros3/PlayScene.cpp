@@ -184,6 +184,7 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 			DebugOut(L"[INFO] Player object created!\n");
 			break;
 		case OBJECT_TYPE_GOOMBA:
+
 			obj = new CGoomba();
 			/*obj->SetTag(tag);
 			obj->SetType(MOVING);*/
@@ -211,7 +212,9 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 
 			break;
 		case OBJECT_TYPE_KOOPAS:
-			obj = new CKoopas();
+			obj = new CBrick();
+
+			//obj = new CKoopas();
 			/*obj->SetTag(tag);
 			((CKoopas*)obj)->start_tag = tag;
 			obj->SetType(MOVING);
@@ -227,7 +230,7 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 			break;
 		case OBJECT_TYPE_BLOCK:
 			/*	obj = new CBlock();*/
-			obj = new CBrick();
+			obj = new CBlock();
 
 			break;
 		case OBJECT_TYPE_ABYSS:
@@ -301,6 +304,9 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 			obj->SetPosition(x, y);
 			LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 			obj->SetAnimationSet(ani_set);
+			
+
+			// except mario
 			objects.push_back(obj);
 		}
 
@@ -399,31 +405,45 @@ void CPlayScene::Load()
 
 void CPlayScene::Update(DWORD dt)
 {
-	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
-	// TO-DO: This is a "dirty" way, need a more organized way 
-
-	vector<LPGAMEOBJECT> coObjects;
-	for (size_t i = 1; i < objects.size(); i++)
-	{
-		coObjects.push_back(objects[i]);
-	}
-
-	for (size_t i = 0; i < objects.size(); i++)
-	{
-		objects[i]->Update(dt, &coObjects);
-	}
-
-	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return;
 
-	cam->Update(dt, isCameraAutoMove, cxcount);
+	vector<LPGAMEOBJECT> coObjects;
+	coObjects.clear();
+	for (size_t i = 0; i < objects.size(); i++)
+		coObjects.push_back(objects[i]);
+
+	//stop the world when player is transforming/lost control
+	if (player->IsLostControl())
+		player->Update(0, &coObjects);
+	else
+	{
+		player->Update(dt, &coObjects);
+		for (size_t i = 0; i < objects.size(); i++)
+		{
+			objects[i]->Update(dt, &coObjects);
+			//hud->Update(dt, &coObjects);
+		}
+	}
+	//get map and screen information
+	if (!player->IsLostControl())
+	{
+		cam->Update(dt, isCameraAutoMove, cxcount);
+	}
 }
 
 void CPlayScene::Render()
 {
+	if (player == NULL) return;
 	current_map->Render();
+	player->Render();
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
+	/*for (int i = 0; i < objectsRenderFirst.size(); i++)
+		objectsRenderFirst[i]->Render();
+	for (int i = 0; i < objectsRenderSecond.size(); i++)
+		objectsRenderSecond[i]->Render();
+	for (int i = 0; i < objectsRenderThird.size(); i++)
+		objectsRenderThird[i]->Render();*/
 }
 
 /*
@@ -435,20 +455,43 @@ void CPlayScene::Unload()
 		delete objects[i];
 
 	objects.clear();
+	//objectsRenderFirst.clear();
+	//objectsRenderSecond.clear();
+	//objectsRenderThird.clear();
 	player = NULL;
 	Camera::GetInstance()->SetCameraPosition(0, 0);
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
+
 }
 
 void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 {
-	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
+	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 
 	CMario* mario = ((CPlayScene*)scene)->GetPlayer();
+
+	if (mario == NULL || mario->IsLostControl()) return;
+
 	switch (KeyCode)
 	{
 	case DIK_SPACE:
-		mario->SetState(MARIO_STATE_JUMP);
+		if (mario->isGround)
+			mario->SetState(MARIO_STATE_JUMPING);
+		break;
+	case DIK_C:
+		mario->SetState(MARIO_STATE_SHOOTING);
+		break;
+	case DIK_1:
+		mario->Transform(CMario::Mode::Small);
+		break;
+	case DIK_2:
+		mario->Transform(CMario::Mode::Super);
+		break;
+	case DIK_3:
+		mario->Transform(CMario::Mode::Fire);
+		break;
+	case DIK_4:
+		mario->Transform(CMario::Mode::Tanooki);
 		break;
 	case DIK_A:
 		mario->Reset();
@@ -460,13 +503,20 @@ void CPlaySceneKeyHandler::KeyState(BYTE* states)
 {
 	CGame* game = CGame::GetInstance();
 	CMario* mario = ((CPlayScene*)scene)->GetPlayer();
+	//DebugOut(L"[INFO] KeyDown: %d\n", mario->GetState());
 
-	// disable control key when Mario die 
-	if (mario->GetState() == MARIO_STATE_DIE) return;
-	if (game->IsKeyDown(DIK_RIGHT))
-		mario->SetState(MARIO_STATE_WALKING_RIGHT);
+	//disable control key when Mario die 
+	if (mario == NULL || mario->IsLostControl()) return;
+	//check current key state
+	if (game->IsKeyDown(DIK_DOWN))
+		mario->SetState(MARIO_STATE_SITTING);
+
 	else if (game->IsKeyDown(DIK_LEFT))
 		mario->SetState(MARIO_STATE_WALKING_LEFT);
+
+	else if (game->IsKeyDown(DIK_RIGHT))
+		mario->SetState(MARIO_STATE_WALKING_RIGHT);
 	else
 		mario->SetState(MARIO_STATE_IDLE);
+
 }

@@ -51,15 +51,11 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 	CGame* game = CGame::GetInstance();
 	// Update camera to follow mario
 	float cx, cy, mapHeight, mapWidth;
-
-
 	CMap* currentMap = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetMap();
 	CMario* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	mapHeight = currentMap->GetMapHeight();
 	mapWidth = currentMap->GetMapWidth();
-	//mapHeight = 4000;  mapWidth = 4000;
 	player->GetPosition(cx, cy);
-	DebugOut(L"cx and cy = %d %d", cx, cy);
 	if (false)
 	{
 		if (player->nx > 0)

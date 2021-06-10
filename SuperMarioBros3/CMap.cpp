@@ -14,7 +14,7 @@ CMap::CMap(int TileSetID, int TotalRowsOfMap, int TotalColumnsOfMap, int TotalRo
 	this->TotalColumnsOfTileSet = TotalColumnsOfTileSet;
 	this->TotalTiles = TotalTiles;
 	TileMap = NULL;
-	DebugOut(L"CMap contructor");
+	//DebugOut(L"CMap contructor");
 }
 
 CMap::~CMap()
@@ -40,13 +40,13 @@ void CMap::Render()
 			if (index < TotalTiles)
 				Tiles.at(index)->Draw(CurrentColumn * TILE_WIDTH, CurrentRow * TILE_HEIGHT - HUD_HEIGHT);
 		}
-	DebugOut(L"CMap Render");
+	//DebugOut(L"CMap Render");
 
 }
 void CMap::SetTileMapData(int** TileMapData)
 {
 	TileMap = TileMapData;
-	DebugOut(L"CMap SetTileMapData");
+	//DebugOut(L"CMap SetTileMapData");
 
 }
 
@@ -63,20 +63,20 @@ void CMap::ExtractTileFromTileSet()
 		LPSPRITE NewTile = new CSprite(TileNum, left, top, right, bottom, TileSet); // get tile from tileset
 		this->Tiles.push_back(NewTile);
 	}
-	DebugOut(L"CMap ExtractTileFromTileSet");
+	//DebugOut(L"CMap ExtractTileFromTileSet");
 
 }
 
 int CMap::GetMapWidth()
 {
-	DebugOut(L"CMap GetMapWidth");
+	//DebugOut(L"CMap GetMapWidth");
 
 	return TotalColumnsOfMap * TILE_WIDTH;
 }
 
 int CMap::GetMapHeight()
 {
-	DebugOut(L"CMap GetMapHeight");
+	//DebugOut(L"CMap GetMapHeight");
 
 	return TotalRowsOfMap * TILE_HEIGHT;
 }

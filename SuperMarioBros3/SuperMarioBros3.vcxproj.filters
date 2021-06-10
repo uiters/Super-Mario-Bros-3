@@ -103,6 +103,12 @@
     <ClCompile Include="CMap.cpp">
       <Filter>Map</Filter>
     </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Block.cpp">
+      <Filter>Map Objects\Bricks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Brick.h">
@@ -164,6 +170,12 @@
     </ClInclude>
     <ClInclude Include="CMap.h">
       <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Block.h">
+      <Filter>Map Objects\Bricks</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
