@@ -290,7 +290,7 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 		{
 			int gridCols = atoi(tokens[1].c_str());
 			int gridRows = atoi(tokens[2].c_str());
-			//grid = new Grid(gridCols, gridRows);
+			grid = new Grid(gridCols, gridRows);
 			DebugOut(L"\nParseSection_GRID: Done");
 			break;
 		}
@@ -316,10 +316,11 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 			int gridCol = (int)atoi(tokens[tokens.size() - 1].c_str());
 			int gridRow = (int)atoi(tokens[tokens.size() - 2].c_str());
 			//Unit* unit = new Unit(grid, obj, gridRow, gridCol);
+			PushBack(obj);
 		}
 	}
 	f.close();
-	//grid->Out();
+	grid->Out();
 }
 
 void CPlayScene::_ParseSection_TILEMAP_DATA(string line)
@@ -365,6 +366,7 @@ void CPlayScene::Load()
 		if (line[0] == '#') continue;	// skip comment lines	
 
 		if (line == "[TEXTURES]") { section = SCENE_SECTION_TEXTURES; continue; }
+
 		if (line == "[SPRITES]") {
 			section = SCENE_SECTION_SPRITES; continue;
 		}
@@ -402,13 +404,44 @@ void CPlayScene::Load()
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 }
+void CPlayScene::GetObjectFromGrid()
+{
+	units.clear();
+	objects.clear();
 
+
+	cam = Camera::GetInstance();
+	float camX, camY;
+
+	camX = cam->GetCameraPosition().x;
+	camY = cam->GetCameraPosition().y;
+
+	grid->Get(camX, camY, units);
+
+	for (UINT i = 0; i < units.size(); i++)
+	{
+		LPGAMEOBJECT obj = units[i]->GetObj();
+		objects.push_back(obj);
+		
+	}
+}
+void CPlayScene::UpdateGrid()
+{
+	for (unsigned int i = 0; i < units.size(); i++)
+	{
+		LPGAMEOBJECT obj = units[i]->GetObj();
+		float newPosX, newPosY;
+		obj->GetPosition(newPosX, newPosY);
+		units[i]->Move(newPosX, newPosY);
+	}
+}
 void CPlayScene::Update(DWORD dt)
 {
 	if (player == NULL) return;
 
 	vector<LPGAMEOBJECT> coObjects;
 	coObjects.clear();
+	GetObjectFromGrid();
 	for (size_t i = 0; i < objects.size(); i++)
 		coObjects.push_back(objects[i]);
 
@@ -451,6 +484,10 @@ void CPlayScene::Render()
 */
 void CPlayScene::Unload()
 {
+	if (grid != nullptr)
+		grid->ClearAll();
+	if (player != nullptr)
+		delete player;
 	for (int i = 0; i < objects.size(); i++)
 		delete objects[i];
 
@@ -459,6 +496,7 @@ void CPlayScene::Unload()
 	//objectsRenderSecond.clear();
 	//objectsRenderThird.clear();
 	player = NULL;
+	grid = nullptr;
 	Camera::GetInstance()->SetCameraPosition(0, 0);
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 

@@ -13,6 +13,7 @@
 #include "Camera.h"
 #include "CMap.h"
 #include "Portal.h"
+#include "Grid.h"
 
 #define GAMEDONE1_SPRITE_ID		50070
 #define GAMEDONE2_SPRITE_ID		50071
@@ -31,6 +32,9 @@ protected:
 	CMario *player = NULL;					// A play scene has to have player, right? 
 	CMap* current_map = NULL;
 	vector<LPGAMEOBJECT> objects;
+	vector<Unit*> units;
+	Grid* grid;
+
 	//Camera
 	Camera* cam ;
 	float cxcount = 0;
@@ -53,6 +57,15 @@ public:
 
 	CMario * GetPlayer() { return player; } 
 	CMap* GetMap() { return current_map; }
+	Grid* GetGrid() { return grid; }
+	void PushBack(CGameObject* obj)
+	{
+		Unit* unit = new Unit(grid, obj, obj->x, obj->y);
+	}
+
+	//grid
+	void GetObjectFromGrid();
+	void UpdateGrid();
 	//friend class CPlaySceneKeyHandler;
 };
 
