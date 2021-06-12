@@ -32,6 +32,7 @@ protected:
 	CMario *player = NULL;					// A play scene has to have player, right? 
 	CMap* current_map = NULL;
 	vector<LPGAMEOBJECT> objects;
+	//Grid
 	vector<Unit*> units;
 	Grid* grid;
 
@@ -58,14 +59,7 @@ public:
 	CMario * GetPlayer() { return player; } 
 	CMap* GetMap() { return current_map; }
 	Grid* GetGrid() { return grid; }
-	void PushBack(CGameObject* obj)
-	{
-		Unit* unit = new Unit(grid, obj, obj->x, obj->y);
-	}
 
-	//grid
-	void GetObjectFromGrid();
-	void UpdateGrid();
 	//friend class CPlaySceneKeyHandler;
 };
 

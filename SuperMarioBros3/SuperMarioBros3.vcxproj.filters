@@ -148,6 +148,12 @@
     <ClCompile Include="Switch.cpp">
       <Filter>Map Objects\Items</Filter>
     </ClCompile>
+    <ClCompile Include="Abyss.cpp">
+      <Filter>Map Objects\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="Card.cpp">
+      <Filter>Map Objects\Others</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Brick.h">
@@ -251,6 +257,12 @@
     </ClInclude>
     <ClInclude Include="Coin.h">
       <Filter>Map Objects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Abyss.h">
+      <Filter>Map Objects\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="Card.h">
+      <Filter>Map Objects\Others</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

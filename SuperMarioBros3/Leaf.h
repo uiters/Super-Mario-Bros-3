@@ -1,6 +1,6 @@
 #pragma once
 #include "GameObject.h"
-class Leaf : public CGameObject
+class CLeaf : public CGameObject
 {
 };
 

@@ -46,9 +46,8 @@ public:
 	void Add(Unit* unit);
 	void Add(Unit* unit, int gridRow, int gridCol);
 	void Move(Unit* unit, float x, float y);
-	void Get(float cam_x, float cam_y, vector<Unit*>& listUnits);
-	void GetObjectFromGrid(Camera* cam, Unit* units);
-	void UpdateGrid(vector<Unit*> units, Unit* others);
+	void Get(Camera* cam, vector<Unit*>& listUnits);
+	void UpdateGrid(vector<Unit*> &units);
 	void Out();
 	void ClearAll();
 };

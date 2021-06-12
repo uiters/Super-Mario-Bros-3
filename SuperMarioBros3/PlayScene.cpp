@@ -1,7 +1,27 @@
 #include <iostream>
 #include <fstream>
 
+#include "Switch.h"
+#include "Block.h"
+#include "Card.h"
+#include "Abyss.h"
+#include "Portal.h"
+#include "BoomerangBro.h"
+#include "BreakableBrick.h"
+#include "Brick.h"
+#include "Coin.h"
+#include "Define.h"
+#include "FirePlant.h"
+#include "Leaf.h"
+#include "MushRoom.h"
+#include "Plant.h"
 #include "PlayScene.h"
+#include "Portal.h"
+#include "QuestionBrick.h"
+#include "Sprites.h"
+#include "Textures.h"
+#include "Utils.h"
+
 
 using namespace std;
 
@@ -184,37 +204,30 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 			DebugOut(L"[INFO] Player object created!\n");
 			break;
 		case OBJECT_TYPE_GOOMBA:
-
 			obj = new CGoomba();
-			/*obj->SetTag(tag);
-			obj->SetType(MOVING);*/
+			obj->SetTag(tag);
+			obj->SetType(MOVING);
 			break;
 		case OBJECT_TYPE_BRICK:
 			obj = new CBrick();
-			//obj->SetTag(tag);
-
+			obj->SetTag(tag);
 			break;
 		case OBJECT_TYPE_QUESTIONBRICK:
-			obj = new CBrick();
-
-			/*	obj = new CQuestionBrick(option_tag_1, option_tag_2);
-				if (tokens.size() >= 8)
-				{
-					int nboitem = atoi(tokens[7].c_str());
-					if (nboitem > 0)
-						((CQuestionBrick*)obj)->items = nboitem;
-				}
-				((CQuestionBrick*)obj)->start_y = y;*/
+			obj = new CQuestionBrick();
+			/*obj = new CQuestionBrick(option_tag_1, option_tag_2);
+			if (tokens.size() >= 8)
+			{
+				int nboitem = atoi(tokens[7].c_str());
+				if (nboitem > 0)
+					((CQuestionBrick*)obj)->items = nboitem;
+			}
+			((CQuestionBrick*)obj)->start_y = y;*/
 			break;
 		case OBJECT_TYPE_BREAKABLEBRICK:
-			/*	obj = new CBreakableBrick();*/
-			obj = new CBrick();
-
+			obj = new CBreakableBrick();
 			break;
 		case OBJECT_TYPE_KOOPAS:
-			obj = new CBrick();
-
-			//obj = new CKoopas();
+			obj = new CKoopas();
 			/*obj->SetTag(tag);
 			((CKoopas*)obj)->start_tag = tag;
 			obj->SetType(MOVING);
@@ -222,50 +235,37 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 			((CKoopas*)obj)->start_y = y;*/
 			break;
 		case OBJECT_TYPE_BOOMERANGBROTHER:
-			obj = new CBrick();
+			obj = new CBoomerangBro();
 
 			/*obj = new CBoomerangBrother();
 			obj->SetType(MOVING);
 			((CBoomerangBrother*)obj)->start_x = x;*/
 			break;
 		case OBJECT_TYPE_BLOCK:
-			/*	obj = new CBlock();*/
 			obj = new CBlock();
-
 			break;
 		case OBJECT_TYPE_ABYSS:
-			/*obj = new CAbyss();*/
-			obj = new CBrick();
-
+			obj = new CAbyss();
 			break;
 		case OBJECT_TYPE_PIRANHAPLANT:
-			/*obj = new CPiranhaPlant();
-			((CPiranhaPlant*)obj)->SetLimitY(y);
+			obj = new CPlant();
+			/*((CPiranhaPlant*)obj)->SetLimitY(y);
 			obj->SetType(MOVING);*/
-			obj = new CBrick();
 
 			break;
 		case OBJECT_TYPE_FIREPIRANHAPLANT:
-			/*obj = new CFirePiranhaPlant(tag);
-			((CFirePiranhaPlant*)obj)->SetLimitY(y);
+			obj = new CFirePlant(tag);
+			/*((CFirePiranhaPlant*)obj)->SetLimitY(y);
 			obj->SetType(MOVING);*/
-			obj = new CBrick();
 
 			break;
 		case OBJECT_TYPE_COIN:
-			/*obj = new CCoin(tag);
-			obj->SetType(IGNORE);*/
-			obj = new CBrick();
+			obj = new CCoin(tag);
+			/*obj->SetType(IGNORE);*/
 
 			break;
 		case OBJECT_TYPE_CARD:
-			/*	obj = new CCard();*/
-			obj = new CBrick();
-
-			break;
-		case OBJECT_TYPE_FLOATINGWOOD:
-			/*obj = new CFloatingWood();*/
-			obj = new CBrick();
+				obj = new CCard();
 
 			break;
 		case OBJECT_TYPE_PORTAL:
@@ -282,7 +282,7 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 			else
 				((CPortal*)obj)->pipeUp = false;
 			obj->SetTag(isToExtraScene);*/
-			obj = new CBrick();
+			obj = new CPortal();
 
 			break;
 		}
@@ -304,19 +304,13 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 			obj->SetPosition(x, y);
 			LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 			obj->SetAnimationSet(ani_set);
-			
-
-			// except mario
-			objects.push_back(obj);
 		}
-
 		// Insert objects to grid from file
 		if (object_type != OBJECT_TYPE_MARIO && object_type != GRID)
 		{
 			int gridCol = (int)atoi(tokens[tokens.size() - 1].c_str());
 			int gridRow = (int)atoi(tokens[tokens.size() - 2].c_str());
-			//Unit* unit = new Unit(grid, obj, gridRow, gridCol);
-			PushBack(obj);
+			Unit* unit = new Unit(grid, obj, gridRow, gridCol);
 		}
 	}
 	f.close();
@@ -404,64 +398,42 @@ void CPlayScene::Load()
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 }
-void CPlayScene::GetObjectFromGrid()
-{
-	units.clear();
-	objects.clear();
 
+void CPlayScene::Update(DWORD dt)
+{
+	if (player == NULL) return;
 
 	cam = Camera::GetInstance();
-	float camX, camY;
-
-	camX = cam->GetCameraPosition().x;
-	camY = cam->GetCameraPosition().y;
-
-	grid->Get(camX, camY, units);
+	vector<LPGAMEOBJECT> coObjects;
+	coObjects.clear();
+	units.clear();
+	objects.clear();
+	grid->Get(cam, units);
 
 	for (UINT i = 0; i < units.size(); i++)
 	{
 		LPGAMEOBJECT obj = units[i]->GetObj();
 		objects.push_back(obj);
-		
-	}
-}
-void CPlayScene::UpdateGrid()
-{
-	for (unsigned int i = 0; i < units.size(); i++)
-	{
-		LPGAMEOBJECT obj = units[i]->GetObj();
-		float newPosX, newPosY;
-		obj->GetPosition(newPosX, newPosY);
-		units[i]->Move(newPosX, newPosY);
-	}
-}
-void CPlayScene::Update(DWORD dt)
-{
-	if (player == NULL) return;
 
-	vector<LPGAMEOBJECT> coObjects;
-	coObjects.clear();
-	GetObjectFromGrid();
+	}
 	for (size_t i = 0; i < objects.size(); i++)
 		coObjects.push_back(objects[i]);
 
-	//stop the world when player is transforming/lost control
-	if (player->IsLostControl())
-		player->Update(0, &coObjects);
-	else
+	//get map and screen information
+	player->Update(dt, &coObjects);
+	if (!player->IsLostControl())
 	{
-		player->Update(dt, &coObjects);
 		for (size_t i = 0; i < objects.size(); i++)
 		{
 			objects[i]->Update(dt, &coObjects);
 			//hud->Update(dt, &coObjects);
 		}
-	}
-	//get map and screen information
-	if (!player->IsLostControl())
-	{
 		cam->Update(dt, isCameraAutoMove, cxcount);
 	}
+	else 
+		cam->Update(dt, true, cxcount);
+	
+	grid->UpdateGrid(units);
 }
 
 void CPlayScene::Render()
@@ -470,13 +442,9 @@ void CPlayScene::Render()
 	current_map->Render();
 	player->Render();
 	for (int i = 0; i < objects.size(); i++)
+	{
 		objects[i]->Render();
-	/*for (int i = 0; i < objectsRenderFirst.size(); i++)
-		objectsRenderFirst[i]->Render();
-	for (int i = 0; i < objectsRenderSecond.size(); i++)
-		objectsRenderSecond[i]->Render();
-	for (int i = 0; i < objectsRenderThird.size(); i++)
-		objectsRenderThird[i]->Render();*/
+	}
 }
 
 /*
@@ -488,14 +456,12 @@ void CPlayScene::Unload()
 		grid->ClearAll();
 	if (player != nullptr)
 		delete player;
-	for (int i = 0; i < objects.size(); i++)
-		delete objects[i];
 
 	objects.clear();
-	//objectsRenderFirst.clear();
-	//objectsRenderSecond.clear();
-	//objectsRenderThird.clear();
-	player = NULL;
+	units.clear();
+
+	current_map = nullptr;
+	player = nullptr;
 	grid = nullptr;
 	Camera::GetInstance()->SetCameraPosition(0, 0);
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);

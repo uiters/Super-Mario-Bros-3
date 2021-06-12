@@ -6,7 +6,7 @@
 #define CAMERA_WIDTH 280
 #define CAMERA_HEIGHT 160
 
-#define CAMERA_SPEED_X	0.02f
+#define CAMERA_SPEED_X	0.05f
 
 class Camera
 {

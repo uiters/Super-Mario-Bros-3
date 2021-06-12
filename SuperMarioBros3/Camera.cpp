@@ -71,8 +71,8 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 			return;
 		countx = countx + CAMERA_SPEED_X * dt;
 		cx = countx;
-		cy = 0;
-		SetCameraPosition((int)countx, 0);
+		cy = 200;
+		SetCameraPosition((int)countx,cy );
 		return;
 	}
 	else

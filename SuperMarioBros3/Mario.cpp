@@ -234,11 +234,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						if (ceil(mBottom) != oTop)
 						{
 							vx = 0;
-							if (/*x < game->GetCamX()*/false)
-							{
-								SetState(MARIO_STATE_DIE);
-								return;
-							}
 						}
 					}
 				}
@@ -246,11 +241,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			//questionbrick
 			/*if (dynamic_cast<CQuestionBrick*>(e->obj) && e->ny > 0)
 				e->obj->SetState(QUESTIONBRICK_STATE_HIT);*/
-			//breakablebrick
+				//breakablebrick
 
-			//floatingwood
+				//floatingwood
 
-			//block
+				//block
 			else if (dynamic_cast<CBlock*>(e->obj)) {
 				isGround = true;
 				if (e->nx != 0 && ceil(mBottom) != oTop)
@@ -765,6 +760,7 @@ void CMario::SetState(int state)
 		vy = -MARIO_DIE_DEFLECT_SPEED;
 		vx = -nx * MARIO_DIE_DEFLECT_SPEED;
 		dead = true;
+
 		break;
 	}
 	if (GetMode() != Mode::Small)

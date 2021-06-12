@@ -1,6 +1,6 @@
 #pragma once
 #include "Brick.h"
-class QuestionBrick :public CBrick
+class CQuestionBrick :public CBrick
 {
 };
 

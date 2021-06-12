@@ -138,8 +138,10 @@ void Grid::Move(Unit* unit, float x, float y)
 	Add(unit);
 }
 
-void Grid::Get(float cam_x, float cam_y, vector<Unit*>& listUnits)
+void Grid::Get(Camera* cam, vector<Unit*>& listUnits)
 {
+	float cam_x = cam->GetCameraPosition().x;
+	float cam_y = cam->GetCameraPosition().y;
 	int startCol = (int)((cam_x - VIEWPORT_PUSHBACK * 2) / CELL_WIDTH);
 	int endCol = (int)ceil((cam_x + SCREEN_WIDTH + VIEWPORT_PUSHBACK * 2) / CELL_WIDTH);
 	int ENDCOL = (int)ceil((mapWidth) / CELL_WIDTH);
@@ -153,7 +155,7 @@ void Grid::Get(float cam_x, float cam_y, vector<Unit*>& listUnits)
 	int ENDROW = (int)ceil((mapHeight) / CELL_HEIGHT);
 	if (endRow > ENDROW)
 		endRow = ENDROW;
-	DebugOut(L"[GRID] %d %d\n", startRow, endRow);
+	//DebugOut(L"[GRID] %d %d\n", startRow, endRow);
 
 	for (int i = startRow; i < endRow; i++)
 	{
@@ -186,20 +188,16 @@ void Grid::Get(float cam_x, float cam_y, vector<Unit*>& listUnits)
 	}
 }
 
-//void Grid::GetObjectFromGrid(Camera* cam, Unit* units)
-//{
-//
-//}
-//void Grid::UpdateGrid(vector<Unit*> units, Unit* others)
-//{
-//	for (unsigned int i = 0; i < units.size(); i++)
-//	{
-//		LPGAMEOBJECT obj = units[i]->GetObj();
-//		float newPosX, newPosY;
-//		obj->GetPosition(newPosX, newPosY);
-//		units[i]->Move(newPosX, newPosY);
-//	}
-//}
+void Grid::UpdateGrid(vector<Unit*>& units)
+{
+	for (unsigned int i = 0; i < units.size(); i++)
+	{
+		LPGAMEOBJECT obj = units[i]->GetObj();
+		float newPosX, newPosY;
+		obj->GetPosition(newPosX, newPosY);
+		units[i]->Move(newPosX, newPosY);
+	}
+}
 
 void Grid::Out()
 {

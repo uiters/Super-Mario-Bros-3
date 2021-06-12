@@ -1,6 +1,8 @@
 #pragma once
 #include "Brick.h"
-class CBreakableBrick : CBrick
+class CBreakableBrick : public CBrick
 {
+public:
+	CBreakableBrick() {};
 };
 

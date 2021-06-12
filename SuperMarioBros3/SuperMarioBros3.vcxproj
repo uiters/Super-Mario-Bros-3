@@ -144,6 +144,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Abyss.cpp" />
     <ClCompile Include="Animations.cpp" />
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="Boomerang.cpp" />
@@ -151,6 +152,7 @@
     <ClCompile Include="BreakableBrick.cpp" />
     <ClCompile Include="Brick.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Card.cpp" />
     <ClCompile Include="CMap.cpp" />
     <ClCompile Include="Coin.cpp" />
     <ClCompile Include="FirePlant.cpp" />
@@ -179,6 +181,7 @@
     <ClCompile Include="WorldScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Abyss.h" />
     <ClInclude Include="Animations.h" />
     <ClInclude Include="Block.h" />
     <ClInclude Include="Boomerang.h" />
@@ -186,6 +189,7 @@
     <ClInclude Include="BreakableBrick.h" />
     <ClInclude Include="Brick.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Card.h" />
     <ClInclude Include="CMap.h" />
     <ClInclude Include="Coin.h" />
     <ClInclude Include="Define.h" />
