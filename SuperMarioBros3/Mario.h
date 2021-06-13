@@ -1,10 +1,11 @@
 #pragma once
 #include "GameObject.h"
 #include "Timer.h"
+#include "Portal.h"
 #define MARIO_WALKING_SPEED_START	0.0001f 
-#define MARIO_WALKING_SPEED_MAX		0.1f
-#define MARIO_RUNNING_SPEED_MAX		0.15f
-#define MARIO_SPEED_MAX				0.20f
+#define MARIO_WALKING_SPEED_MAX		0.15f
+#define MARIO_RUNNING_SPEED_MAX		0.2f
+#define MARIO_SPEED_MAX				0.25f
 #define MARIO_ACCELERATION			0.0003f
 #define MARIO_FRICTION				0.0005f	
 #define MARIO_WALKING_SPEED_MIN		0.05f
@@ -294,20 +295,20 @@ private:
 	Mode mode;
 	Mode prevMode;
 	Timer untouchableTimer;
-	Timer flyTimer;
 	Timer transformTimer;
-	Timer pipeTimer;
+
+	Timer flyTimer;
 	//Timer runTimer;
 	//
-
+	Timer dieTimer;
 
 public:
 	float start_x;			// initial position of Mario at scene
 	float start_y;
 	bool isAtIntroScene;
 	int RunningStacks = 0;
-	bool isSitting;
 	bool dead;
+	bool isSitting;
 	bool isShooting;
 	bool isGround;
 	bool isJumping;
@@ -315,18 +316,23 @@ public:
 	bool isFlying;
 	bool isHolding;
 
+	// swap map
+	bool isInPipe=false;
+	Timer pipeUpTimer;
+	Timer pipeDownTimer;
+	CPortal* portal = NULL;
 	CMario(float x = 0.0f, float y = 0.0f, bool iais = false);
 	~CMario();
 
 	bool IsDead() { return dead; }
-	bool IsLostControl() { return IsDead() || transformTimer.IsStarted() || pipeTimer.IsStarted(); }
-	void Attacked();
+	bool IsLostControl() { return transformTimer.IsStarted(); }
+	bool isPipe() { return pipeUpTimer.IsStarted() || pipeDownTimer.IsStarted(); }
+
+	// transform 
 	Mode GetMode() { return mode; }
 	void Transform(Mode form);
-	void Stop();
-	void Jump();
-	void Update(DWORD dt, std::vector<LPGAMEOBJECT>* objects);
 	//render
+	void Attacked();
 	void RenderBasicMoving(int& ani,
 		int ani_idle_right, int ani_idle_left, int ani_jump_down_right, int ani_jump_down_left,
 		int ani_baking_right, int ani_baking_left, int ani_walking_right, int ani_walking_left, int ani_kicking_right, int ani_kicking_left);
@@ -337,7 +343,15 @@ public:
 	void TransformTanookiAni(int& ani);
 	void TransformFireAni(int& ani);
 	void Render();
+
+	//set state
+	void Stop();
+	void Jump();
+	void Sit();
+	void Die();
 	void SetState(int vState);
+
+	void Update(DWORD dt, std::vector<LPGAMEOBJECT>* objects);
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	void Reset();
 

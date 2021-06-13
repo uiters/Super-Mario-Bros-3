@@ -47,19 +47,23 @@ protected:
 	void _ParseSection_OBJECTS(string line);
 	void _ParseSection_TILEMAP_DATA(string line);
 	void ParseObjFromFile(LPCWSTR path);
-	
+
+	LPSPRITE gamedone1 = nullptr;
+	LPSPRITE gamedone2 = nullptr;
 public: 
+	bool isGameDone1 = false;
+	bool isGameDone2 = false;
+	bool isGameDone3 = false;
 	CPlayScene(int id, LPCWSTR filePath);
 
 	virtual void Load();
 	virtual void Update(DWORD dt);
 	virtual void Render();
 	virtual void Unload();
-
 	CMario * GetPlayer() { return player; } 
 	CMap* GetMap() { return current_map; }
 	Grid* GetGrid() { return grid; }
-
+	void SetPlayer(CMario* m) { player = m; }
 	//friend class CPlaySceneKeyHandler;
 };
 
@@ -68,7 +72,7 @@ class CPlaySceneKeyHandler : public CSceneKeyHandler
 public: 
 	virtual void KeyState(BYTE *states);
 	virtual void OnKeyDown(int KeyCode);
-	virtual void OnKeyUp(int KeyCode) {};
+	virtual void OnKeyUp(int KeyCode);
 	CPlaySceneKeyHandler(CScene *s) :CSceneKeyHandler(s) {};
 };
 

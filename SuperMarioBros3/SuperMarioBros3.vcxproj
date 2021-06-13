@@ -155,6 +155,7 @@
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="CMap.cpp" />
     <ClCompile Include="Coin.cpp" />
+    <ClCompile Include="Fire.cpp" />
     <ClCompile Include="FirePlant.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="IntroScene.cpp" />
@@ -175,6 +176,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="Switch.cpp" />
+    <ClCompile Include="Tanooki.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Utils.cpp" />
@@ -193,6 +195,7 @@
     <ClInclude Include="CMap.h" />
     <ClInclude Include="Coin.h" />
     <ClInclude Include="Define.h" />
+    <ClInclude Include="Fire.h" />
     <ClInclude Include="FirePlant.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="Game.h" />
@@ -213,6 +216,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="Switch.h" />
+    <ClInclude Include="Tanooki.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Utils.h" />

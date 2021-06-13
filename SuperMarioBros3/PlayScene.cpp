@@ -100,6 +100,10 @@ void CPlayScene::_ParseSection_SPRITES(string line)
 	}
 
 	CSprites::GetInstance()->Add(ID, l, t, r, b, tex);
+	if (ID == GAMEDONE1_SPRITE_ID)
+		gamedone1 = CSprites::GetInstance()->Get(ID);
+	if (ID == GAMEDONE2_SPRITE_ID)
+		gamedone2 = CSprites::GetInstance()->Get(ID);
 }
 
 void CPlayScene::_ParseSection_ANIMATIONS(string line)
@@ -207,6 +211,7 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 			obj = new CGoomba();
 			obj->SetTag(tag);
 			obj->SetType(MOVING);
+
 			break;
 		case OBJECT_TYPE_BRICK:
 			obj = new CBrick();
@@ -214,14 +219,14 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 			break;
 		case OBJECT_TYPE_QUESTIONBRICK:
 			obj = new CQuestionBrick();
-			/*obj = new CQuestionBrick(option_tag_1, option_tag_2);
-			if (tokens.size() >= 8)
-			{
-				int nboitem = atoi(tokens[7].c_str());
-				if (nboitem > 0)
-					((CQuestionBrick*)obj)->items = nboitem;
-			}
-			((CQuestionBrick*)obj)->start_y = y;*/
+			/*	obj = new CQuestionBrick(option_tag_1, option_tag_2);
+				if (tokens.size() >= 8)
+				{
+					int nboitem = atoi(tokens[7].c_str());
+					if (nboitem > 0)
+						((CQuestionBrick*)obj)->items = nboitem;
+				}
+				((CQuestionBrick*)obj)->start_y = y;*/
 			break;
 		case OBJECT_TYPE_BREAKABLEBRICK:
 			obj = new CBreakableBrick();
@@ -236,7 +241,6 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 			break;
 		case OBJECT_TYPE_BOOMERANGBROTHER:
 			obj = new CBoomerangBro();
-
 			/*obj = new CBoomerangBrother();
 			obj->SetType(MOVING);
 			((CBoomerangBrother*)obj)->start_x = x;*/
@@ -265,12 +269,12 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 
 			break;
 		case OBJECT_TYPE_CARD:
-				obj = new CCard();
+			obj = new CCard();
 
 			break;
 		case OBJECT_TYPE_PORTAL:
 		{
-			/*int scene_id = atoi(tokens[4].c_str());
+			int scene_id = atoi(tokens[4].c_str());
 			int isToExtraScene = atoi(tokens[5].c_str());
 			float start_x = 0, start_y = 0;
 			start_x = atoi(tokens[6].c_str());
@@ -281,9 +285,7 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 				((CPortal*)obj)->pipeUp = true;
 			else
 				((CPortal*)obj)->pipeUp = false;
-			obj->SetTag(isToExtraScene);*/
-			obj = new CPortal();
-
+			obj->SetTag(isToExtraScene);
 			break;
 		}
 		case GRID:
@@ -310,6 +312,7 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 		{
 			int gridCol = (int)atoi(tokens[tokens.size() - 1].c_str());
 			int gridRow = (int)atoi(tokens[tokens.size() - 2].c_str());
+			//add unit into grid
 			Unit* unit = new Unit(grid, obj, gridRow, gridCol);
 		}
 	}
@@ -416,13 +419,18 @@ void CPlayScene::Update(DWORD dt)
 		objects.push_back(obj);
 
 	}
+
 	for (size_t i = 0; i < objects.size(); i++)
 		coObjects.push_back(objects[i]);
 
 	//get map and screen information
-	player->Update(dt, &coObjects);
-	if (!player->IsLostControl())
+	if (player->IsLostControl())
 	{
+		player->Update(0, &coObjects);
+		cam->Update(0, isCameraAutoMove, cxcount);
+	}
+	else {
+		player->Update(dt, &coObjects);
 		for (size_t i = 0; i < objects.size(); i++)
 		{
 			objects[i]->Update(dt, &coObjects);
@@ -430,15 +438,16 @@ void CPlayScene::Update(DWORD dt)
 		}
 		cam->Update(dt, isCameraAutoMove, cxcount);
 	}
-	else 
-		cam->Update(dt, true, cxcount);
-	
 	grid->UpdateGrid(units);
 }
 
 void CPlayScene::Render()
 {
 	if (player == NULL) return;
+	if (isGameDone1)
+		gamedone1->Draw(Camera::GetInstance()->GetCameraPosition().x + GAMEDONE_1_DIFF_X, Camera::GetInstance()->GetCameraPosition().y + GAMEDONE_1_DIFF_Y);
+	if (isGameDone2)
+		gamedone2->Draw(Camera::GetInstance()->GetCameraPosition().x + GAMEDONE_2_DIFF_X, Camera::GetInstance()->GetCameraPosition().y + GAMEDONE_2_DIFF_Y);
 	current_map->Render();
 	player->Render();
 	for (int i = 0; i < objects.size(); i++)
@@ -468,19 +477,33 @@ void CPlayScene::Unload()
 
 }
 
+void CPlaySceneKeyHandler::OnKeyUp(int KeyCode) {
+	DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
+	CMario* mario = ((CPlayScene*)scene)->GetPlayer();
+
+	if (mario == NULL || mario->IsLostControl() || mario->IsDead()) return;
+
+	switch (KeyCode)
+	{
+	case DIK_DOWN:
+		mario->isSitting = false;
+		break;
+	}
+}
+
 void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 {
 	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 
 	CMario* mario = ((CPlayScene*)scene)->GetPlayer();
 
-	if (mario == NULL || mario->IsLostControl()) return;
+	if (mario == NULL || mario->IsLostControl() || mario->IsDead()) return;
 
 	switch (KeyCode)
 	{
 	case DIK_SPACE:
-		if (mario->isGround)
-			mario->SetState(MARIO_STATE_JUMPING);
+		/*if (mario->isGround)*/
+		mario->SetState(MARIO_STATE_JUMPING);
 		break;
 	case DIK_C:
 		mario->SetState(MARIO_STATE_SHOOTING);
@@ -510,7 +533,7 @@ void CPlaySceneKeyHandler::KeyState(BYTE* states)
 	//DebugOut(L"[INFO] KeyDown: %d\n", mario->GetState());
 
 	//disable control key when Mario die 
-	if (mario == NULL || mario->IsLostControl()) return;
+	if (mario == NULL || mario->IsLostControl() || mario->IsDead()) return;
 	//check current key state
 	if (game->IsKeyDown(DIK_DOWN))
 		mario->SetState(MARIO_STATE_SITTING);

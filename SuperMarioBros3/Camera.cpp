@@ -65,17 +65,17 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 	}
 	D3DXVECTOR3 pos = GetCameraPosition();
 
-	if (typeCamera)
-	{
-		if (pos.x > mapWidth - SCREEN_WIDTH - 1)
-			return;
-		countx = countx + CAMERA_SPEED_X * dt;
-		cx = countx;
-		cy = 200;
-		SetCameraPosition((int)countx,cy );
-		return;
-	}
-	else
+	//if (typeCamera)
+	//{
+	//	if (pos.x > mapWidth - SCREEN_WIDTH - 1)
+	//		return;
+	//	countx = countx + CAMERA_SPEED_X * dt;
+	//	cx = countx;
+	//	cy = 200;
+	//	SetCameraPosition((int)countx,cy );
+	//	return;
+	//}
+	//else
 	{
 		if (mapWidth > SCREEN_WIDTH) {
 			if (cx + 5 < SCREEN_WIDTH / 2) {
@@ -114,7 +114,11 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 		if (cy < 0) cy = 0;
 		//cy -= SCREEN_HEIGHT / 2;
 	}
-	SetCameraPosition((int)cx, (int)cy);
+	int sceneId = game->GetCurrentScene()->GetId();
+	if (sceneId == 2) //2 is extra scene
+		SetCameraPosition((int)cx, (int)cy - 30);
+	else
+		SetCameraPosition((int)cx, (int)cy);
 }
 
 void Camera::Unload()

@@ -7,9 +7,8 @@
 
 #include "Brick.h"
 #include "Goomba.h"
-#include "Portal.h"
 #include "Block.h"
-//#include "QuestionBrick.h"
+#include "QuestionBrick.h"
 #include "PlayScene.h"
 
 CMario::CMario(float x, float y, bool isatintroscene) : CGameObject()
@@ -70,39 +69,52 @@ void CMario::Transform(Mode m) {
 	}
 }
 
-void CMario::Stop() {
-	if (vx > 0)
-		ax = -MARIO_ACCELERATION;
-	if (vx < 0)
-		ax = MARIO_ACCELERATION;
-	ay = MARIO_GRAVITY;
-
-	if (abs(vx) <= MARIO_WALKING_SPEED_MIN)
-	{
-		vx = 0;
-		ax = 0;
-	}
-}
-
-void CMario::Jump() {
-	isGround = false;
-	isJumping = true;
-	if (vy > -MARIO_JUMP_SPEED_MIN)
-		vy = -MARIO_JUMP_SPEED_MIN;
-	ay = -MARIO_ACCELERATION_JUMP;
-}
-
-
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGame* game = CGame::GetInstance();
-	//stop update when transform
+	// Calculate dx, dy 
+	CGameObject::Update(dt);
+
 	if (transformTimer.IsStarted() && transformTimer.ElapsedTime() >= MARIO_TRANSFORMING_TIME)
 	{
 		transformTimer.Reset();
 	}
-	// Calculate dx, dy 
-	CGameObject::Update(dt);
+	if (untouchableTimer.IsStarted() && untouchableTimer.ElapsedTime() >= MARIO_UNTOUCHABLE_TIME) {
+		untouchableTimer.Reset();
+	}
+	if (pipeDownTimer.ElapsedTime() > MARIO_PIPE_TIME && pipeDownTimer.IsStarted() == true)
+	{
+		pipeDownTimer.Reset();
+		pipeUpTimer.Reset();
+		isSitting = false;
+		if (!isInPipe)
+		{
+			CGame::GetInstance()->SwitchExtraScene(portal->GetSceneId(), portal->start_x, portal->start_y, portal->pipeUp);
+		}
+		else
+		{
+			vx = vy = 0;
+			ay = MARIO_GRAVITY;
+		}
+	}
+	if (pipeUpTimer.ElapsedTime() > MARIO_PIPE_TIME && pipeUpTimer.IsStarted() == true)
+	{
+		pipeDownTimer.Reset();
+		pipeUpTimer.Reset();
+		isSitting = false;
+
+		if (!isInPipe)
+		{
+			CGame::GetInstance()->SwitchBackScene(portal->GetSceneId(), portal->start_x, portal->start_y);
+			DebugOut(L"UpTimer::");
+		}
+		else
+		{
+			vx = vy = 0;
+			ay = MARIO_GRAVITY;
+		}
+	}
+
 	//slow down if change direction when running
 	if (vx * ax < 0 && abs(vx) > MARIO_WALKING_SPEED_MAX
 		&& (state == MARIO_STATE_WALKING_LEFT || state == MARIO_STATE_WALKING_RIGHT))
@@ -114,19 +126,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//update and limit speed
 	if (isAtIntroScene)
 	{
-		/*if (state != MARIO_STATE_IDLE && state != MARIO_STATE_SITTING
-			&& !((CIntroScene*)game->GetCurrentScene())->isCustomSpeed)
-			vx = nx * MARIO_WALKING_SPEED_MIN * 2;
-		if (!((CIntroScene*)game->GetCurrentScene())->isCustomSpeed)
-			vy += ay * dt;
-		if (vy <= -MARIO_JUMP_DEFLECT_INTRO && !lostControl && !isDeflect)
-		{
-			vy = -MARIO_JUMP_SPEED_MAX;
-			ay = MARIO_GRAVITY;
-			isReadyToJump = false;
-		}
-		if (isDeflect)
-			vy = -MARIO_JUMP_SPEED_MAX * 2;*/
+		//doing somthing
 	}
 	else
 	{
@@ -137,11 +137,13 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			vx = nx * MARIO_WALKING_SPEED_MAX;
 		}
+		// falling
 		if (vy > MARIO_JUMP_SPEED_MAX)
 		{
 			vy = MARIO_JUMP_SPEED_MAX;
 			ay = MARIO_GRAVITY;
 		}
+		// jump
 		if (vy <= -MARIO_JUMP_SPEED_MAX && !IsLostControl())
 		{
 			vy = -MARIO_JUMP_SPEED_MAX;
@@ -154,20 +156,13 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			ay = -MARIO_GRAVITY;
 			isGround = false;
 		}
-
-	}
-
-	if (untouchableTimer.IsStarted() && untouchableTimer.ElapsedTime() >= MARIO_UNTOUCHABLE_TIME) {
-		untouchableTimer.Reset();
 	}
 	//handle for sitting when jump
 	if (state == MARIO_STATE_SITTING && vy < 0)
 		vy -= MARIO_ACCELERATION_JUMP * dt;
 	//cant jump again until touch the ground
 	if (vy < 0)
-	{
 		isGround = false;
-	}
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
@@ -176,149 +171,170 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// turn off collision when die 
 	if (state != MARIO_STATE_DIE)
 		CalcPotentialCollisions(coObjects, coEvents);
-
-	// No collision occured, proceed normally
-	if (coEvents.size() == 0)
+	else
 	{
+		//camera move to end map
 		x += dx;
 		y += dy;
+		return;
+	}
+	if (isPipe())
+	{
+		if (pipeDownTimer.IsStarted() == true)
+			y += 0.5f;
+		else if (pipeUpTimer.IsStarted() == true)
+			y += -0.5f;
 	}
 	else
 	{
-		float min_tx, min_ty, nx = 0, ny;
-		float rdx = 0;
-		float rdy = 0;
-
-		// TODO: This is a very ugly designed function!!!!
-		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
-		float x0 = x, y0 = y;
-		x = x0 + min_tx * dx + nx * 0.4f;
-		y = y0 + min_ty * dy + ny * 0.4f;
-
-		//
-		// Collision logic with other objects
-		//
-		float oLeft, oTop, oRight, oBottom;			// object Collision
-		float mLeft, mTop, mRight, mBottom;			//mario Collision
-		for (UINT i = 0; i < coEventsResult.size(); i++)
+		// No collision occured, proceed normally
+		if (coEvents.size() == 0)
 		{
-			LPCOLLISIONEVENT e = coEventsResult[i];
-			if (e->ny != 0 && !(dynamic_cast<CBlock*>(e->obj) && ny > 0))
-			{
-				if (!(dynamic_cast<CBrick*>(e->obj) && e->obj->tag == PIPE && isFlying))
-				{
-					isGround = true;
-					isJumping = false;
-					isFlying = false;
-				}
+			x += dx;
+			y += dy;
+		}
+		else {
+			float min_tx, min_ty, nx = 0, ny;
+			float rdx = 0;
+			float rdy = 0;
 
-			}
-			GetBoundingBox(mLeft, mTop, mRight, mBottom);
-			e->obj->GetBoundingBox(oLeft, oTop, oRight, oBottom);
-			//brick
-			if (dynamic_cast<CBrick*>(e->obj)) {
-				isGround = true;
-				if (!(tag == PIPE))
+			// TODO: This is a very ugly designed function!!!!
+			FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
+			float x0 = x, y0 = y;
+			x = x0 + min_tx * dx + nx * 0.4f;
+			y = y0 + min_ty * dy + ny * 0.4f;
+
+			//
+			// Collision logic with other objects
+			//
+			float oLeft, oTop, oRight, oBottom;			// object Collision
+			float mLeft, mTop, mRight, mBottom;			//mario Collision
+			for (UINT i = 0; i < coEventsResult.size(); i++)
+			{
+				LPCOLLISIONEVENT e = coEventsResult[i];
+				if (e->ny != 0 && !(dynamic_cast<CBlock*>(e->obj) && ny > 0))
 				{
+					if (!(dynamic_cast<CBrick*>(e->obj) && e->obj->tag == PIPE && isFlying))
+					{
+						isGround = true;
+						isJumping = false;
+						isFlying = false;
+					}
+
+				}
+				GetBoundingBox(mLeft, mTop, mRight, mBottom);
+				e->obj->GetBoundingBox(oLeft, oTop, oRight, oBottom);
+				//brick
+				if (dynamic_cast<CBrick*>(e->obj)) {
+					isGround = true;
+					if (!(tag == PIPE))
+					{
+						if (e->ny < 0)
+						{
+							vy = 0;
+						}
+						if (e->ny > 0)
+						{
+							vy = 0;
+							ay = MARIO_GRAVITY;
+						}
+						if (e->nx != 0)
+						{
+							if (ceil(mBottom) != oTop)
+							{
+								vx = 0;
+							}
+						}
+					}
+				}
+				//questionbrick
+				/*if (dynamic_cast<CQuestionBrick*>(e->obj) && e->ny > 0)
+					e->obj->SetState(QUESTIONBRICK_STATE_HIT);*/
+					//breakablebrick
+
+					//block
+				else if (dynamic_cast<CBlock*>(e->obj)) {
+					isGround = true;
+					if (e->nx != 0 && ceil(mBottom) != oTop)
+						x = x0 + dx;
 					if (e->ny < 0)
 					{
 						vy = 0;
 					}
-					if (e->ny > 0)
-					{
-						vy = 0;
-						ay = MARIO_GRAVITY;
-					}
-					if (e->nx != 0)
-					{
-						if (ceil(mBottom) != oTop)
-						{
-							vx = 0;
-						}
-					}
+					if (e->ny > 0 && vy < 0)
+						y = y0 + dy;
 				}
-			}
-			//questionbrick
-			/*if (dynamic_cast<CQuestionBrick*>(e->obj) && e->ny > 0)
-				e->obj->SetState(QUESTIONBRICK_STATE_HIT);*/
-				//breakablebrick
-
-				//floatingwood
-
-				//block
-			else if (dynamic_cast<CBlock*>(e->obj)) {
-				isGround = true;
-				if (e->nx != 0 && ceil(mBottom) != oTop)
-					x = x0 + dx;
-				if (e->ny < 0)
+				//goomba
+				else if (dynamic_cast<CGoomba*>(e->obj))
 				{
-					vy = 0;
-				}
-				if (e->ny > 0 && vy < 0)
-					y = y0 + dy;
-			}
-			//goomba
-			else if (dynamic_cast<CGoomba*>(e->obj))
-			{
-				CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
-				// jump on top >> kill Goomba and deflect a bit 
-				if (e->ny < 0)
-				{
-					if (goomba->GetState() != GOOMBA_STATE_DIE)
+					CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+					// jump on top >> kill Goomba and deflect a bit 
+					if (e->ny < 0)
 					{
-						if (goomba->tag != GOOMBA_RED)
+						if (goomba->GetState() != GOOMBA_STATE_DIE)
 						{
-							goomba->SetState(GOOMBA_STATE_DIE);
-							if (!isAtIntroScene)
-								vy = -MARIO_JUMP_DEFLECT_SPEED;
+							if (goomba->tag != GOOMBA_RED)
+							{
+								goomba->SetState(GOOMBA_STATE_DIE);
+								if (!isAtIntroScene)
+									vy = -MARIO_JUMP_DEFLECT_SPEED;
+								else
+								{
+									vy = -MARIO_JUMP_DEFLECT_INTRO;
+								}
+							}
 							else
 							{
-								vy = -MARIO_JUMP_DEFLECT_INTRO;
+								goomba->SetTag(GOOMBA_RED_NORMAL);
+								goomba->SetState(GOOMBA_STATE_WALKING);
+								vy = -MARIO_JUMP_DEFLECT_SPEED;
 							}
 						}
 						else
-						{
-							goomba->SetTag(GOOMBA_RED_NORMAL);
-							goomba->SetState(GOOMBA_STATE_WALKING);
 							vy = -MARIO_JUMP_DEFLECT_SPEED;
-						}
 					}
-					else
-						vy = -MARIO_JUMP_DEFLECT_SPEED;
-				}
-				else if (goomba->GetState() != GOOMBA_STATE_DIE)
-				{
-					y = y0;
-					if (untouchableTimer.IsStarted() == 0)
-						Attacked();
-					else
+					else if (goomba->GetState() != GOOMBA_STATE_DIE)
 					{
-						x = x0 + dx;
 						y = y0;
-						if (e->ny > 0 && vy < 0)
-							y = y0 + dy;
-						if (e->nx != 0 /*&& isTurningTail*/)
+						if (untouchableTimer.IsStarted() == 0)
+							Attacked();
+						else
 						{
-							//AddScore(goomba->x, goomba->y, 100, true);
-							goomba->SetState(GOOMBA_STATE_DIE_BY_TAIL);
+							x = x0 + dx;
+							y = y0;
+							if (e->ny > 0 && vy < 0)
+								y = y0 + dy;
+							if (e->nx != 0 /*&& isTurningTail*/)
+							{
+								//AddScore(goomba->x, goomba->y, 100, true);
+								goomba->SetState(GOOMBA_STATE_DIE_BY_TAIL);
+							}
 						}
 					}
+				}
+				//bomerang
+
+				//koopas
+
+				//piranhaPlant
+
+				//switch
+
+				//mario
+
+				//card
+
+				//port
+				else if (dynamic_cast<CPortal*>(e->obj))
+				{
+					/*if (isSitting)
+					{
+						CGame::GetInstance()->SwitchExtraScene(portal->GetSceneId(), portal->start_x, portal->start_y);
+					}*/
 				}
 			}
-			//bomerang
-
-			//koopas
-
-			//piranhaPlant
-
-			//switch
-
-			//mario
-
-			//card
 		}
 	}
-
 	// clean up collision events
 	for (UINT i = 0; i < coEvents.size(); i++)
 		delete coEvents[i];
@@ -717,14 +733,66 @@ void CMario::Render()
 	}
 	if (untouchableTimer.IsStarted()) alpha = MARIO_RENDER_ALPHA / 2;
 
+	if (pipeDownTimer.IsStarted() == true || pipeUpTimer.IsStarted() == true)
+	{
+		int sprite_id = MARIO_SPRITE_PIPE_SMALL;
+		if (GetMode() == Mode::Super)
+			sprite_id = MARIO_SPRITE_PIPE_BIG;
+		if (GetMode() == Mode::Tanooki)
+			sprite_id = MARIO_SPRITE_PIPE_TAIL;
+		if (GetMode() == Mode::Fire)
+			sprite_id = MARIO_SPRITE_PIPE_FIRE;
+		CSprites::GetInstance()->sprites[sprite_id]->Draw(x, y - HUD_HEIGHT, alpha);
+	}
+
 	if (ani == -1)
 	{
 		if (nx > 0) ani = MARIO_ANI_SMALL_WALKING_RIGHT;
 		else ani = MARIO_ANI_SMALL_WALKING_LEFT;
 	}
 	animation_set->at(ani)->Render(x, y, alpha);
-
 	RenderBoundingBox();
+
+}
+
+void CMario::Stop() {
+	if (vx > 0)
+		ax = -MARIO_ACCELERATION;
+	if (vx < 0)
+		ax = MARIO_ACCELERATION;
+	ay = MARIO_GRAVITY;
+
+	if (abs(vx) <= MARIO_WALKING_SPEED_MIN)
+	{
+		vx = 0;
+		ax = 0;
+	}
+}
+
+void CMario::Jump() {
+	isGround = false;
+	isJumping = true;
+	if (vy > -MARIO_JUMP_SPEED_MIN)
+		vy = -MARIO_JUMP_SPEED_MIN;
+	ay = -MARIO_ACCELERATION_JUMP;
+}
+
+void CMario::Sit() {
+	ay = MARIO_GRAVITY;
+	ax = -nx * MARIO_ACCELERATION;
+	if (abs(vx) <= MARIO_WALKING_SPEED_MIN)
+	{
+		vx = 0;
+		ax = 0;
+	}
+	isSitting = true;
+}
+
+void CMario::Die()
+{
+	vy = -MARIO_DIE_DEFLECT_SPEED;
+	vx = -nx * MARIO_DIE_DEFLECT_SPEED;
+	dead = true;
 
 }
 
@@ -747,20 +815,10 @@ void CMario::SetState(int state)
 		Stop();
 		break;
 	case MARIO_STATE_SITTING:
-		if (GetMode() != Mode::Small)
-		{
-			vx = 0;
-			ax = 0;
-			ay = MARIO_GRAVITY;
-			//ax = -nx * MARIO_ACCELERATION;
-			isSitting = true;
-		}
+		Sit();
 		break;
 	case MARIO_STATE_DIE:
-		vy = -MARIO_DIE_DEFLECT_SPEED;
-		vx = -nx * MARIO_DIE_DEFLECT_SPEED;
-		dead = true;
-
+		Die();
 		break;
 	}
 	if (GetMode() != Mode::Small)
@@ -815,4 +873,5 @@ void CMario::Reset()
 	SetSpeed(0, 0);
 	dead = false;
 }
+
 

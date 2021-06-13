@@ -413,3 +413,45 @@ void CGame::SwitchScene(int scene_id)
 	CGame::GetInstance()->SetKeyHandler(s->GetKeyEventHandler());
 	s->Load();
 }
+void CGame::SwitchBackScene(int scene_id, float start_x , float start_y ) {
+	DebugOut(L"[INFO] SwitchBack to scene %d\n", scene_id);
+	pre_scene = current_scene;
+	current_scene = scene_id;
+	LPSCENE s = scenes[scene_id];
+	CGame::GetInstance()->SetKeyHandler(s->GetKeyEventHandler());
+
+	CMario* omario = ((CPlayScene*)scenes[pre_scene])->GetPlayer();
+	omario->SetPosition(start_x, start_y);
+	((CPlayScene*)s)->SetPlayer(omario);
+	((CPlayScene*)s)->GetPlayer()->pipeUpTimer.Start();
+}
+void CGame::SwitchExtraScene(int scene_id, float start_x, float start_y, bool pipeUp)
+{
+	DebugOut(L"[INFO] Switching Extra to scene %d\n", scene_id);
+
+	bool isHaveToReload = true;
+	if (pre_scene == scene_id)
+		isHaveToReload = false;
+
+	//switch scene
+	pre_scene = current_scene;
+	current_scene = scene_id;
+	LPSCENE s = scenes[scene_id];
+	CGame::GetInstance()->SetKeyHandler(s->GetKeyEventHandler());
+
+	//put player to extrascene
+	CMario* omario = ((CPlayScene*)scenes[pre_scene])->GetPlayer();
+	omario->SetPosition(start_x, start_y);
+	((CPlayScene*)s)->SetPlayer(omario);
+
+	//load extra scene if necessary
+	if (isHaveToReload)
+		s->Load();
+	if (!pipeUp)
+	{
+		((CPlayScene*)s)->GetPlayer()->isInPipe=true;
+		((CPlayScene*)s)->GetPlayer()->pipeDownTimer.Start();
+	}
+	else
+		((CPlayScene*)s)->GetPlayer()->pipeUpTimer.Start();
+}

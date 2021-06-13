@@ -40,11 +40,11 @@ class Grid
 	vector <vector<Unit*>> cells;
 public:
 	Grid(int mapWidth, int mapHeight, int cellWidth, int cellHeight);
-	Grid(int gridCols, int gridRows);
+	Grid(int gridCols, int gridRows); 
 	~Grid();
 
 	void Add(Unit* unit);
-	void Add(Unit* unit, int gridRow, int gridCol);
+	void Add(Unit* unit, int gridRow, int gridCol); 
 	void Move(Unit* unit, float x, float y);
 	void Get(Camera* cam, vector<Unit*>& listUnits);
 	void UpdateGrid(vector<Unit*> &units);

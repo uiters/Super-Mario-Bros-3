@@ -104,17 +104,16 @@ public:
 	{
 		float this_left, this_top, this_right, this_bottom;
 
-		GetBoundingBox(
+		this->GetBoundingBox(
 			this_left,
 			this_top,
 			this_right,
 			this_bottom);
 
-		bool on1 = friend_left <= this_right;
-		bool on2 = friend_top <= this_bottom;
-		bool down1 = friend_right >= this_left;
-		bool down2 = friend_bottom >= this_top;
-
+		bool on1 = friend_left < this_right;
+		bool on2 = friend_top < this_bottom;
+		bool down1 = friend_right > this_left;
+		bool down2 = friend_bottom > this_top;
 		return on1 && on2 && down1 && down2;
 	}
 	CGameObject();

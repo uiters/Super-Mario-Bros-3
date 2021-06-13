@@ -245,7 +245,7 @@ void CGoomba::Render()
 		break;
 	}
 	animation_set->at(ani)->Render(x, y);
-	RenderBoundingBox();
+	RenderBoundingBox(100);
 }
 
 void CGoomba::SetState(int state)

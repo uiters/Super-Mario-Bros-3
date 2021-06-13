@@ -3,6 +3,6 @@
 class CBreakableBrick : public CBrick
 {
 public:
-	CBreakableBrick() {};
+	CBreakableBrick()  {};
 };
 
