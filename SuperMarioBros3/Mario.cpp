@@ -85,12 +85,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (pipeDownTimer.ElapsedTime() > MARIO_PIPE_TIME && pipeDownTimer.IsStarted() == true)
 	{
 		pipeDownTimer.Reset();
-		pipeUpTimer.Reset();
 		isSitting = false;
-		if (!isInPipe)
-		{
+		DebugOut(L"[INFO] portal-scene:: %d", portal->GetSceneId());
+		if (wannaTele)
 			CGame::GetInstance()->SwitchExtraScene(portal->GetSceneId(), portal->start_x, portal->start_y, portal->pipeUp);
-		}
 		else
 		{
 			vx = vy = 0;
@@ -99,15 +97,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	if (pipeUpTimer.ElapsedTime() > MARIO_PIPE_TIME && pipeUpTimer.IsStarted() == true)
 	{
-		pipeDownTimer.Reset();
 		pipeUpTimer.Reset();
 		isSitting = false;
-
-		if (!isInPipe)
-		{
+		DebugOut(L"[INFO] portal-scene:: %d", portal->GetSceneId());
+		if (wannaTele)
 			CGame::GetInstance()->SwitchBackScene(portal->GetSceneId(), portal->start_x, portal->start_y);
-			DebugOut(L"UpTimer::");
-		}
 		else
 		{
 			vx = vy = 0;
@@ -794,6 +788,10 @@ void CMario::Die()
 	vx = -nx * MARIO_DIE_DEFLECT_SPEED;
 	dead = true;
 
+}
+
+void CMario::Boost() {
+	DebugOut(L"BOOST");
 }
 
 void CMario::SetState(int state)

@@ -33,23 +33,21 @@ void CPortal::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		mario->GetBoundingBox(mLeft, mTop, mRight, mBottom);
 		GetBoundingBox(oLeft, oTop, oRight, oBottom);
-
-
 		if (/*isColliding(floor(mLeft), mTop, ceil(mRight), mBottom) &&*/ mario->isSitting
-
 			&& mLeft >= oLeft && mRight <= oRight)
 		{
 			mario->portal = this;
 			if (tag == BACKTOPLAYSCENE)
+			{
 				mario->pipeUpTimer.Start();
+				mario->wannaTele = true;
+			}
 			if (tag == TOEXTRASCENE)
 			{
 				mario->pipeDownTimer.Start();
-				mario->isInPipe = false;
+				mario->wannaTele = true;
 			}
-
 			return;
 		}
-
 	}
 }

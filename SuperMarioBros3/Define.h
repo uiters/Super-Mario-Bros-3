@@ -11,3 +11,6 @@
 #define SCREEN_HEIGHT 256
 
 #define MAX_FRAME_RATE 144
+
+// scene
+#define EXTRA_SCENE 2

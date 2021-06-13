@@ -413,7 +413,7 @@ void CGame::SwitchScene(int scene_id)
 	CGame::GetInstance()->SetKeyHandler(s->GetKeyEventHandler());
 	s->Load();
 }
-void CGame::SwitchBackScene(int scene_id, float start_x , float start_y ) {
+void CGame::SwitchBackScene(int scene_id, float start_x, float start_y) {
 	DebugOut(L"[INFO] SwitchBack to scene %d\n", scene_id);
 	pre_scene = current_scene;
 	current_scene = scene_id;
@@ -423,6 +423,7 @@ void CGame::SwitchBackScene(int scene_id, float start_x , float start_y ) {
 	CMario* omario = ((CPlayScene*)scenes[pre_scene])->GetPlayer();
 	omario->SetPosition(start_x, start_y);
 	((CPlayScene*)s)->SetPlayer(omario);
+	((CPlayScene*)s)->GetPlayer()->wannaTele = false;
 	((CPlayScene*)s)->GetPlayer()->pipeUpTimer.Start();
 }
 void CGame::SwitchExtraScene(int scene_id, float start_x, float start_y, bool pipeUp)
@@ -447,11 +448,15 @@ void CGame::SwitchExtraScene(int scene_id, float start_x, float start_y, bool pi
 	//load extra scene if necessary
 	if (isHaveToReload)
 		s->Load();
-	if (!pipeUp)
+	if (pipeUp)
 	{
-		((CPlayScene*)s)->GetPlayer()->isInPipe=true;
-		((CPlayScene*)s)->GetPlayer()->pipeDownTimer.Start();
+		((CPlayScene*)s)->GetPlayer()->wannaTele = false;
+		((CPlayScene*)s)->GetPlayer()->pipeUpTimer.Start();
 	}
 	else
-		((CPlayScene*)s)->GetPlayer()->pipeUpTimer.Start();
+	{
+		((CPlayScene*)s)->GetPlayer()->wannaTele = false;
+		((CPlayScene*)s)->GetPlayer()->pipeDownTimer.Start();
+	}
+
 }

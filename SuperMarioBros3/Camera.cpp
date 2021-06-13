@@ -115,7 +115,7 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 		//cy -= SCREEN_HEIGHT / 2;
 	}
 	int sceneId = game->GetCurrentScene()->GetId();
-	if (sceneId == 2) //2 is extra scene
+	if (sceneId == EXTRA_SCENE)
 		SetCameraPosition((int)cx, (int)cy - 30);
 	else
 		SetCameraPosition((int)cx, (int)cy);

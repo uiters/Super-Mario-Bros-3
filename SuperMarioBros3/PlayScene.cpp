@@ -488,6 +488,8 @@ void CPlaySceneKeyHandler::OnKeyUp(int KeyCode) {
 	case DIK_DOWN:
 		mario->isSitting = false;
 		break;
+	case DIK_UP:
+		mario->isSitting = false;
 	}
 }
 
@@ -505,6 +507,10 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 		/*if (mario->isGround)*/
 		mario->SetState(MARIO_STATE_JUMPING);
 		break;
+	/*case DIK_DOWN:
+		break;
+	case DIK_UP:
+		break;*/
 	case DIK_C:
 		mario->SetState(MARIO_STATE_SHOOTING);
 		break;
@@ -521,7 +527,7 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 		mario->Transform(CMario::Mode::Tanooki);
 		break;
 	case DIK_A:
-		mario->Reset();
+		mario->Boost();
 		break;
 	}
 }
@@ -537,10 +543,8 @@ void CPlaySceneKeyHandler::KeyState(BYTE* states)
 	//check current key state
 	if (game->IsKeyDown(DIK_DOWN))
 		mario->SetState(MARIO_STATE_SITTING);
-
 	else if (game->IsKeyDown(DIK_LEFT))
 		mario->SetState(MARIO_STATE_WALKING_LEFT);
-
 	else if (game->IsKeyDown(DIK_RIGHT))
 		mario->SetState(MARIO_STATE_WALKING_RIGHT);
 	else

@@ -317,10 +317,11 @@ public:
 	bool isHolding;
 
 	// swap map
-	bool isInPipe=false;
+	bool wannaTele=false;
 	Timer pipeUpTimer;
 	Timer pipeDownTimer;
 	CPortal* portal = NULL;
+
 	CMario(float x = 0.0f, float y = 0.0f, bool iais = false);
 	~CMario();
 
@@ -349,10 +350,12 @@ public:
 	void Jump();
 	void Sit();
 	void Die();
+	void Boost();
+	void Reset();
+
 	void SetState(int vState);
 
 	void Update(DWORD dt, std::vector<LPGAMEOBJECT>* objects);
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
-	void Reset();
 
 };
