@@ -2,6 +2,7 @@
 
 #include <d3dx9.h>
 #include "KeyEventHandler.h"
+#include "Font.h"
 
 #define	INTROSCENE	0
 #define	WORLDSCENE	1
@@ -24,6 +25,7 @@ protected:
 	int id;
 	bool isCameraAutoMove = false;
 	LPCWSTR sceneFilePath;
+	CFont* fonts = NULL;
 
 public:
 	CScene(int id, LPCWSTR filePath);
@@ -35,6 +37,8 @@ public:
 	virtual void Unload() = 0;
 	virtual void Update(DWORD dt) = 0;
 	virtual void Render() = 0;
+	CFont* GetFont() { return fonts; }
+
 };
 typedef CScene* LPSCENE;
 

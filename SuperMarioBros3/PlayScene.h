@@ -14,6 +14,7 @@
 #include "CMap.h"
 #include "Portal.h"
 #include "Grid.h"
+#include "HUD.h"
 
 #define GAMEDONE1_SPRITE_ID		50070
 #define GAMEDONE2_SPRITE_ID		50071
@@ -35,7 +36,8 @@ protected:
 	//Grid
 	vector<Unit*> units;
 	Grid* grid;
-
+	//HUD
+	HUD* hud = NULL;
 	//Camera
 	Camera* cam ;
 	float cxcount = 0;
@@ -63,6 +65,7 @@ public:
 	CMario * GetPlayer() { return player; } 
 	CMap* GetMap() { return current_map; }
 	Grid* GetGrid() { return grid; }
+	HUD* GetHUD() { return hud; }
 	void SetPlayer(CMario* m) { player = m; }
 	//friend class CPlaySceneKeyHandler;
 };

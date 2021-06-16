@@ -1,6 +1,8 @@
 #pragma once
 //status board
 #define HUD_HEIGHT 32
+#define HUD_CY 395
+
 
 //windown
 #define WINDOW_CLASS_NAME L"GameWindow"

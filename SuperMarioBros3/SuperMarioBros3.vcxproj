@@ -158,6 +158,7 @@
     <ClCompile Include="Fire.cpp" />
     <ClCompile Include="FirePlant.cpp" />
     <ClCompile Include="Grid.cpp" />
+    <ClCompile Include="HUD.cpp" />
     <ClCompile Include="IntroScene.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -202,6 +203,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Goomba.h" />
     <ClInclude Include="Grid.h" />
+    <ClInclude Include="HUD.h" />
     <ClInclude Include="IntroScene.h" />
     <ClInclude Include="KeyEventHandler.h" />
     <ClInclude Include="Koopas.h" />

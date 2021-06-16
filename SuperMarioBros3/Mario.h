@@ -306,7 +306,7 @@ public:
 	float start_x;			// initial position of Mario at scene
 	float start_y;
 	bool isAtIntroScene;
-	int RunningStacks = 0;
+
 	bool dead;
 	bool isSitting;
 	bool isShooting;
@@ -315,7 +315,14 @@ public:
 	bool isKicking;
 	bool isFlying;
 	bool isHolding;
-
+	//game done
+	bool isGameDone = false;
+	// HUD
+	int RunningStacks = 0;
+	int money = 0;
+	int life = 4;
+	int score = 0;
+	
 	// swap map
 	bool wannaTele=false;
 	Timer pipeUpTimer;

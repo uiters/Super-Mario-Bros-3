@@ -425,6 +425,9 @@ void CGame::SwitchBackScene(int scene_id, float start_x, float start_y) {
 	((CPlayScene*)s)->SetPlayer(omario);
 	((CPlayScene*)s)->GetPlayer()->wannaTele = false;
 	((CPlayScene*)s)->GetPlayer()->pipeUpTimer.Start();
+	//set HUD
+	((CPlayScene*)s)->GetHUD()->SetHUD(((CPlayScene*)scenes[pre_scene])->GetHUD());
+	((CPlayScene*)s)->GetHUD()->Update(0);
 }
 void CGame::SwitchExtraScene(int scene_id, float start_x, float start_y, bool pipeUp)
 {
@@ -448,6 +451,8 @@ void CGame::SwitchExtraScene(int scene_id, float start_x, float start_y, bool pi
 	//load extra scene if necessary
 	if (isHaveToReload)
 		s->Load();
+	((CPlayScene*)s)->GetHUD()->SetHUD(((CPlayScene*)scenes[pre_scene])->GetHUD());
+	((CPlayScene*)s)->GetHUD()->Update(0);
 	if (pipeUp)
 	{
 		((CPlayScene*)s)->GetPlayer()->wannaTele = false;

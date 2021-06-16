@@ -160,6 +160,9 @@
     <ClCompile Include="Tanooki.cpp">
       <Filter>Map Objects\Player</Filter>
     </ClCompile>
+    <ClCompile Include="HUD.cpp">
+      <Filter>HUD</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Brick.h">
@@ -275,6 +278,9 @@
     </ClInclude>
     <ClInclude Include="Tanooki.h">
       <Filter>Map Objects\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="HUD.h">
+      <Filter>HUD</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

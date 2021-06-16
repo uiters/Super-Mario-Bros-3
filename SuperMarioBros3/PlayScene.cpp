@@ -398,7 +398,8 @@ void CPlayScene::Load()
 	f.close();
 
 	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"Resources\\Textures\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
-
+	fonts = new CFont();
+	hud = new HUD();
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 }
 
@@ -424,9 +425,10 @@ void CPlayScene::Update(DWORD dt)
 		coObjects.push_back(objects[i]);
 
 	//get map and screen information
-	if (player->IsLostControl())
+	if (player->IsLostControl() || player->isPipe())
 	{
 		player->Update(0, &coObjects);
+		hud->Update(0);
 		cam->Update(0, isCameraAutoMove, cxcount);
 	}
 	else {
@@ -434,8 +436,8 @@ void CPlayScene::Update(DWORD dt)
 		for (size_t i = 0; i < objects.size(); i++)
 		{
 			objects[i]->Update(dt, &coObjects);
-			//hud->Update(dt, &coObjects);
 		}
+		hud->Update(dt);
 		cam->Update(dt, isCameraAutoMove, cxcount);
 	}
 	grid->UpdateGrid(units);
@@ -454,6 +456,7 @@ void CPlayScene::Render()
 	{
 		objects[i]->Render();
 	}
+	hud->Render();
 }
 
 /*
@@ -469,9 +472,13 @@ void CPlayScene::Unload()
 	objects.clear();
 	units.clear();
 
+	delete hud;
+	delete fonts;
+
 	current_map = nullptr;
 	player = nullptr;
 	grid = nullptr;
+	hud = nullptr;
 	Camera::GetInstance()->SetCameraPosition(0, 0);
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 
@@ -507,10 +514,10 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 		/*if (mario->isGround)*/
 		mario->SetState(MARIO_STATE_JUMPING);
 		break;
-	/*case DIK_DOWN:
-		break;
-	case DIK_UP:
-		break;*/
+		/*case DIK_DOWN:
+			break;
+		case DIK_UP:
+			break;*/
 	case DIK_C:
 		mario->SetState(MARIO_STATE_SHOOTING);
 		break;

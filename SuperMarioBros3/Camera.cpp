@@ -51,6 +51,7 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 	CGame* game = CGame::GetInstance();
 	// Update camera to follow mario
 	float cx, cy, mapHeight, mapWidth;
+	HUD* hud = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetHUD();
 	CMap* currentMap = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetMap();
 	CMario* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	mapHeight = currentMap->GetMapHeight();
@@ -116,9 +117,19 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 	}
 	int sceneId = game->GetCurrentScene()->GetId();
 	if (sceneId == EXTRA_SCENE)
+	{
 		SetCameraPosition((int)cx, (int)cy - 30);
+		hud->SetPosition(int(cx), HUD_CY/2-40);
+	}
 	else
+	{
 		SetCameraPosition((int)cx, (int)cy);
+		hud->SetPosition(int(cx), HUD_CY);
+		if (cy == 0)
+		{
+			hud->SetPosition(int(cx), HUD_CY / 2 - 10);
+		}
+	}
 }
 
 void Camera::Unload()
