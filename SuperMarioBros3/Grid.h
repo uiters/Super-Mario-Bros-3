@@ -22,7 +22,7 @@ public:
 	Unit(Grid* grid, LPGAMEOBJECT obj, float x, float y);
 	Unit(Grid* grid, LPGAMEOBJECT obj, int gridRow, int gridCol);
 
-	void Add(LPGAMEOBJECT obj);
+	void AddUnit(LPGAMEOBJECT obj, Grid* grid);
 	void Move(float x, float y);
 	LPGAMEOBJECT GetObj() { return this->obj; }
 

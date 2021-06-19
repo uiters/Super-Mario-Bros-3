@@ -47,7 +47,7 @@ void CMario::Transform(Mode m) {
 	{
 	case CMario::Mode::Small:
 		if (this->mode != Mode::Small) {
-			SetPosition(x, y - 8);
+			SetPosition(x, y + 8);
 			SetSpeed(0, 0);
 		}
 		break;
@@ -177,7 +177,13 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (pipeDownTimer.IsStarted() == true)
 			y += 0.5f;
 		else if (pipeUpTimer.IsStarted() == true)
-			y += -0.5f;
+		{
+			if (GetMode() == Mode::Small)
+				y += -0.3f;
+			else
+				y += -0.5f;
+
+		}
 	}
 	else
 	{
@@ -195,8 +201,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			// TODO: This is a very ugly designed function!!!!
 			FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
 			float x0 = x, y0 = y;
-			x = x0 + min_tx * dx + nx * 0.4f;
-			y = y0 + min_ty * dy + ny * 0.4f;
+			x = x0 + min_tx * dx + nx * PUSHBACK;
+			y = y0 + min_ty * dy + ny * PUSHBACK;
 
 			//
 			// Collision logic with other objects
@@ -242,11 +248,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 				}
 				//questionbrick
-				/*if (dynamic_cast<CQuestionBrick*>(e->obj) && e->ny > 0)
-					e->obj->SetState(QUESTIONBRICK_STATE_HIT);*/
-					//breakablebrick
+				if (dynamic_cast<CQuestionBrick*>(e->obj) && e->ny > 0)
+					e->obj->SetState(QUESTIONBRICK_STATE_HIT);
+				//breakablebrick
 
-					//block
+				//block
 				else if (dynamic_cast<CBlock*>(e->obj)) {
 					isGround = true;
 					if (e->nx != 0 && ceil(mBottom) != oTop)
@@ -725,6 +731,7 @@ void CMario::Render()
 		else if (GetMode() == Mode::Fire)
 			TransformFireAni(ani);
 	}
+
 	if (untouchableTimer.IsStarted()) alpha = MARIO_RENDER_ALPHA / 2;
 
 	if (pipeDownTimer.IsStarted() == true || pipeUpTimer.IsStarted() == true)
@@ -738,13 +745,15 @@ void CMario::Render()
 			sprite_id = MARIO_SPRITE_PIPE_FIRE;
 		CSprites::GetInstance()->sprites[sprite_id]->Draw(x, y - HUD_HEIGHT, alpha);
 	}
-
-	if (ani == -1)
+	else
 	{
-		if (nx > 0) ani = MARIO_ANI_SMALL_WALKING_RIGHT;
-		else ani = MARIO_ANI_SMALL_WALKING_LEFT;
+		if (ani == -1)
+		{
+			if (nx > 0) ani = MARIO_ANI_SMALL_WALKING_RIGHT;
+			else ani = MARIO_ANI_SMALL_WALKING_LEFT;
+		}
+		animation_set->at(ani)->Render(x, y, alpha);
 	}
-	animation_set->at(ani)->Render(x, y, alpha);
 	RenderBoundingBox();
 
 }
@@ -872,4 +881,9 @@ void CMario::Reset()
 	dead = false;
 }
 
-
+void CMario::TelePort() {
+	if (nx > 0)
+		SetPosition(x + 1300, start_y);
+	else
+		SetPosition(x - 1300, start_y);
+}

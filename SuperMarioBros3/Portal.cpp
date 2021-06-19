@@ -33,7 +33,7 @@ void CPortal::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		mario->GetBoundingBox(mLeft, mTop, mRight, mBottom);
 		GetBoundingBox(oLeft, oTop, oRight, oBottom);
-		if (/*isColliding(floor(mLeft), mTop, ceil(mRight), mBottom) &&*/ mario->isSitting
+		if (isColliding(floor(mLeft), floor(mTop), ceil(mRight), ceil(mBottom)) && mario->isSitting
 			&& mLeft >= oLeft && mRight <= oRight)
 		{
 			mario->portal = this;

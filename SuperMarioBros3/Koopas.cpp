@@ -4,8 +4,8 @@
 CKoopas::CKoopas()
 {
 	nx = -1;
-	//SetState(KOOPAS_STATE_WALKING);
-	SetState(KOOPAS_STATE_IN_SHELL);
+	SetState(KOOPAS_STATE_WALKING);
+	//SetState(KOOPAS_STATE_IN_SHELL);
 	//SetState(KOOPAS_STATE_SHELL_UP);
 }
 

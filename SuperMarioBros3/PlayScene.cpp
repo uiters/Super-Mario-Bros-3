@@ -218,15 +218,14 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 			obj->SetTag(tag);
 			break;
 		case OBJECT_TYPE_QUESTIONBRICK:
-			obj = new CQuestionBrick();
-			/*	obj = new CQuestionBrick(option_tag_1, option_tag_2);
-				if (tokens.size() >= 8)
-				{
-					int nboitem = atoi(tokens[7].c_str());
-					if (nboitem > 0)
-						((CQuestionBrick*)obj)->items = nboitem;
-				}
-				((CQuestionBrick*)obj)->start_y = y;*/
+			obj = new CQuestionBrick(option_tag_1, option_tag_2);
+			if (tokens.size() >= 8)
+			{
+				int nboitem = atoi(tokens[7].c_str());
+				if (nboitem > 0)
+					((CQuestionBrick*)obj)->items = nboitem;
+			}
+			((CQuestionBrick*)obj)->start_y = y;
 			break;
 		case OBJECT_TYPE_BREAKABLEBRICK:
 			obj = new CBreakableBrick();
@@ -265,8 +264,7 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 			break;
 		case OBJECT_TYPE_COIN:
 			obj = new CCoin(tag);
-			/*obj->SetType(IGNORE);*/
-
+			obj->SetType(IGNORE);
 			break;
 		case OBJECT_TYPE_CARD:
 			obj = new CCard();
@@ -488,7 +486,7 @@ void CPlaySceneKeyHandler::OnKeyUp(int KeyCode) {
 	DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
 	CMario* mario = ((CPlayScene*)scene)->GetPlayer();
 
-	if (mario == NULL || mario->IsLostControl() || mario->IsDead()) return;
+	if (mario == NULL || mario->IsLostControl() || mario->IsDead() || mario->isPipe()) return;
 
 	switch (KeyCode)
 	{
@@ -506,7 +504,7 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 
 	CMario* mario = ((CPlayScene*)scene)->GetPlayer();
 
-	if (mario == NULL || mario->IsLostControl() || mario->IsDead()) return;
+	if (mario == NULL || mario->IsLostControl() || mario->IsDead() || mario->isPipe()) return;
 
 	switch (KeyCode)
 	{
@@ -536,6 +534,9 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_A:
 		mario->Boost();
 		break;
+	case DIK_T:
+		mario->TelePort();
+		break;
 	}
 }
 
@@ -546,7 +547,7 @@ void CPlaySceneKeyHandler::KeyState(BYTE* states)
 	//DebugOut(L"[INFO] KeyDown: %d\n", mario->GetState());
 
 	//disable control key when Mario die 
-	if (mario == NULL || mario->IsLostControl() || mario->IsDead()) return;
+	if (mario == NULL || mario->IsLostControl() || mario->IsDead() || mario->isPipe()) return;
 	//check current key state
 	if (game->IsKeyDown(DIK_DOWN))
 		mario->SetState(MARIO_STATE_SITTING);

@@ -52,13 +52,13 @@
 class CGoomba : public CGameObject
 {
 	Timer dyingTimer;
-	Timer changsingTimer;
+	Timer chasingTimer;
 	Timer walkingTimer;
 	bool isDying = false;
 	bool isWhackedDying = false;
 	bool isJumping = false;
 	bool isHighJumping = false;
-	int jumping_stacks = 0;
+	int jumpingStacks = 0;
 public:
 	CGoomba();
 	virtual void SetState(int state);

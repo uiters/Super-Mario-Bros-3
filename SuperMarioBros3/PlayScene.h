@@ -27,19 +27,20 @@
 
 #define CAM_CHANGE_TIME		30
 
-class CPlayScene: public CScene
+class CPlayScene : public CScene
 {
-protected: 
-	CMario *player = NULL;					// A play scene has to have player, right? 
+protected:
+	CMario* player = NULL;					// A play scene has to have player, right? 
 	CMap* current_map = NULL;
 	vector<LPGAMEOBJECT> objects;
 	//Grid
 	vector<Unit*> units;
+	Unit* unit;
 	Grid* grid;
 	//HUD
 	HUD* hud = NULL;
 	//Camera
-	Camera* cam ;
+	Camera* cam;
 	float cxcount = 0;
 
 	void _ParseSection_TEXTURES(string line);
@@ -52,7 +53,7 @@ protected:
 
 	LPSPRITE gamedone1 = nullptr;
 	LPSPRITE gamedone2 = nullptr;
-public: 
+public:
 	bool isGameDone1 = false;
 	bool isGameDone2 = false;
 	bool isGameDone3 = false;
@@ -62,8 +63,9 @@ public:
 	virtual void Update(DWORD dt);
 	virtual void Render();
 	virtual void Unload();
-	CMario * GetPlayer() { return player; } 
+	CMario* GetPlayer() { return player; }
 	CMap* GetMap() { return current_map; }
+	Unit* GetUnit() { return unit; }
 	Grid* GetGrid() { return grid; }
 	HUD* GetHUD() { return hud; }
 	void SetPlayer(CMario* m) { player = m; }
@@ -72,10 +74,10 @@ public:
 
 class CPlaySceneKeyHandler : public CSceneKeyHandler
 {
-public: 
-	virtual void KeyState(BYTE *states);
+public:
+	virtual void KeyState(BYTE* states);
 	virtual void OnKeyDown(int KeyCode);
 	virtual void OnKeyUp(int KeyCode);
-	CPlaySceneKeyHandler(CScene *s) :CSceneKeyHandler(s) {};
+	CPlaySceneKeyHandler(CScene* s) :CSceneKeyHandler(s) {};
 };
 

@@ -55,9 +55,13 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (walkingTimer.ElapsedTime() >= GOOMBA_RED_TIME_WALKING && walkingTimer.IsStarted())
 		{
 			walkingTimer.Reset();
-			jumping_stacks = 0;
+			jumpingStacks = 0;
 			y -= GOOMBA_RED_BBOX_WINGS_HEIGHT - GOOMBA_RED_BBOX_HEIGHT;
 			SetState(GOOMBA_STATE_RED_JUMPING);
+		}
+		if (chasingTimer.ElapsedTime() >= GOOMBA_RED_TIME_CHASING && chasingTimer.IsStarted())
+		{
+			chasingTimer.Reset();
 		}
 	}
 	//
@@ -67,7 +71,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (!mario->isAtIntroScene)
 		vy += ay * dt;
 
-	// limit
+	//// limit
 	if (vy < -GOOMBA_JUMP_SPEED && state == GOOMBA_STATE_RED_JUMPING)
 	{
 		vy = -GOOMBA_JUMP_SPEED;
@@ -83,7 +87,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
 	coEvents.clear();
-	// turn off collision when goomba kicked 
+	//// turn off collision when goomba kicked 
 	if (state != GOOMBA_STATE_DIE_BY_TAIL)
 		CalcPotentialCollisions(coObjects, coEvents);
 
@@ -105,9 +109,24 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				return;
 			}
 		}
-
+		if (abs(mario->x - x) <= GOOMBA_RED_RANGE_CHASING && tag == GOOMBA_RED && chasingTimer.IsStarted())
+			chasingTimer.Start();
+		if (abs(mario->x - x) >= GOOMBA_RED_RANGE_CHASING && tag == GOOMBA_RED && !chasingTimer.IsStarted())
+		{
+			if (x < mario->x)
+			{
+				nx = 1;
+				vx = GOOMBA_WALKING_SPEED;
+			}
+			else
+			{
+				nx = -1;
+				vx = -GOOMBA_WALKING_SPEED;
+			}
+			DebugOut(L"[INFO] goomba %d\n", chasingTimer.IsStarted() ? 1 : 0);
+		}
 	}
-	// No collision occured, proceed normally
+	//// No collision occured, proceed normally
 	if (coEvents.size() == 0 || state == GOOMBA_STATE_DIE_BY_TAIL)
 	{
 		x += dx;
@@ -174,18 +193,18 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					{
 						if (!walkingTimer.IsStarted())
 						{
-							if (jumping_stacks == GOOMBA_RED_JUMPING_STACKS)
+							if (jumpingStacks == GOOMBA_RED_JUMPING_STACKS)
 							{
 								SetState(GOOMBA_STATE_RED_HIGHJUMPING);
-								jumping_stacks = -1;
+								jumpingStacks = -1;
 							}
 							else
 							{
-								if (jumping_stacks == -1)
+								if (jumpingStacks == -1)
 									SetState(GOOMBA_STATE_RED_WINGSWALKING);
 								else
 									SetState(GOOMBA_STATE_RED_JUMPING);
-								jumping_stacks++;
+								jumpingStacks++;
 							}
 						}
 						else
@@ -211,6 +230,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 		}
 	}
+	// limit screen
 	if (vx < 0 && x <= 0) {
 		x = 0;
 		vx = -vx;

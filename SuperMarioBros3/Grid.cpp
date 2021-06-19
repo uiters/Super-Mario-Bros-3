@@ -28,7 +28,7 @@ Unit::Unit(Grid* grid, LPGAMEOBJECT obj, int gridRow, int gridCol)
 	grid->Add(this, gridRow, gridCol);
 }
 
-void Unit::Add(LPGAMEOBJECT obj)
+void Unit::AddUnit(LPGAMEOBJECT obj,Grid* grid)
 {
 	Unit* unit = new Unit(grid, obj, obj->x, obj->y);
 }

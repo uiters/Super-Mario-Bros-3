@@ -322,9 +322,9 @@ public:
 	int money = 0;
 	int life = 4;
 	int score = 0;
-	
+
 	// swap map
-	bool wannaTele=false;
+	bool wannaTele = false;
 	Timer pipeUpTimer;
 	Timer pipeDownTimer;
 	CPortal* portal = NULL;
@@ -365,4 +365,5 @@ public:
 	void Update(DWORD dt, std::vector<LPGAMEOBJECT>* objects);
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 
+	void TelePort();
 };

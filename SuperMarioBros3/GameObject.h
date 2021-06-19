@@ -7,7 +7,7 @@
 #include "Sprites.h"
 #include "Animations.h"
 #include "Define.h"
-
+#include "Utils.h"
 #define STATIC	0
 #define MOVING	1
 #define IGNORE	2
@@ -104,16 +104,19 @@ public:
 	{
 		float this_left, this_top, this_right, this_bottom;
 
-		this->GetBoundingBox(
+		GetBoundingBox(
 			this_left,
 			this_top,
 			this_right,
 			this_bottom);
-
-		bool on1 = friend_left < this_right;
-		bool on2 = friend_top < this_bottom;
-		bool down1 = friend_right > this_left;
-		bool down2 = friend_bottom > this_top;
+	/*	DebugOut(L"isColliding:: %f %f %f %f", this_left,
+			this_top,
+			this_right,
+			this_bottom);*/
+		bool on1 = friend_left <= this_right;
+		bool on2 = friend_top <= this_bottom;
+		bool down1 = friend_right >= this_left;
+		bool down2 = friend_bottom >= this_top;
 		return on1 && on2 && down1 && down2;
 	}
 	CGameObject();
