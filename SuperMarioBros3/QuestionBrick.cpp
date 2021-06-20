@@ -46,15 +46,15 @@ void CQuestionBrick::SetState(int state = BRICK_STATE_IDLE)
 				obj->SetState(COIN_STATE_UP);
 				scene->GetUnit()->AddUnit(obj, scene->GetGrid());
 			}
-			/*	if (tag == ITEM_LEAF || (tag == ITEM_CUSTOM && mario->GetMode() == CMario::Mode::Super))
-				{
-					CreateItem(ITEM_LEAF);
-					CLeaf* obj = dynamic_cast<CLeaf*>(item);
-					obj->isAppear = true;
-					obj->SetPosition(x, y);
-					obj->SetState(LEAF_STATE_UP);
-					scene->PushBack(item);
-				}*/
+			if (tag == ITEM_LEAF || (tag == ITEM_CUSTOM && mario->GetMode() == CMario::Mode::Super))
+			{
+				CreateItem(ITEM_LEAF);
+				CLeaf* obj = dynamic_cast<CLeaf*>(item);
+				obj->isAppear = true;
+				obj->SetPosition(x, y);
+				obj->SetState(LEAF_STATE_UP);
+				scene->GetUnit()->AddUnit(obj, scene->GetGrid());
+			}
 			else if (tag == ITEM_CUSTOM)
 			{
 				if (mario->GetMode() == CMario::Mode::Small)
@@ -114,6 +114,12 @@ void CQuestionBrick::CreateItem(int itemtype)
 		item = new CMushroom();
 		item->SetType(IGNORE);
 		tmp_ani_set = animation_sets->Get(MUSHROOM_ANI_SET_ID);
+	}
+	else if (itemtype == ITEM_LEAF)
+	{
+		item = new CLeaf();
+		item->SetType(IGNORE);
+		tmp_ani_set = animation_sets->Get(LEAF_ANI_SET_ID);
 	}
 	item->SetAnimationSet(tmp_ani_set);
 

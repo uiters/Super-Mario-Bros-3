@@ -28,6 +28,10 @@ void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				mario->Transform(CMario::Mode::Super);
 			}
+			else if (tag == MUSHROOM_TYPE_GREEN)
+			{
+				// add more life;
+			}
 			isAppear = false;
 			isDestroyed = true;
 		}
