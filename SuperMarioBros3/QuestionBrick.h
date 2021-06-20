@@ -28,16 +28,10 @@
 class CQuestionBrick :
 	public CBrick
 {
-	Timer appearTimer;
-	bool isFallingDown = false;
-	bool haveToWaitForPush = false;
-	int PushedStacks = 0;
 	int type = 0;
-
 public:
 	int items = 0;
 	float start_y = 0;
-	bool isBeingPushedUp = false;
 	CQuestionBrick(int tag = ITEM_COIN, int type = QUESTIONBRICK_TYPE_MARK);
 	CGameObject* item = NULL;
 	void SetState(int vState);

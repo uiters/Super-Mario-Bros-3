@@ -103,7 +103,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				mario->vy = -MARIO_JUMP_DEFLECT_SPEED;
 				if (tag == GOOMBA_RED)
-					tag = GOOMBA_RED_NORMAL;
+					SetTag(GOOMBA_RED_NORMAL);
 				else
 					SetState(GOOMBA_STATE_DIE);
 				return;

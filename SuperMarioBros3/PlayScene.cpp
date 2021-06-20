@@ -218,7 +218,7 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 			obj->SetTag(tag);
 			break;
 		case OBJECT_TYPE_QUESTIONBRICK:
-			obj = new CQuestionBrick(option_tag_1, option_tag_2);
+			obj = new CQuestionBrick(option_tag_1, option_tag_2); // op_1: reward inside the brick  --- op_2: appearance of the brick
 			if (tokens.size() >= 8)
 			{
 				int nboitem = atoi(tokens[7].c_str());
@@ -268,7 +268,6 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 			break;
 		case OBJECT_TYPE_CARD:
 			obj = new CCard();
-
 			break;
 		case OBJECT_TYPE_PORTAL:
 		{

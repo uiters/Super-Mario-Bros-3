@@ -6,7 +6,7 @@
 
 CQuestionBrick::CQuestionBrick(int tag, int type)
 {
-	state = QUESTIONBRICK_STATE_IDLE;
+	SetState(QUESTIONBRICK_STATE_IDLE);
 	this->tag = tag;
 	this->type = type;
 }
@@ -23,11 +23,6 @@ void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (scene != NULL)
 			mario = ((CPlayScene*)scene)->GetPlayer();
 	}
-	if (isBeingPushedUp && start_y - y >= QUESTIONBRICK_PUSH_MAX_HEIGHT)
-	{
-		y = start_y - QUESTIONBRICK_PUSH_MAX_HEIGHT;
-		appearTimer.Reset();
-	}
 }
 void CQuestionBrick::SetState(int state = BRICK_STATE_IDLE)
 {
@@ -40,7 +35,6 @@ void CQuestionBrick::SetState(int state = BRICK_STATE_IDLE)
 	case QUESTIONBRICK_STATE_HIT:
 		if (this->state != QUESTIONBRICK_STATE_HIT && mario != nullptr)
 		{
-			appearTimer.Start();
 			if (items > 0)
 				items--;
 			if (tag == ITEM_COIN)
@@ -51,6 +45,38 @@ void CQuestionBrick::SetState(int state = BRICK_STATE_IDLE)
 				obj->SetPosition(x, y - COIN_BBOX_HEIGHT - 1);
 				obj->SetState(COIN_STATE_UP);
 				scene->GetUnit()->AddUnit(obj, scene->GetGrid());
+			}
+			/*	if (tag == ITEM_LEAF || (tag == ITEM_CUSTOM && mario->GetMode() == CMario::Mode::Super))
+				{
+					CreateItem(ITEM_LEAF);
+					CLeaf* obj = dynamic_cast<CLeaf*>(item);
+					obj->isAppear = true;
+					obj->SetPosition(x, y);
+					obj->SetState(LEAF_STATE_UP);
+					scene->PushBack(item);
+				}*/
+			else if (tag == ITEM_CUSTOM)
+			{
+				if (mario->GetMode() == CMario::Mode::Small)
+				{
+					CreateItem(ITEM_MUSHROOM_RED);
+					item->tag = ITEM_MUSHROOM_RED;
+					CMushroom* obj = dynamic_cast<CMushroom*>(item);
+					obj->isAppear = true;
+					obj->SetPosition(x, y);
+					obj->SetState(MUSHROOM_STATE_UP);
+					scene->GetUnit()->AddUnit(obj, scene->GetGrid());
+				}
+				if (mario->GetMode() == CMario::Mode::Tanooki || mario->GetMode() == CMario::Mode::Fire)
+				{
+					CreateItem(ITEM_MUSHROOM_GREEN);
+					item->tag = MUSHROOM_TYPE_GREEN;
+					CMushroom* obj = dynamic_cast<CMushroom*>(item);
+					obj->isAppear = true;
+					obj->SetPosition(x, y);
+					obj->SetState(MUSHROOM_STATE_UP);
+					scene->GetUnit()->AddUnit(obj, scene->GetGrid());
+				}
 			}
 		}
 		break;
@@ -74,13 +100,21 @@ void CQuestionBrick::Render()
 void CQuestionBrick::CreateItem(int itemtype)
 {
 	CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
+	LPANIMATION_SET tmp_ani_set = NULL;
+
 	if (itemtype == ITEM_COIN)
 	{
 		item = new CCoin(COIN_TYPE_INBRICK);
 		item->SetType(IGNORE);
-		CAnimationSets* animation_sets = CAnimationSets::GetInstance();
-		LPANIMATION_SET tmp_ani_set = animation_sets->Get(COIN_ANI_SET_ID);
-		item->SetAnimationSet(tmp_ani_set);
-
+		tmp_ani_set = animation_sets->Get(COIN_ANI_SET_ID);
 	}
+	else if (itemtype == ITEM_MUSHROOM_RED || itemtype == ITEM_MUSHROOM_GREEN)
+	{
+		item = new CMushroom();
+		item->SetType(IGNORE);
+		tmp_ani_set = animation_sets->Get(MUSHROOM_ANI_SET_ID);
+	}
+	item->SetAnimationSet(tmp_ani_set);
+
 }

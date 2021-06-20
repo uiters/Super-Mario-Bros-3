@@ -24,6 +24,7 @@ public:
 	D3DXVECTOR3 GetCameraPosition();
 	void Update(DWORD dt, int typeCamera, float& countx);
 	void Unload();
+	bool isAreaCamera(float x, float y);
 	~Camera();
 };
 

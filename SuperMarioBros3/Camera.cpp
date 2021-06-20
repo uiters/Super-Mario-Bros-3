@@ -119,7 +119,7 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 	if (sceneId == EXTRA_SCENE)
 	{
 		SetCameraPosition((int)cx, (int)cy - 30);
-		hud->SetPosition(int(cx), HUD_CY/2-40);
+		hud->SetPosition(int(cx), HUD_CY / 2 - 40);
 	}
 	else
 	{
@@ -130,6 +130,15 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 			hud->SetPosition(int(cx), HUD_CY / 2 - 10);
 		}
 	}
+}
+
+bool Camera::isAreaCamera(float x, float y) {
+	CGame* game = CGame::GetInstance();
+
+	bool xInViewPort = x >= GetCameraPosition().x && x < GetCameraPosition().x + game->GetScreenWidth();
+	bool yInViewPort = y >= GetCameraPosition().y - (SCREEN_HEIGHT - game->GetScreenHeight()) && y < GetCameraPosition().y + SCREEN_HEIGHT;
+
+	return xInViewPort && yInViewPort;
 }
 
 void Camera::Unload()

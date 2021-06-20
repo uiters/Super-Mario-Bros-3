@@ -11,8 +11,8 @@ CCoin::CCoin(int tag) : CGameObject() {
 		isAppear = true;
 	if (tag == COIN_TYPE_TRANSFORM)
 		appearTimer.Start();
-	state = COIN_STATE_IDLE;
-	type = IGNORE;
+	SetState(COIN_STATE_IDLE);
+	SetType(IGNORE);
 }
 void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -34,9 +34,6 @@ void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				isAppear = false;
 				isDestroyed = true;
-
-				DebugOut(L"mat:: %f %f %f %f", mLeft, mTop, mRight, mBottom);
-
 			}
 
 		}
