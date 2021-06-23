@@ -35,7 +35,6 @@ void CLeaf::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 
 		}
-
 	}
 	if (state == LEAF_STATE_UP)
 	{
