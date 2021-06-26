@@ -11,7 +11,7 @@
 #include "QuestionBrick.h"
 #include "PlayScene.h"
 #include "Switch.h"
-
+#include "Tanooki.h"
 CMario::CMario(float x, float y, bool isatintroscene) : CGameObject()
 {
 	Transform(Mode::Small);
@@ -22,6 +22,7 @@ CMario::CMario(float x, float y, bool isatintroscene) : CGameObject()
 	start_y = y;
 	this->x = x;
 	this->y = y;
+	tail = new CTanooki(x, y);
 }
 
 CMario::~CMario()
@@ -109,7 +110,18 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			ay = MARIO_GRAVITY;
 		}
 	}
-
+	if (tailStateTimer.ElapsedTime() >= MARIO_TURNING_STATE_TIME && tailTimer.IsStarted())
+	{
+		tailStateTimer.Start();
+		tailState++;
+	}
+	if (tailTimer.ElapsedTime() > MARIO_TURNING_TAIL_TIME && tailTimer.IsStarted())
+	{
+		tailTimer.Reset();
+		tailStateTimer.Reset();
+		tailState = 0;
+		tail->hit_times = 0;
+	}
 	//slow down if change direction when running
 	if (vx * ax < 0 && abs(vx) > MARIO_WALKING_SPEED_MAX
 		&& (state == MARIO_STATE_WALKING_LEFT || state == MARIO_STATE_WALKING_RIGHT))
@@ -308,7 +320,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							y = y0;
 							if (e->ny > 0 && vy < 0)
 								y = y0 + dy;
-							if (e->nx != 0 /*&& isTurningTail*/)
+							if (e->nx != 0 && tailTimer.IsStarted())
 							{
 								//AddScore(goomba->x, goomba->y, 100, true);
 								goomba->SetState(GOOMBA_STATE_DIE_BY_TAIL);
@@ -362,6 +374,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// clean up collision events
 	for (UINT i = 0; i < coEvents.size(); i++)
 		delete coEvents[i];
+	tail->Update(dt);
 }
 
 void CMario::RenderBasicMoving(int& ani, int ani_jump_down_right, int ani_jump_down_left,
@@ -658,7 +671,7 @@ void CMario::TransformTanookiAni(int& ani) {
 		}
 	}
 
-	if (/*isTurningTail*/false)
+	if (tailTimer.IsStarted())
 	{
 		if (nx > 0)
 			ani = MARIO_ANI_TAIL_TURNING_RIGHT;
@@ -733,6 +746,46 @@ void CMario::TransformFireAni(int& ani) {
 	}
 }
 
+void CMario::RenderTanookiAni(int ani, int alpha)
+{
+	if (tailTimer.IsStarted())
+	{
+		if (nx > 0)
+		{
+			if (tailState == MARIO_WHACK_STATE_1 || tailState == MARIO_WHACK_STATE_5)
+				CSprites::GetInstance()->sprites[MARIO_SPRITE_WHACK_RIGHT_1_ID]->Draw(x - MARIO_WHACK_RENDER_DIFF_7, y - HUD_HEIGHT, alpha);
+			if (tailState == MARIO_WHACK_STATE_2)
+				CSprites::GetInstance()->sprites[MARIO_SPRITE_WHACK_RIGHT_2_ID]->Draw(x, y - HUD_HEIGHT, alpha);
+			if (tailState == MARIO_WHACK_STATE_3)
+				CSprites::GetInstance()->sprites[MARIO_SPRITE_WHACK_RIGHT_3_ID]->Draw(x, y - HUD_HEIGHT, alpha);
+			if (tailState == MARIO_WHACK_STATE_4)
+				CSprites::GetInstance()->sprites[MARIO_SPRITE_WHACK_RIGHT_4_ID]->Draw(x, y - HUD_HEIGHT, alpha);
+		}
+		else if (nx < 0)
+		{
+			if (tailState == MARIO_WHACK_STATE_1 || tailState == MARIO_WHACK_STATE_5)
+				CSprites::GetInstance()->sprites[MARIO_SPRITE_WHACK_LEFT_1_ID]->Draw(x + MARIO_WHACK_RENDER_DIFF_2, y - HUD_HEIGHT, alpha);
+			if (tailState == MARIO_WHACK_STATE_2)
+				CSprites::GetInstance()->sprites[MARIO_SPRITE_WHACK_LEFT_2_ID]->Draw(x, y - HUD_HEIGHT, alpha);
+			if (tailState == MARIO_WHACK_STATE_3)
+				CSprites::GetInstance()->sprites[MARIO_SPRITE_WHACK_LEFT_3_ID]->Draw(x - MARIO_WHACK_RENDER_DIFF_7, y - HUD_HEIGHT, alpha);
+			if (tailState == MARIO_WHACK_STATE_4)
+				CSprites::GetInstance()->sprites[MARIO_SPRITE_WHACK_LEFT_4_ID]->Draw(x, y - HUD_HEIGHT, alpha);
+		}
+	}
+	else
+	{
+		//TODO: will fix later
+		if (ani == -1)
+		{
+			if (nx > 0) ani = MARIO_ANI_SMALL_WALKING_RIGHT;
+			else ani = MARIO_ANI_SMALL_WALKING_LEFT;
+		}
+		animation_set->at(ani)->Render(x, y, alpha);
+	}
+
+}
+
 void CMario::Render()
 {
 	int ani = -1;
@@ -769,8 +822,13 @@ void CMario::Render()
 			sprite_id = MARIO_SPRITE_PIPE_FIRE;
 		CSprites::GetInstance()->sprites[sprite_id]->Draw(x, y - HUD_HEIGHT, alpha);
 	}
+	else if (GetMode() == Mode::Tanooki)
+	{
+		RenderTanookiAni(ani, alpha);
+	}
 	else
 	{
+		//TODO: will fix later
 		if (ani == -1)
 		{
 			if (nx > 0) ani = MARIO_ANI_SMALL_WALKING_RIGHT;
@@ -779,7 +837,8 @@ void CMario::Render()
 		animation_set->at(ani)->Render(x, y, alpha);
 	}
 	RenderBoundingBox();
-
+	if (tailTimer.IsStarted())
+		tail->Render();
 }
 
 void CMario::Stop() {
@@ -825,6 +884,20 @@ void CMario::Die()
 
 void CMario::Boost() {
 	DebugOut(L"BOOST");
+}
+
+void CMario::Attack() {
+	if (GetMode() == Mode::Fire)
+	{
+		DebugOut(L"FIRE\n");
+	}
+	else if (GetMode() == Mode::Tanooki)
+	{
+		tailTimer.Start();
+		tailStateTimer.Start();
+		tailState = 1;
+		DebugOut(L"TAIL\n");
+	}
 }
 
 void CMario::SetState(int state)

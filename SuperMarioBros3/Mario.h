@@ -2,6 +2,10 @@
 #include "GameObject.h"
 #include "Timer.h"
 #include "Portal.h"
+#include "Tanooki.h"
+#include "Fire.h"
+#include "Utils.h"
+
 #define MARIO_WALKING_SPEED_START	0.0001f 
 #define MARIO_WALKING_SPEED_MAX		0.15f
 #define MARIO_RUNNING_SPEED_MAX		0.2f
@@ -296,12 +300,13 @@ private:
 	Mode prevMode;
 	Timer untouchableTimer;
 	Timer transformTimer;
-
 	Timer flyTimer;
 	//Timer runTimer;
 	//
 	Timer dieTimer;
 
+	//skill
+	CTanooki* tail;
 public:
 	float start_x;			// initial position of Mario at scene
 	float start_y;
@@ -322,7 +327,10 @@ public:
 	int money = 0;
 	int life = 4;
 	int score = 0;
-
+	//  tail
+	int tailState = 0;
+	Timer tailTimer;
+	Timer tailStateTimer;
 	// swap map
 	bool wannaTele = false;
 	Timer pipeUpTimer;
@@ -350,6 +358,7 @@ public:
 	void TransformBigAni(int& ani);
 	void TransformTanookiAni(int& ani);
 	void TransformFireAni(int& ani);
+	void RenderTanookiAni(int ani,int alpha);
 	void Render();
 
 	//set state
@@ -359,11 +368,11 @@ public:
 	void Die();
 	void Boost();
 	void Reset();
-
+	void Attack();
 	void SetState(int vState);
 
 	void Update(DWORD dt, std::vector<LPGAMEOBJECT>* objects);
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
-
+	//CTanooki* getTail() { return tail; }
 	void TelePort();
 };

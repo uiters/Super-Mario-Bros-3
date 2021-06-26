@@ -515,8 +515,12 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 		case DIK_UP:
 			break;*/
 	case DIK_C:
-		mario->SetState(MARIO_STATE_SHOOTING);
+	{
+		if (!mario->tailTimer.IsStarted() || !mario->isSitting)
+			mario->Attack();
 		break;
+	}
+	break;
 	case DIK_1:
 		mario->Transform(CMario::Mode::Small);
 		break;

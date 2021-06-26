@@ -65,6 +65,7 @@ void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		if (appearTimer.ElapsedTime() >= COIN_FALLING_TIME)
 		{
+			appearTimer.Reset();
 			isAppear = false;
 			SetState(COIN_STATE_IDLE);
 			isDestroyed = true;

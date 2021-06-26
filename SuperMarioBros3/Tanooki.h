@@ -1,6 +1,5 @@
 #pragma once
 #include "GameObject.h"
-#include "Mario.h"
 #include "Timer.h"
 #define TAIL_BBOX_WIDTH		8
 #define TAIL_BBOX_HEIGHT	6
