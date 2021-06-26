@@ -16,6 +16,7 @@
 
 #define QUESTIONBRICK_STATE_HIT			142
 #define QUESTIONBRICK_STATE_IDLE		100
+#define QUESTIONBRICK_STATE_EMPTY		101
 
 #define QUESTIONBRICK_PUSH_MAX_HEIGHT 8
 
@@ -23,12 +24,13 @@
 #define QUESTIONBRICK_ANI_HIT	1
 #define QUESTIONBRICK_ANI_FLASH 2
 
-#define QUESTIONBRICK_SPEED		0.05f
+#define QUESTIONBRICK_SPEED		0.005f
 
 class CQuestionBrick :
 	public CBrick
 {
 	int type = 0;
+	Timer boundTimer;
 public:
 	int items = 0;
 	float start_y = 0;

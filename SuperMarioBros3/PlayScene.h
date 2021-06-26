@@ -63,6 +63,7 @@ public:
 	virtual void Update(DWORD dt);
 	virtual void Render();
 	virtual void Unload();
+	vector<LPGAMEOBJECT> GetObjects() { return objects; }
 	CMario* GetPlayer() { return player; }
 	CMap* GetMap() { return current_map; }
 	Unit* GetUnit() { return unit; }

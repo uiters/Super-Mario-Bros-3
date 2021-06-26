@@ -218,7 +218,7 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 			obj->SetTag(tag);
 			break;
 		case OBJECT_TYPE_QUESTIONBRICK:
-			obj = new CQuestionBrick(option_tag_1, option_tag_2); // op_1: reward inside the brick  --- op_2: appearance of the brick
+			obj = new CQuestionBrick(option_tag_1, option_tag_2); // op_1: reward  --- op_2: appearance of the brick
 			if (tokens.size() >= 8)
 			{
 				int nboitem = atoi(tokens[7].c_str());
@@ -415,7 +415,6 @@ void CPlayScene::Update(DWORD dt)
 	{
 		LPGAMEOBJECT obj = units[i]->GetObj();
 		objects.push_back(obj);
-
 	}
 
 	for (size_t i = 0; i < objects.size(); i++)

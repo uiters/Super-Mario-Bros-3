@@ -1,4 +1,4 @@
-#include <algorithm>
+﻿#include <algorithm>
 #include <assert.h>
 #include "Utils.h"
 
@@ -10,6 +10,7 @@
 #include "Block.h"
 #include "QuestionBrick.h"
 #include "PlayScene.h"
+#include "Switch.h"
 
 CMario::CMario(float x, float y, bool isatintroscene) : CGameObject()
 {
@@ -75,18 +76,18 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 
-	if (transformTimer.IsStarted() && transformTimer.ElapsedTime() >= MARIO_TRANSFORMING_TIME)
+	if (transformTimer.ElapsedTime() >= MARIO_TRANSFORMING_TIME && transformTimer.IsStarted())
 	{
 		transformTimer.Reset();
 	}
-	if (untouchableTimer.IsStarted() && untouchableTimer.ElapsedTime() >= MARIO_UNTOUCHABLE_TIME) {
+	if (untouchableTimer.ElapsedTime() >= MARIO_UNTOUCHABLE_TIME && untouchableTimer.IsStarted()) {
 		untouchableTimer.Reset();
 	}
-	if (pipeDownTimer.ElapsedTime() > MARIO_PIPE_TIME && pipeDownTimer.IsStarted() == true)
+	if (pipeDownTimer.ElapsedTime() >= MARIO_PIPE_TIME && pipeDownTimer.IsStarted())
 	{
 		pipeDownTimer.Reset();
 		isSitting = false;
-		DebugOut(L"[INFO] portal-scene:: %d", portal->GetSceneId());
+		//DebugOut(L"[INFO] portal-scene:: %d", portal->GetSceneId());
 		if (wannaTele)
 			CGame::GetInstance()->SwitchExtraScene(portal->GetSceneId(), portal->start_x, portal->start_y, portal->pipeUp);
 		else
@@ -95,11 +96,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			ay = MARIO_GRAVITY;
 		}
 	}
-	if (pipeUpTimer.ElapsedTime() > MARIO_PIPE_TIME && pipeUpTimer.IsStarted() == true)
+	if (pipeUpTimer.ElapsedTime() >= MARIO_PIPE_TIME && pipeUpTimer.IsStarted())
 	{
 		pipeUpTimer.Reset();
 		isSitting = false;
-		DebugOut(L"[INFO] portal-scene:: %d", portal->GetSceneId());
+		//DebugOut(L"[INFO] portal-scene:: %d", portal->GetSceneId());
 		if (wannaTele)
 			CGame::GetInstance()->SwitchBackScene(portal->GetSceneId(), portal->start_x, portal->start_y);
 		else
@@ -174,12 +175,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	if (isPipe())
 	{
-		if (pipeDownTimer.IsStarted() == true)
+		if (pipeDownTimer.IsStarted())
 			y += 0.5f;
-		else if (pipeUpTimer.IsStarted() == true)
+		else if (pipeUpTimer.IsStarted())
 		{
 			if (GetMode() == Mode::Small)
-				y += -0.3f;
+				y += -0.3f; // perfect position which is not overloap
 			else
 				y += -0.5f;
 
@@ -229,11 +230,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					isGround = true;
 					if (!(tag == PIPE))
 					{
-						if (e->ny < 0)
+						if (e->ny < 0) // mario collide from top to bottom
 						{
 							vy = 0;
 						}
-						if (e->ny > 0)
+						if (e->ny > 0)// mario collide from bottom to top
 						{
 							vy = 0;
 							ay = MARIO_GRAVITY;
@@ -249,7 +250,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 				//questionbrick
 				if (dynamic_cast<CQuestionBrick*>(e->obj) && e->ny > 0)
-					e->obj->SetState(QUESTIONBRICK_STATE_HIT);
+				{
+					if (e->obj->state != QUESTIONBRICK_STATE_EMPTY)
+						e->obj->SetState(QUESTIONBRICK_STATE_HIT);
+				}
 				//breakablebrick
 
 				//block
@@ -319,7 +323,27 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				//piranhaPlant
 
 				//switch
-
+				else if (dynamic_cast<CSwitch*>(e->obj))
+				{
+					CSwitch* sw = dynamic_cast<CSwitch*>(e->obj);
+					if (e->ny > 0)
+					{
+						//vy = -MARIO_JUMP_SPEED_MAX;
+						ay = MARIO_GRAVITY;
+						//isReadyToJump = false;
+					}
+					else if (e->ny < 0)
+					{
+						vy = 0;
+						if (sw->state != SWITCH_STATE_PRESSED)
+							sw->SetState(SWITCH_STATE_PRESSED);
+					}
+					if (e->nx != 0)
+					{
+						if (ceil(mBottom) != oTop)
+							vx = 0;
+					}
+				}
 				//mario
 
 				//card
