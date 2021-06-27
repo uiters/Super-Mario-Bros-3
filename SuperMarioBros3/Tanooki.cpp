@@ -11,7 +11,7 @@ void CTanooki::GetBoundingBox(float& l, float& t, float& r, float& b)
 }
 void CTanooki::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 {
-	if (attackTimer.ElapsedTime() >= TAIL_HIT_TIME && attackTimer.IsStarted() != 0)
+	if (attackTimer.ElapsedTime() >= TAIL_HIT_TIME && attackTimer.IsStarted())
 		attackTimer.Reset();
 	CMario* mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	if (x < mario->x)
@@ -39,7 +39,7 @@ void CTanooki::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 }
 void CTanooki::Render()
 {
-	if (attackTimer.IsStarted() != 0)
+	if (attackTimer.IsStarted())
 	{
 		if (nx < 0)
 			CSprites::GetInstance()->sprites[TAIL_HIT_SPRITE_ID]->Draw(x - 2, y - HUD_HEIGHT);

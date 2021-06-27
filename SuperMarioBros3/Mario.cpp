@@ -12,6 +12,7 @@
 #include "PlayScene.h"
 #include "Switch.h"
 #include "Tanooki.h"
+#include "BreakableBrick.h"
 CMario::CMario(float x, float y, bool isatintroscene) : CGameObject()
 {
 	Transform(Mode::Small);
@@ -267,7 +268,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						e->obj->SetState(QUESTIONBRICK_STATE_HIT);
 				}
 				//breakablebrick
-
+				if (dynamic_cast<CBreakableBrick*>(e->obj) && e->ny > 0)
+				{
+					//AddScore(e->obj->x, e->obj->y, 10, false, false);
+					((CBreakableBrick*)e->obj)->Break();
+				}
 				//block
 				else if (dynamic_cast<CBlock*>(e->obj)) {
 					isGround = true;

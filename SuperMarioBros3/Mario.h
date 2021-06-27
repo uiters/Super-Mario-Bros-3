@@ -373,6 +373,6 @@ public:
 
 	void Update(DWORD dt, std::vector<LPGAMEOBJECT>* objects);
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
-	//CTanooki* getTail() { return tail; }
+	CTanooki* getTail() { return tail; }
 	void TelePort();
 };

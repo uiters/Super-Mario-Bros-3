@@ -29,10 +29,29 @@ void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		vy += ay * dt;
 	}
 
+	//use tail open box
+	if (state == QUESTIONBRICK_STATE_IDLE && mario != NULL)
+	{
+		float mLeft, mTop, mRight, mBottom;
+		float oLeft, oTop, oRight, oBottom;
+		if (mario->tailTimer.IsStarted() && mario->GetMode() == CMario::Mode::Tanooki)
+		{
+			mario->getTail()->GetBoundingBox(mLeft, mTop, mRight, mBottom);
+			GetBoundingBox(oLeft, oTop, oRight, oBottom);
+			if (isColliding(floor(mLeft), mTop, ceil(mRight), mBottom) && mario->getTail()->hit_times == 0)
+			{
+				SetState(QUESTIONBRICK_STATE_HIT);
+				mario->getTail()->hit_times = 1;
+			}
+		}
+	}
+
 	if (boundTimer.IsStarted() && state == QUESTIONBRICK_STATE_HIT && mario != nullptr)
 	{
+
 		if (items > 0)
 			items--;
+
 		if (tag == ITEM_COIN)
 		{
 			CreateItem(ITEM_COIN);
@@ -101,6 +120,9 @@ void CQuestionBrick::SetState(int state = BRICK_STATE_IDLE)
 	case QUESTIONBRICK_STATE_HIT:
 		boundTimer.Start();
 		ay = -QUESTIONBRICK_SPEED;
+
+
+
 		break;
 	case QUESTIONBRICK_STATE_EMPTY:
 		vy = 0;

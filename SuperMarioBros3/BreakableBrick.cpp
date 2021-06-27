@@ -7,14 +7,28 @@ void CBreakableBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt);
 	if (isDestroyed)
 		return;
-
+	CMario* mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	if (mario != NULL && mario->tailTimer.IsStarted() && mario->GetMode() == CMario::Mode::Tanooki)
+	{
+		float mLeft, mTop, mRight, mBottom;
+		float oLeft, oTop, oRight, oBottom;
+		mario->getTail()->GetBoundingBox(mLeft, mTop, mRight, mBottom);
+		GetBoundingBox(oLeft, oTop, oRight, oBottom);
+		if (isColliding(floor(mLeft), mTop, ceil(mRight), mBottom) && mario->getTail()->hit_times == 0)
+		{
+			Break();
+			//mario->AddScore(x, y, 10, false, false);
+			mario->getTail()->hit_times = 1;
+			DebugOut(L"Break");
+		}
+	}
 }
 void CBreakableBrick::Render()
 {
 	if (isDestroyed)
 		return;
 	animation_set->at(0)->Render(x, y);
-	RenderBoundingBox();
+	RenderBoundingBox(100);
 }
 void CBreakableBrick::Break()
 {

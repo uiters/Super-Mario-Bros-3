@@ -34,7 +34,7 @@ void CPiece::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 	//DebugOut(L"[Piece] %f %f %f %f \n", x,y,vx,vy);
 	if (GetTickCount64() - start >= PIECE_TIME)
 	{
-		//x = y = -50;
+		x = y = -50;
 		isDestroyed = true;
 	}
 }
