@@ -257,8 +257,8 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 			break;
 		case OBJECT_TYPE_FIREPIRANHAPLANT:
 			obj = new CFirePlant(tag);
-			/*((CFirePiranhaPlant*)obj)->SetLimitY(y);
-			obj->SetType(MOVING);*/
+			((CFirePlant*)obj)->SetLimitY(y);
+			obj->SetType(MOVING);
 
 			break;
 		case OBJECT_TYPE_COIN:
@@ -325,7 +325,6 @@ void CPlayScene::_ParseSection_TILEMAP_DATA(string line)
 	f.open(path);
 	f >> ID >> rowMap >> columnMap >> rowTile >> columnTile >> totalTiles;
 	//Init Map Matrix
-	DebugOut(L"[INFO] _ParseSection_TILEMAP_DATA : %d %d %d %d %d", ID, rowMap, columnMap, rowTile, columnTile, totalTiles);
 
 	int** TileMapData = new int* [rowMap];
 	for (int i = 0; i < rowMap; i++)

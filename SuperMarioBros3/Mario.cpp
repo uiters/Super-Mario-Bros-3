@@ -4,15 +4,16 @@
 
 #include "Mario.h"
 #include "Game.h"
+#include "PlayScene.h"
 
 #include "Brick.h"
-#include "Goomba.h"
 #include "Block.h"
+#include "BreakableBrick.h"
 #include "QuestionBrick.h"
-#include "PlayScene.h"
+#include "Goomba.h"
+#include "Plant.h"
 #include "Switch.h"
 #include "Tanooki.h"
-#include "BreakableBrick.h"
 CMario::CMario(float x, float y, bool isatintroscene) : CGameObject()
 {
 	Transform(Mode::Small);
@@ -338,7 +339,20 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				//koopas
 
 				//piranhaPlant
-
+				else if (dynamic_cast<CPlant*>(e->obj))
+				{
+					if (!untouchableTimer.IsStarted())
+					{
+						Attacked();
+					}
+					else {
+						x = x0 + dx;
+						if (e->ny < 0)
+						{
+							y = y0 + dy;
+						}
+					}
+				}
 				//switch
 				else if (dynamic_cast<CSwitch*>(e->obj))
 				{
