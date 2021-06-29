@@ -252,9 +252,8 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 			break;
 		case OBJECT_TYPE_PIRANHAPLANT:
 			obj = new CPlant();
-			/*((CPiranhaPlant*)obj)->SetLimitY(y);
-			obj->SetType(MOVING);*/
-
+			((CPlant*)obj)->SetLimitY(y);
+			obj->SetType(MOVING);
 			break;
 		case OBJECT_TYPE_FIREPIRANHAPLANT:
 			obj = new CFirePlant(tag);

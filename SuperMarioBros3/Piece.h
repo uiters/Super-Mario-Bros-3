@@ -1,6 +1,6 @@
 #pragma once
 #include "GameObject.h"
-
+#include "Timer.h"
 #define PIECE_BBOX_WIDTH  8
 #define PIECE_BBOX_HEIGHT 8
 
@@ -12,7 +12,7 @@
 
 class CPiece : public CGameObject
 {
-	DWORD start = 0;
+	Timer appearTimer;
 public:
 	CPiece(float vx, float vy);
 	virtual void Render();

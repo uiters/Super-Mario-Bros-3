@@ -26,7 +26,7 @@
 #define MARIO_RUN_SPEED_MAX			0.3f
 #define MARIO_BULLET_MAX			20
 
-#define MARIO_UNTOUCHABLE_TIME		350
+#define MARIO_UNTOUCHABLE_TIME		1000
 #define MARIO_TURNING_TAIL_TIME		350
 #define MARIO_TURNING_STATE_TIME	70
 #define MARIO_SHOOTING_TIME			150
@@ -298,7 +298,6 @@ public:
 private:
 	Mode mode;
 	Mode prevMode;
-	Timer untouchableTimer;
 	Timer transformTimer;
 	Timer flyTimer;
 	//Timer runTimer;
@@ -308,6 +307,8 @@ private:
 	//skill
 	CTanooki* tail;
 public:
+	Timer untouchableTimer;
+
 	float start_x;			// initial position of Mario at scene
 	float start_y;
 	bool isAtIntroScene;

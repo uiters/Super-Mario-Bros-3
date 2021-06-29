@@ -19,7 +19,6 @@ void CBreakableBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			Break();
 			//mario->AddScore(x, y, 10, false, false);
 			mario->getTail()->hit_times = 1;
-			DebugOut(L"Break");
 		}
 	}
 }
@@ -28,7 +27,7 @@ void CBreakableBrick::Render()
 	if (isDestroyed)
 		return;
 	animation_set->at(0)->Render(x, y);
-	RenderBoundingBox(100);
+	RenderBoundingBox();
 }
 void CBreakableBrick::Break()
 {
