@@ -240,13 +240,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						isJumping = false;
 						isFlying = false;
 					}
-
 				}
 				GetBoundingBox(mLeft, mTop, mRight, mBottom);
 				e->obj->GetBoundingBox(oLeft, oTop, oRight, oBottom);
 				//brick
 				if (dynamic_cast<CBrick*>(e->obj)) {
-					isGround = true;
 					if (!(tag == PIPE))
 					{
 						if (e->ny < 0) // mario collide from top to bottom
@@ -291,7 +289,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 				//block
 				else if (dynamic_cast<CBlock*>(e->obj)) {
-					isGround = true;
 					if (e->nx != 0 && ceil(mBottom) != oTop)
 						x = x0 + dx;
 					if (e->ny < 0)
@@ -397,10 +394,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				//port
 				else if (dynamic_cast<CPortal*>(e->obj))
 				{
-					/*if (isSitting)
-					{
-						CGame::GetInstance()->SwitchExtraScene(portal->GetSceneId(), portal->start_x, portal->start_y);
-					}*/
 				}
 			}
 		}
@@ -809,12 +802,6 @@ void CMario::RenderTanookiAni(int ani, int alpha)
 	}
 	else
 	{
-		//TODO: will fix later
-		if (ani == -1)
-		{
-			if (nx > 0) ani = MARIO_ANI_SMALL_WALKING_RIGHT;
-			else ani = MARIO_ANI_SMALL_WALKING_LEFT;
-		}
 		animation_set->at(ani)->Render(x, y, alpha);
 	}
 
@@ -862,12 +849,6 @@ void CMario::Render()
 	}
 	else
 	{
-		//TODO: will fix later
-		if (ani == -1)
-		{
-			if (nx > 0) ani = MARIO_ANI_SMALL_WALKING_RIGHT;
-			else ani = MARIO_ANI_SMALL_WALKING_LEFT;
-		}
 		animation_set->at(ani)->Render(x, y, alpha);
 	}
 	RenderBoundingBox();
