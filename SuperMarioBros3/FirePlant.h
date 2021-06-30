@@ -20,7 +20,7 @@ class CFirePlant : public CGameObject
 	int BBHeight = 0;
 
 public:
-	CFirePlant(int tag = PIRANHAPLANT_GREEN_TYPE);
+	CFirePlant(int tag = PIRANHAPLANT_GREEN_TYPE) {};
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom) {};
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {};
 	virtual void Render() {};

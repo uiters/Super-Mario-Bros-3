@@ -344,7 +344,8 @@ public:
 	bool IsDead() { return dead; }
 	bool IsLostControl() { return transformTimer.IsStarted(); }
 	bool isPipe() { return pipeUpTimer.IsStarted() || pipeDownTimer.IsStarted(); }
-
+	//
+	void RunTimer();
 	// transform 
 	Mode GetMode() { return mode; }
 	void Transform(Mode form);

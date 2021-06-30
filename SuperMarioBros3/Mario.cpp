@@ -73,12 +73,7 @@ void CMario::Transform(Mode m) {
 	}
 }
 
-void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{
-	CGame* game = CGame::GetInstance();
-	// Calculate dx, dy 
-	CGameObject::Update(dt);
-
+void CMario::RunTimer() {
 	if (transformTimer.ElapsedTime() >= MARIO_TRANSFORMING_TIME && transformTimer.IsStarted())
 	{
 		transformTimer.Reset();
@@ -124,6 +119,16 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		tailState = 0;
 		tail->hit_times = 0;
 	}
+}
+
+void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	CGame* game = CGame::GetInstance();
+	// Calculate dx, dy 
+	CGameObject::Update(dt);
+
+	RunTimer();
+
 	//slow down if change direction when running
 	if (vx * ax < 0 && abs(vx) > MARIO_WALKING_SPEED_MAX
 		&& (state == MARIO_STATE_WALKING_LEFT || state == MARIO_STATE_WALKING_RIGHT))
@@ -266,7 +271,17 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (dynamic_cast<CQuestionBrick*>(e->obj) && e->ny > 0)
 				{
 					if (e->obj->state != QUESTIONBRICK_STATE_EMPTY)
-						e->obj->SetState(QUESTIONBRICK_STATE_HIT);
+					{
+						if (e->obj->type == QUESTIONBRICK_TYPE_FLASH)
+							e->obj->SetState(QUESTBRICK_STATE_FLASH);
+
+						else
+						{
+							e->obj->SetState(QUESTIONBRICK_STATE_HIT);
+
+						}
+
+					}
 				}
 				//breakablebrick
 				if (dynamic_cast<CBreakableBrick*>(e->obj) && e->ny > 0)

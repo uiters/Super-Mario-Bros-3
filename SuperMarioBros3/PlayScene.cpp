@@ -175,7 +175,7 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 		if (tokens.size() < 3) continue; // skip invalid lines - an object set must have at least id, x, y
 
 
-		int ani_set_id, tag = 0, option_tag_1 = 0, option_tag_2 = 0;
+		int ani_set_id, tag = 0, option_tag_1 = 0, option_tag_2 = 0, option_tag_3 = 0;
 		int object_type = atoi(tokens[0].c_str());
 		float  x, y;
 		if (object_type != 999)
@@ -190,6 +190,8 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 				option_tag_1 = atof(tokens[5].c_str());
 			if (tokens.size() >= 7)
 				option_tag_2 = atof(tokens[6].c_str());
+			if (tokens.size() >= 8)
+				option_tag_3 = atof(tokens[7].c_str());
 		}
 
 		CAnimationSets* animation_sets = CAnimationSets::GetInstance();
@@ -218,7 +220,7 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 			obj->SetTag(tag);
 			break;
 		case OBJECT_TYPE_QUESTIONBRICK:
-			obj = new CQuestionBrick(option_tag_1, option_tag_2); // op_1: reward  --- op_2: appearance of the brick
+			obj = new CQuestionBrick(option_tag_1, option_tag_2, option_tag_3); // op_1: reward  --- op_2: appearance of the brick  ------- op_3: repeating
 			if (tokens.size() >= 8)
 			{
 				int nboitem = atoi(tokens[7].c_str());

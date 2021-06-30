@@ -4,17 +4,17 @@
 #include "Switch.h"
 #include "Leaf.h"
 
-CQuestionBrick::CQuestionBrick(int tag, int type)
+CQuestionBrick::CQuestionBrick(int tag, int type, int repeat)
 {
 	start_y = y;
 	SetState(QUESTIONBRICK_STATE_IDLE);
 	this->tag = tag;
 	this->type = type;
+	repeating = repeat;
 }
 
 void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if (this->state == QUESTIONBRICK_STATE_EMPTY) return;
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 	CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
@@ -22,13 +22,6 @@ void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (scene != NULL)
 		mario = ((CPlayScene*)scene)->GetPlayer();
 	y += dy;
-	//bounce
-	if (boundTimer.ElapsedTime() > 10 && boundTimer.IsStarted() && state == QUESTIONBRICK_STATE_HIT)
-	{
-		boundTimer.Reset();
-		vy += ay * dt;
-	}
-
 	//use tail open box
 	if (state == QUESTIONBRICK_STATE_IDLE && mario != NULL)
 	{
@@ -46,8 +39,10 @@ void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 
-	if (boundTimer.IsStarted() && state == QUESTIONBRICK_STATE_HIT && mario != nullptr)
+	if (boundTimer.ElapsedTime() > QUESTIONBRICK_BOUND_TIME && boundTimer.IsStarted() && state == QUESTIONBRICK_STATE_HIT && mario != nullptr)
 	{
+		boundTimer.Reset();
+		vy += ay * dt;
 
 		if (items > 0)
 			items--;
@@ -95,6 +90,15 @@ void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				scene->GetUnit()->AddUnit(obj, scene->GetGrid());
 			}
 		}
+		if (tag == ITEM_COIN_x5 && type == QUESTIONBRICK_TYPE_FLASH && repeating >= 0)
+		{
+			CreateItem(ITEM_COIN);
+			CCoin* obj = dynamic_cast<CCoin*>(item);
+			obj->isAppear = true;
+			obj->SetPosition(x, y - COIN_BBOX_HEIGHT - 1);
+			obj->SetState(COIN_STATE_UP);
+			scene->GetUnit()->AddUnit(obj, scene->GetGrid());
+		}
 		if (tag == ITEM_SWITCH)
 		{
 			CreateItem(ITEM_SWITCH);
@@ -106,7 +110,15 @@ void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 	//bounce
-	if (y < start_y - 5)
+	if (tag == ITEM_COIN_x5 && type == QUESTIONBRICK_TYPE_FLASH && y < start_y - 7)
+	{
+		SetState(QUESTBRICK_STATE_FLASH);
+		y = start_y;
+		if (repeating >= 0)
+			SetState(QUESTBRICK_STATE_FLASH_IDLE);
+		else SetState(QUESTIONBRICK_STATE_EMPTY);
+	}
+	else if (y < start_y - 7)
 	{
 		SetState(QUESTIONBRICK_STATE_EMPTY);
 		y = start_y;
@@ -120,27 +132,37 @@ void CQuestionBrick::SetState(int state = BRICK_STATE_IDLE)
 	case QUESTIONBRICK_STATE_HIT:
 		boundTimer.Start();
 		ay = -QUESTIONBRICK_SPEED;
-
-
-
 		break;
 	case QUESTIONBRICK_STATE_EMPTY:
+		vy = 0;
+		ay = 0;
+		break;
+	case QUESTBRICK_STATE_FLASH:
+		if (tag == ITEM_SWITCH)
+			SetState(QUESTIONBRICK_STATE_HIT);
+		else {
+			boundTimer.Start();
+			ay = -QUESTIONBRICK_SPEED;
+			repeating--;
+		}
+		break;
+	case QUESTBRICK_STATE_FLASH_IDLE:
 		vy = 0;
 		ay = 0;
 		break;
 	default:
 		DebugOut(L"[INFO] state default");
 		break;
-	}
 
+	}
 	CGameObject::SetState(state);
 }
 
 void CQuestionBrick::Render()
 {
 	int ani = -1;
-	if (state == QUESTIONBRICK_STATE_HIT || state == QUESTIONBRICK_STATE_EMPTY)
-		ani = QUESTIONBRICK_ANI_HIT; // empty brick
+	if (state == QUESTIONBRICK_STATE_EMPTY)
+		ani = QUESTIONBRICK_ANI_EMPTY;
 	else
 		if (type == QUESTIONBRICK_TYPE_FLASH)
 			ani = QUESTIONBRICK_ANI_FLASH;
