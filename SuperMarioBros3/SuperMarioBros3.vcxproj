@@ -171,6 +171,7 @@
     <ClCompile Include="Mushroom.cpp" />
     <ClCompile Include="Piece.cpp" />
     <ClCompile Include="Plant.cpp" />
+    <ClCompile Include="PlantBullet.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="Portal.cpp" />
     <ClCompile Include="QuestionBrick.cpp" />
@@ -212,6 +213,7 @@
     <ClInclude Include="Mushroom.h" />
     <ClInclude Include="Piece.h" />
     <ClInclude Include="Plant.h" />
+    <ClInclude Include="PlantBullet.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="Portal.h" />
     <ClInclude Include="QuestionBrick.h" />
