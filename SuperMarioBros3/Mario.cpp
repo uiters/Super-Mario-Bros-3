@@ -14,6 +14,7 @@
 #include "Plant.h"
 #include "Switch.h"
 #include "Tanooki.h"
+#include "FirePlant.h"
 CMario::CMario(float x, float y, bool isatintroscene) : CGameObject()
 {
 	Transform(Mode::Small);
@@ -351,7 +352,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				//koopas
 
 				//piranhaPlant
-				else if (dynamic_cast<CPlant*>(e->obj))
+				else if (dynamic_cast<CPlant*>(e->obj) || dynamic_cast<CFirePlant*>(e->obj))
 				{
 					if (!untouchableTimer.IsStarted())
 					{

@@ -93,9 +93,7 @@ void CFirePlant::Update(DWORD dt,
 			GetBoundingBox(oLeft, oTop, oRight, oBottom);
 			if (isColliding(floor(mLeft), mTop, ceil(mRight), mBottom))
 			{
-
 				SetState(PIRANHAPLANT_STATE_DEATH);
-
 			}
 		}
 	}
