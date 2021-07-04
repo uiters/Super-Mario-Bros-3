@@ -1,5 +1,9 @@
 #include "Koopas.h"
 #include "IntroScene.h"
+#include "Plant.h"
+#include "FirePlant.h"
+#include "QuestionBrick.h"
+#include "BreakableBrick.h"
 
 CKoopas::CKoopas()
 {
@@ -26,6 +30,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (!isEnable)
 		return;
+	
 }
 
 void CKoopas::Render()
@@ -101,5 +106,35 @@ void CKoopas::SetState(int state)
 		SetType(IGNORE);
 		break;
 	}
+}
 
+bool CKoopas::CalKillable(vector<LPGAMEOBJECT>* coObjects)
+{
+	for (UINT i = 0; i < coObjects->size(); i++)
+		if (dynamic_cast<CBrick*>(coObjects->at(i)))
+		{
+			float mLeft, mTop, mRight, mBottom;
+			coObjects->at(i)->GetBoundingBox(mLeft, mTop, mRight, mBottom);
+			if (isColliding(floor(mLeft), floor(mTop), ceil(mRight), ceil(mBottom)))
+				return true;
+		}
+	return false;
+}
+bool CKoopas::CalTurnable(LPGAMEOBJECT object, vector<LPGAMEOBJECT>* coObjects)
+{
+	Camera* cam = Camera::GetInstance();
+	if (!cam->isAreaCamera(x, y))
+		return false;
+	for (UINT i = 0; i < coObjects->size(); i++)
+		if (dynamic_cast<CBrick*>(coObjects->at(i)) || dynamic_cast<CBlock*>(coObjects->at(i)))
+			if (abs(coObjects->at(i)->y == object->y))
+			{
+				if (nx > 0)
+					if (coObjects->at(i)->x > object->x && coObjects->at(i)->x - BRICK_BBOX_WIDTH < object->x + BRICK_BBOX_WIDTH)
+						return false;
+				if (nx < 0)
+					if (coObjects->at(i)->x + BRICK_BBOX_WIDTH > object->x - BRICK_BBOX_WIDTH && coObjects->at(i)->x < object->x)
+						return false;
+			}
+	return true;
 }

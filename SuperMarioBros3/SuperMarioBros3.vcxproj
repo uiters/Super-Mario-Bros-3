@@ -176,6 +176,7 @@
     <ClCompile Include="Portal.cpp" />
     <ClCompile Include="QuestionBrick.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Score.cpp" />
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="Switch.cpp" />
     <ClCompile Include="Tanooki.cpp" />
@@ -218,6 +219,7 @@
     <ClInclude Include="Portal.h" />
     <ClInclude Include="QuestionBrick.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="Score.h" />
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="Switch.h" />
     <ClInclude Include="Tanooki.h" />

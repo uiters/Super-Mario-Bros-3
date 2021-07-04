@@ -27,10 +27,13 @@ void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (tag == MUSHROOM_TYPE_RED)
 			{
 				mario->Transform(CMario::Mode::Super);
+				mario->AddScore(x, y, 1000);
+
 			}
 			else if (tag == MUSHROOM_TYPE_GREEN)
 			{
-				// add more life;
+				mario->AddScore(x, y, 1);
+				mario->AddLife();
 			}
 			isAppear = false;
 			isDestroyed = true;
@@ -66,9 +69,7 @@ void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			//
 			// Collision logic with other objects
 			//
-			if (mario != NULL)
-				if (mario->isAtIntroScene)
-					vx = -MUSHROOM_SPEED;
+
 			for (UINT i = 0; i < coEventsResult.size(); i++)
 			{
 				LPCOLLISIONEVENT e = coEventsResult[i];

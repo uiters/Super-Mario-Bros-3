@@ -34,6 +34,8 @@ void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				isAppear = false;
 				isDestroyed = true;
+				coinmario->AddScore(x, y, 50, false, false);
+				coinmario->AddMoney(1);
 			}
 
 		}
@@ -69,7 +71,8 @@ void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			isAppear = false;
 			SetState(COIN_STATE_IDLE);
 			isDestroyed = true;
-	
+			coinmario->AddScore(x, y);
+			coinmario->AddMoney();
 		}
 	}
 }

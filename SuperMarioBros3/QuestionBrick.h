@@ -36,8 +36,8 @@ class CQuestionBrick :
 {
 	int type = 0;
 	int repeating = 0;
-	Timer boundTimer;
 public:
+	Timer boundTimer;
 	int items = 0;
 	float start_y = 0;
 	CQuestionBrick(int tag = ITEM_COIN, int type = QUESTIONBRICK_TYPE_MARK, int repeating = 0);

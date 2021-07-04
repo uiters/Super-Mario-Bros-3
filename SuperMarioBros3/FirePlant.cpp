@@ -94,6 +94,8 @@ void CFirePlant::Update(DWORD dt,
 			if (isColliding(floor(mLeft), mTop, ceil(mRight), mBottom))
 			{
 				SetState(PIRANHAPLANT_STATE_DEATH);
+				mario->AddScore(x, y, 100, true);
+
 			}
 		}
 	}

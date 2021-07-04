@@ -166,6 +166,9 @@
     <ClCompile Include="PlantBullet.cpp">
       <Filter>Map Objects\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="Score.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Brick.h">
@@ -287,6 +290,9 @@
     </ClInclude>
     <ClInclude Include="PlantBullet.h">
       <Filter>Map Objects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Score.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

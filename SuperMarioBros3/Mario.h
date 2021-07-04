@@ -302,7 +302,11 @@ private:
 	Timer flyTimer;
 	//Timer runTimer;
 	//
+
 	Timer dieTimer;
+
+	Timer countKillTimer;
+	int countKill;
 
 	//skill
 	CTanooki* tail;
@@ -311,7 +315,6 @@ public:
 
 	float start_x;			// initial position of Mario at scene
 	float start_y;
-	bool isAtIntroScene;
 
 	bool dead;
 	bool isSitting;
@@ -338,7 +341,7 @@ public:
 	Timer pipeDownTimer;
 	CPortal* portal = NULL;
 
-	CMario(float x = 0.0f, float y = 0.0f, bool iais = false);
+	CMario(float x = 0.0f, float y = 0.0f);
 	~CMario();
 
 	bool IsDead() { return dead; }
@@ -360,7 +363,7 @@ public:
 	void TransformBigAni(int& ani);
 	void TransformTanookiAni(int& ani);
 	void TransformFireAni(int& ani);
-	void RenderTanookiAni(int ani,int alpha);
+	void RenderTanookiAni(int ani, int alpha);
 	void Render();
 
 	//set state
@@ -376,5 +379,8 @@ public:
 	void Update(DWORD dt, std::vector<LPGAMEOBJECT>* objects);
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	CTanooki* getTail() { return tail; }
+	void AddLife(int l = 1) { this->life += l; }
+	void AddMoney(int m = 1) { this->money += m; }
+	void AddScore(int ox, int oy, int s = 100, bool isEnemy = false, bool showScore = true);
 	void TelePort();
 };

@@ -234,11 +234,11 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 			break;
 		case OBJECT_TYPE_KOOPAS:
 			obj = new CKoopas();
-			/*obj->SetTag(tag);
+			obj->SetTag(tag);
 			((CKoopas*)obj)->start_tag = tag;
 			obj->SetType(MOVING);
 			((CKoopas*)obj)->start_x = x;
-			((CKoopas*)obj)->start_y = y;*/
+			((CKoopas*)obj)->start_y = y;
 			break;
 		case OBJECT_TYPE_BOOMERANGBROTHER:
 			obj = new CBoomerangBro();

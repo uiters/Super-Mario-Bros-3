@@ -27,6 +27,8 @@ void CLeaf::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				mario->Transform(CMario::Mode::Tanooki);
 				isAppear = false;
 				isDestroyed = true;
+				mario->AddScore(x, y, 1000);
+
 			}
 			if (appearTimer.ElapsedTime() >= LEAF_FALLING_TIME)
 			{

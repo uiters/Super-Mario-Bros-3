@@ -15,7 +15,8 @@
 #include "Switch.h"
 #include "Tanooki.h"
 #include "FirePlant.h"
-CMario::CMario(float x, float y, bool isatintroscene) : CGameObject()
+#include "Score.h"
+CMario::CMario(float x, float y) : CGameObject()
 {
 	Transform(Mode::Small);
 	SetState(MARIO_STATE_IDLE);
@@ -139,11 +140,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			RunningStacks = 0;
 	}
 	//update and limit speed
-	if (isAtIntroScene)
-	{
+	//if (isAtIntroScene) 
+
 		//doing somthing
-	}
-	else
+
 	{
 		vx += ax * dt + RunningStacks * ax;
 		vy += ay * dt;
@@ -285,7 +285,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				//breakablebrick
 				if (dynamic_cast<CBreakableBrick*>(e->obj) && e->ny > 0)
 				{
-					//AddScore(e->obj->x, e->obj->y, 10, false, false);
+					AddScore(e->obj->x, e->obj->y, 10, false, false);
 					((CBreakableBrick*)e->obj)->Break();
 				}
 				//block
@@ -308,15 +308,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					{
 						if (goomba->GetState() != GOOMBA_STATE_DIE)
 						{
+							AddScore(goomba->x, goomba->y, 100, true);
 							if (goomba->tag != GOOMBA_RED)
 							{
 								goomba->SetState(GOOMBA_STATE_DIE);
-								if (!isAtIntroScene)
-									vy = -MARIO_JUMP_DEFLECT_SPEED;
-								else
-								{
-									vy = -MARIO_JUMP_DEFLECT_INTRO;
-								}
+								vy = -MARIO_JUMP_DEFLECT_SPEED;
+
 							}
 							else
 							{
@@ -341,7 +338,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 								y = y0 + dy;
 							if (e->nx != 0 && tailTimer.IsStarted())
 							{
-								//AddScore(goomba->x, goomba->y, 100, true);
+								AddScore(goomba->x, goomba->y, 100, true);
 								goomba->SetState(GOOMBA_STATE_DIE_BY_TAIL);
 							}
 						}
@@ -350,7 +347,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				//bomerang
 
 				//koopas
-
+				else if (dynamic_cast<CKoopas*>(e->obj)) // if e->obj is Koopas 
+				{
+					CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
+					DebugOut(L"collision");
+				}
 				//piranhaPlant
 				else if (dynamic_cast<CPlant*>(e->obj) || dynamic_cast<CFirePlant*>(e->obj))
 				{
@@ -423,11 +424,7 @@ void CMario::RenderBasicMoving(int& ani, int ani_jump_down_right, int ani_jump_d
 		{
 			if (nx > 0) ani = ani_jump_down_right;
 			else ani = ani_jump_down_left;
-			if (GetMode() == Mode::Small && isAtIntroScene)
-			{
-				if (nx > 0) ani = ani_idle_right;
-				else ani = ani_idle_left;
-			}
+
 		}
 	}
 	else {
@@ -459,7 +456,7 @@ void CMario::RenderBasicMoving(int& ani, int ani_jump_down_right, int ani_jump_d
 		else if (nx < 0)
 			ani = MARIO_ANI_SHOOTING_LEFT;
 	}
-	if (vx != 0 && vy > 0 && !isGround && !isAtIntroScene)
+	if (vx != 0 && vy > 0 && !isGround)
 	{
 		if (nx > 0) ani = ani_jump_down_right;
 		else ani = ani_jump_down_left;
@@ -982,6 +979,33 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
 	}
 }
 
+void CMario::AddScore(int ox, int oy, int s, bool isEnemy, bool showscore)
+{
+	if (isEnemy)
+	{
+		if (countKillTimer.ElapsedTime() >= MARIO_KILLSTREAK_TIME)
+		{
+			countKill++;
+			if (countKill > 3)
+				countKill = 3;
+		}
+		else
+			countKill = 0;
+		countKillTimer.Start();
+	}
+	else
+		countKill = 0;
+	s = pow(2, countKill) * s;
+	this->score += s;
+	if (showscore)
+	{
+		CScore* cscore = new CScore(s);
+		CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+
+		cscore->SetPosition(ox, oy);
+		scene->GetUnit()->AddUnit(cscore, scene->GetGrid());
+	}
+}
 /*
 	Reset Mario status to the beginning state of a scene
 */

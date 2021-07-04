@@ -68,8 +68,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// TO-DO: make sure Goomba can interact with the world and to each of them too!
 	// 
 	// Simple fall down
-	if (!mario->isAtIntroScene)
-		vy += ay * dt;
+	vy += ay * dt;
 
 	//// limit
 	if (vy < -GOOMBA_JUMP_SPEED && state == GOOMBA_STATE_RED_JUMPING)
@@ -93,7 +92,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	float mLeft, mTop, mRight, mBottom;
 	float oLeft, oTop, oRight, oBottom;
-	if (mario != NULL && !mario->isAtIntroScene && state != GOOMBA_STATE_DIE_BY_TAIL && state != GOOMBA_STATE_DIE)
+	if (mario != NULL && state != GOOMBA_STATE_DIE_BY_TAIL && state != GOOMBA_STATE_DIE)
 	{
 		mario->GetBoundingBox(mLeft, mTop, mRight, mBottom);
 		GetBoundingBox(oLeft, oTop, oRight, oBottom);
