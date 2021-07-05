@@ -4,6 +4,7 @@
 #include "Block.h"
 #include "Mario.h"
 #include "PlayScene.h"
+#include "PlantBullet.h"
 CGoomba::CGoomba()
 {
 	nx = -1;
@@ -122,7 +123,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				nx = -1;
 				vx = -GOOMBA_WALKING_SPEED;
 			}
-			DebugOut(L"[INFO] goomba %d\n", chasingTimer.IsStarted() ? 1 : 0);
+			//DebugOut(L"[INFO] goomba %d\n", chasingTimer.IsStarted() ? 1 : 0);
 		}
 	}
 	//// No collision occured, proceed normally
@@ -223,10 +224,10 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			if (dynamic_cast<CBlock*>(e->obj))
 			{
-				CBlock* block = dynamic_cast<CBlock*>(e->obj);
 				x = x0 + dx;
 				y = y0 + dy;
 			}
+			
 		}
 	}
 	// limit screen

@@ -28,7 +28,7 @@ Unit::Unit(Grid* grid, LPGAMEOBJECT obj, int gridRow, int gridCol)
 	grid->Add(this, gridRow, gridCol);
 }
 
-void Unit::AddUnit(LPGAMEOBJECT obj,Grid* grid)
+void Unit::AddUnit(LPGAMEOBJECT obj, Grid* grid)
 {
 	Unit* unit = new Unit(grid, obj, obj->x, obj->y);
 }
@@ -49,14 +49,14 @@ Grid::Grid(int mapWidth, int mapHeight, int cellWidth, int cellHeight)
 	numCols = mapWidth / cellWidth;
 	numRows = mapHeight / cellHeight;
 
-	cells.resize(numCols);
+	cells.resize(numRows * 10 + numCols);
 
-	for (int i = 0; i < numCols; i++)
-		cells[i].resize(numCols);
+	/*for (int i = 0; i < numCols; i++)
+		cells.resize(numRows *10+ numCols);*/
 
 	for (int i = 0; i < numRows; i++)
 		for (int j = 0; j < numCols; j++)
-			cells[i][j] = NULL;
+			cells[i * 10 + j] = NULL;
 
 }
 
@@ -77,8 +77,8 @@ void Grid::Add(Unit* unit)
 
 	//add head
 	unit->prev = NULL;
-	unit->next = cells[row][col];
-	cells[row][col] = unit;
+	unit->next = cells[row * 10 + col];
+	cells[row * 10 + col] = unit;
 	if (unit->next != NULL)
 		unit->next->prev = unit;
 }
@@ -92,8 +92,8 @@ void Grid::Add(Unit* unit, int gridRow, int gridCol)
 
 	//add head
 	unit->prev = NULL;
-	unit->next = cells[gridRow][gridCol];
-	cells[gridRow][gridCol] = unit;
+	unit->next = cells[gridRow * 10 + gridCol];
+	cells[gridRow * 10 + gridCol] = unit;
 	if (unit->next != NULL)
 		unit->next->prev = unit;
 }
@@ -107,11 +107,11 @@ void Grid::Move(Unit* unit, float x, float y)
 	int newCol = (int)(x / CELL_WIDTH);
 
 	//// if object get out viewport-> we dont need to update 
-	//if (newRow < 0 || newRow >= numRows || newCol < 0 ||
-	//	newCol >= numCols)
-	//{
-	//	return;
-	//}
+	if (newRow < 0 || newRow >= numRows || newCol < 0 ||
+		newCol >= numCols)
+	{
+		return;
+	}
 
 
 	// update new position for unit
@@ -131,8 +131,8 @@ void Grid::Move(Unit* unit, float x, float y)
 	{
 		unit->next->prev = unit->prev;
 	}
-	if (cells[oldRow][oldCol] == unit)
-		cells[oldRow][oldCol] = unit->next;
+	if (cells[oldRow * 10 + oldCol] == unit)
+		cells[oldRow * 10 + oldCol] = unit->next;
 
 	// add cell 
 	Add(unit);
@@ -149,30 +149,31 @@ void Grid::Get(Camera* cam, vector<Unit*>& listUnits)
 		endCol = ENDCOL;
 	if (startCol < 0)
 		startCol = 0;
-	//DebugOut(L"[GRID] %d %d\n", startCol, endCol);
+	//DebugOut(L"[GRID COL] %d %d\n", startCol, endCol);
 	int startRow = (int)(cam_y / CELL_HEIGHT);
 	int endRow = (int)ceil((cam_y + SCREEN_HEIGHT) / CELL_HEIGHT);
 	int ENDROW = (int)ceil((mapHeight) / CELL_HEIGHT);
 	if (endRow > ENDROW)
 		endRow = ENDROW;
-	//DebugOut(L"[GRID] %d %d\n", startRow, endRow);
+	//DebugOut(L"[GRID ROW] %d %d\n", startRow, endRow);
 
 	for (int i = startRow; i < endRow; i++)
 	{
 		for (int j = startCol; j < endCol; j++)
 		{
-			Unit* unit = cells[i][j];
+			Unit* unit = cells[i * 10 + j];
 			while (unit != NULL)
 			{
 				if (unit->GetObj()->isDestroyed == false)
 				{
 					listUnits.push_back(unit);
 					unit = unit->next;
+					
 				}
 				else
 				{
-					if (cells[i][j] == unit)
-						cells[i][j] = unit->next;
+					if (cells[i * 10 + j] == unit)
+						cells[i * 10 + j] = unit->next;
 					if (unit->next != NULL)
 						unit->next->prev = unit->prev;
 					if (unit->prev != NULL)
@@ -207,7 +208,7 @@ void Grid::Out()
 		for (int j = 0; j < numCols; j++)
 		{
 
-			Unit* unit = cells[i][j];
+			Unit* unit = cells[i * 10 + j];
 			while (unit)
 			{
 				c++;
@@ -224,11 +225,11 @@ void Grid::ClearAll()
 	{
 		for (int j = 0; j < numCols; j++)
 		{
-			Unit* unit = cells[i][j];
+			Unit* unit = cells[i * 10 + j];
 			while (unit != NULL)
 			{
-				if (cells[i][j] == unit)
-					cells[i][j] = unit->next;
+				if (cells[i * 10 + j] == unit)
+					cells[i * 10 + j] = unit->next;
 				if (unit->next != NULL)
 					unit->next->prev = unit->prev;
 				if (unit->prev != NULL)
@@ -251,12 +252,12 @@ Grid::Grid(int gridCols, int gridRows)
 	this->mapHeight = gridRows * CELL_HEIGHT;
 
 
-	cells.resize(numCols);
+	cells.resize(numRows * 10 + numCols);
 
-	for (int i = 0; i < numCols; i++)
-		cells[i].resize(numCols);
+	//for (int i = 0; i < numCols; i++)
+	//	cells[i].resize(numCols);
 
 	for (int i = 0; i < numRows; i++)
 		for (int j = 0; j < numCols; j++)
-			cells[i][j] = NULL;
+			cells[i * 10 + j] = NULL;
 }

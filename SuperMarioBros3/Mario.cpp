@@ -277,7 +277,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						else
 						{
 							e->obj->SetState(QUESTIONBRICK_STATE_HIT);
-
 						}
 
 					}

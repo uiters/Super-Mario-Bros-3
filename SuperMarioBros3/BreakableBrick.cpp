@@ -17,7 +17,7 @@ void CBreakableBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (isColliding(floor(mLeft), mTop, ceil(mRight), mBottom) && mario->getTail()->hit_times == 0)
 		{
 			Break();
-			//mario->AddScore(x, y, 10, false, false);
+			mario->AddScore(x, y, 10, false, false);
 			mario->getTail()->hit_times = 1;
 		}
 	}

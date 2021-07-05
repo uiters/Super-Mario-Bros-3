@@ -3,7 +3,7 @@
 #include <vector>
 #include "GameObject.h"
 
-#define CAMERA_WIDTH 280
+#define CAMERA_WIDTH 272
 #define CAMERA_HEIGHT 160
 
 #define CAMERA_SPEED_X	0.05f

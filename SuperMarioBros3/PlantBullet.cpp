@@ -31,6 +31,11 @@ CPlantBullet::CPlantBullet(float bx, float by, bool Up, bool Right)
 }
 void CPlantBullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	Camera* cam = Camera::GetInstance();
+	if (!cam->isAreaCamera(x, y))
+		isDestroyed = true;
+	if (isDestroyed)
+		return;
 	CGameObject::Update(dt);
 	x += dx;
 	y += dy;
@@ -39,12 +44,17 @@ void CPlantBullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (mario != NULL)
 	{
 		mario->GetBoundingBox(mLeft, mTop, mRight, mBottom);
-		if (isColliding(floor(mLeft), floor(mTop), ceil(mRight), ceil(mBottom)) && mario->untouchableTimer.IsStarted())
+		if (isColliding(floor(mLeft), floor(mTop), ceil(mRight), ceil(mBottom)) && !mario->untouchableTimer.IsStarted())
 		{
 			mario->Attacked();
 			isDestroyed = true;
 		}
 	}
+	//Camera* cam = Camera::GetInstance();
+	//bool iscam = cam->isAreaCamera(x, y);
+	//if (!iscam) {
+	//	isDestroyed = true;
+	//}
 }
 void CPlantBullet::Render()
 {

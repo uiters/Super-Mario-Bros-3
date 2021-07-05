@@ -37,7 +37,7 @@ class Grid
 	int numCols;
 	int numRows;
 
-	vector <vector<Unit*>> cells;
+	vector<Unit*> cells;
 public:
 	Grid(int mapWidth, int mapHeight, int cellWidth, int cellHeight);
 	Grid(int gridCols, int gridRows); 

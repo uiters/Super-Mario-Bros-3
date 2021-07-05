@@ -33,6 +33,10 @@ protected:
 	CMario* player = NULL;					// A play scene has to have player, right? 
 	CMap* current_map = NULL;
 	vector<LPGAMEOBJECT> objects;
+	vector<LPGAMEOBJECT> objectsRenderFirst; //enemies // items pushed up
+	vector<LPGAMEOBJECT> objectsRenderSecond; // statics
+	vector<LPGAMEOBJECT> objectsRenderThird; // items fall down
+
 	//Grid
 	vector<Unit*> units;
 	Unit* unit;

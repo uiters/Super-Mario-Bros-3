@@ -21,6 +21,9 @@
 #include "Sprites.h"
 #include "Textures.h"
 #include "Utils.h"
+#include "Score.h"
+#include "PlantBullet.h"
+#include "PlantBullet.h"
 
 
 using namespace std;
@@ -261,7 +264,6 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 			obj = new CFirePlant(tag);
 			((CFirePlant*)obj)->SetLimitY(y);
 			obj->SetType(MOVING);
-
 			break;
 		case OBJECT_TYPE_COIN:
 			obj = new CCoin(tag);
@@ -405,9 +407,13 @@ void CPlayScene::Update(DWORD dt)
 	if (player == NULL) return;
 
 	cam = Camera::GetInstance();
+
 	vector<LPGAMEOBJECT> coObjects;
 	coObjects.clear();
 	units.clear();
+	objectsRenderFirst.clear();
+	objectsRenderSecond.clear();
+	objectsRenderThird.clear();
 	objects.clear();
 	grid->Get(cam, units);
 
@@ -415,6 +421,22 @@ void CPlayScene::Update(DWORD dt)
 	{
 		LPGAMEOBJECT obj = units[i]->GetObj();
 		objects.push_back(obj);
+		if (dynamic_cast<CGoomba*> (obj) || dynamic_cast<CKoopas*> (obj)
+			|| dynamic_cast<CPlant*> (obj)
+			|| dynamic_cast<CFirePlant*> (obj) || dynamic_cast<CCoin*> (obj)
+			|| dynamic_cast<CMushroom*> (obj) && obj->state == MUSHROOM_STATE_UP
+			|| dynamic_cast<CLeaf*> (obj) && obj->state == LEAF_STATE_UP
+			|| dynamic_cast<CSwitch*> (obj))
+			objectsRenderFirst.push_back(obj);
+		else if (dynamic_cast<CBrick*> (obj) && obj->tag != WOOD && obj->tag != PLATFORM
+			|| (dynamic_cast<CQuestionBrick*> (obj) || (dynamic_cast<CBreakableBrick*> (obj))))
+			objectsRenderSecond.push_back(obj);
+		else if (dynamic_cast<CFirePlant*> (obj) || dynamic_cast<CPlantBullet*> (obj)
+			|| dynamic_cast<CMushroom*>(obj) && obj->state == MUSHROOM_STATE_WALK
+			|| dynamic_cast<CLeaf*> (obj) && obj->state == LEAF_STATE_FALLING
+			|| dynamic_cast<CScore*>(obj) || dynamic_cast<CPiece*>(obj)
+			|| dynamic_cast<CCard*>(obj))
+			objectsRenderThird.push_back(obj);
 	}
 
 	for (size_t i = 0; i < objects.size(); i++)
@@ -448,10 +470,14 @@ void CPlayScene::Render()
 		gamedone2->Draw(Camera::GetInstance()->GetCameraPosition().x + GAMEDONE_2_DIFF_X, Camera::GetInstance()->GetCameraPosition().y + GAMEDONE_2_DIFF_Y);
 	current_map->Render();
 	player->Render();
-	for (int i = 0; i < objects.size(); i++)
-	{
-		objects[i]->Render();
-	}
+	//for (int i = 0; i < objects.size(); i++)
+	//	objects[i]->Render();
+	for (int i = 0; i < objectsRenderFirst.size(); i++)
+		objectsRenderFirst[i]->Render();
+	for (int i = 0; i < objectsRenderSecond.size(); i++)
+		objectsRenderSecond[i]->Render();
+	for (int i = 0; i < objectsRenderThird.size(); i++)
+		objectsRenderThird[i]->Render();
 	hud->Render();
 }
 
@@ -467,6 +493,9 @@ void CPlayScene::Unload()
 
 	objects.clear();
 	units.clear();
+	objectsRenderFirst.clear();
+	objectsRenderSecond.clear();
+	objectsRenderThird.clear();
 
 	delete hud;
 	delete fonts;
