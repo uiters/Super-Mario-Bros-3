@@ -57,13 +57,13 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 	mapHeight = currentMap->GetMapHeight();
 	mapWidth = currentMap->GetMapWidth();
 	player->GetPosition(cx, cy);
-	if (false)
-	{
-		if (player->nx > 0)
-			cx -= 8;
-		else if (player->nx < 0)
-			cx += 8;
-	}
+	//if (false)
+	//{
+	//	if (player->nx > 0)
+	//		cx -= 8;
+	//	else if (player->nx < 0)
+	//		cx += 8;
+	//}
 	D3DXVECTOR3 pos = GetCameraPosition();
 
 	//if (typeCamera)

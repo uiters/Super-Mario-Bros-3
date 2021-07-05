@@ -121,6 +121,10 @@ void CMario::RunTimer() {
 		tailState = 0;
 		tail->hit_times = 0;
 	}
+	if (kickTimer.ElapsedTime() > MARIO_KICKING_TIME && kickTimer.IsStarted())
+	{
+		kickTimer.Reset();
+	}
 }
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -203,7 +207,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				y += -0.3f; // perfect position which is not overloap
 			else
 				y += -0.5f;
-
 		}
 	}
 	else
@@ -312,7 +315,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							{
 								goomba->SetState(GOOMBA_STATE_DIE);
 								vy = -MARIO_JUMP_DEFLECT_SPEED;
-
 							}
 							else
 							{
@@ -327,9 +329,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					else if (goomba->GetState() != GOOMBA_STATE_DIE)
 					{
 						y = y0;
-						if (untouchableTimer.IsStarted() == 0)
-							Attacked();
-						else
+						//if (!untouchableTimer.IsStarted())
+							//Attacked();
+						//else
 						{
 							x = x0 + dx;
 							y = y0;
@@ -338,7 +340,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							if (e->nx != 0 && tailTimer.IsStarted())
 							{
 								AddScore(goomba->x, goomba->y, 100, true);
-								goomba->SetState(GOOMBA_STATE_DIE_BY_TAIL);
+								goomba->SetState(GOOMBA_STATE_DIE_BY_MARIO);
 							}
 						}
 					}
@@ -349,14 +351,63 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				else if (dynamic_cast<CKoopas*>(e->obj)) // if e->obj is Koopas 
 				{
 					CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
-					DebugOut(L"collision");
+					if (e->ny < 0)
+					{
+						AddScore(koopas->x, koopas->y, 100, true);
+						vy = -1.5f * MARIO_JUMP_DEFLECT_SPEED;
+						if (this->nx > 0)
+						{
+							if (vx < MARIO_WALKING_SPEED_MIN * 2)
+								vx = MARIO_WALKING_SPEED_MIN * 2;
+						}
+						else
+						{
+							if (vx > -MARIO_WALKING_SPEED_MIN * 2)
+								vx = -MARIO_WALKING_SPEED_MIN * 2;
+						}
+						if (koopas->tag == KOOPAS_GREEN_PARA)
+							koopas->tag = KOOPAS_GREEN;
+						else if (koopas->tag == KOOPAS_RED_PARA)
+							koopas->tag = KOOPAS_RED;
+						else if (koopas->GetState() != KOOPAS_STATE_IN_SHELL && koopas->GetState() != KOOPAS_STATE_SHELL_UP)
+							koopas->SetState(KOOPAS_STATE_IN_SHELL);
+						else
+							koopas->SetState(KOOPAS_STATE_SPINNING);
+					}
+					else
+					{
+						if (e->ny > 0)
+							y = y0;
+						if (untouchableTimer.IsStarted())
+						{
+							x = x0 + dx;
+							if (e->ny > 0 && vy < 0)
+								y = y0 + dy;
+						}
+						if (koopas->GetState() == KOOPAS_STATE_IN_SHELL || koopas->GetState() == KOOPAS_STATE_SHELL_UP)
+						{
+							if (isReadyToHold)
+							{
+								koopas->SetIsHold(true);
+								isHold = true;
+							}
+							else
+							{
+								kickTimer.Start();
+								koopas->nx = this->nx;
+								koopas->SetState(KOOPAS_STATE_SPINNING);
+							}
+						}
+						else if (!untouchableTimer.IsStarted() && (koopas->GetState() == KOOPAS_STATE_SPINNING || koopas->GetState() == KOOPAS_STATE_WALKING))
+							Attacked();
+					}
 				}
 				//piranhaPlant
 				else if (dynamic_cast<CPlant*>(e->obj) || dynamic_cast<CFirePlant*>(e->obj))
 				{
 					if (!untouchableTimer.IsStarted())
 					{
-						Attacked();
+						//Attacked();
 					}
 					else {
 						x = x0 + dx;
@@ -415,7 +466,7 @@ void CMario::RenderBasicMoving(int& ani, int ani_jump_down_right, int ani_jump_d
 		{
 			if (nx > 0) ani = ani_idle_right;
 			else ani = ani_idle_left;
-			if (isKicking)
+			if (kickTimer.IsStarted())
 				if (nx > 0) ani = ani_kicking_right;
 				else ani = ani_kicking_left;
 		}
@@ -439,7 +490,7 @@ void CMario::RenderBasicMoving(int& ani, int ani_jump_down_right, int ani_jump_d
 		else if (vx < 0 && nx < 0) {
 			ani = ani_walking_left;
 		}
-		if (isKicking)
+		if (kickTimer.IsStarted())
 		{
 			if (vx > 0)
 				ani = ani_kicking_right;
@@ -504,7 +555,7 @@ void CMario::TransformSmallAni(int& ani) {
 	}
 	else if (isJumping)
 	{
-		if (isHolding)
+		if (isHold)
 		{
 			RenderJumping(ani,
 				MARIO_ANI_SMALL_HOLD_JUMPINGUP_RIGHT,
@@ -530,7 +581,7 @@ void CMario::TransformSmallAni(int& ani) {
 		}
 	}
 	else {
-		if (isHolding)
+		if (isHold)
 		{
 			RenderBasicMoving(ani,
 				MARIO_ANI_SMALL_HOLD_JUMPINGDOWN_RIGHT, MARIO_ANI_SMALL_HOLD_JUMPINGDOWN_LEFT,
@@ -572,7 +623,7 @@ void CMario::TransformBigAni(int& ani) {
 	}
 	else if (isJumping)
 	{
-		if (isHolding)
+		if (isHold)
 		{
 			RenderJumping(ani,
 				MARIO_ANI_BIG_HOLD_JUMPINGUP_RIGHT,
@@ -598,7 +649,7 @@ void CMario::TransformBigAni(int& ani) {
 		}
 	}
 	else {
-		if (isHolding) {
+		if (isHold) {
 			RenderBasicMoving(ani,
 				MARIO_ANI_BIG_HOLD_JUMPINGDOWN_RIGHT, MARIO_ANI_BIG_HOLD_JUMPINGDOWN_LEFT,
 				MARIO_ANI_BIG_HOLD_IDLE_RIGHT, MARIO_ANI_BIG_HOLD_IDLE_LEFT,
@@ -638,7 +689,7 @@ void CMario::TransformTanookiAni(int& ani) {
 	}
 	else if (isJumping)
 	{
-		if (isHolding)
+		if (isHold)
 		{
 			RenderJumping(ani,
 				MARIO_ANI_TAIL_HOLD_JUMPINGUP_RIGHT,
@@ -664,7 +715,7 @@ void CMario::TransformTanookiAni(int& ani) {
 		}
 	}
 	else {
-		if (isHolding) {
+		if (isHold) {
 			RenderBasicMoving(ani,
 				MARIO_ANI_TAIL_HOLD_JUMPINGDOWN_RIGHT, MARIO_ANI_TAIL_HOLD_JUMPINGDOWN_LEFT,
 				MARIO_ANI_TAIL_HOLD_IDLE_RIGHT, MARIO_ANI_TAIL_HOLD_IDLE_LEFT,
@@ -712,7 +763,7 @@ void CMario::TransformFireAni(int& ani) {
 	}
 	else if (isJumping)
 	{
-		if (isHolding) {
+		if (isHold) {
 			RenderJumping(ani,
 				MARIO_ANI_FIRE_HOLD_JUMPINGUP_RIGHT,
 				MARIO_ANI_FIRE_HOLD_JUMPINGUP_LEFT,
@@ -737,7 +788,7 @@ void CMario::TransformFireAni(int& ani) {
 		}
 	}
 	else {
-		if (isHolding)
+		if (isHold)
 		{
 			RenderBasicMoving(ani,
 				MARIO_ANI_FIRE_HOLD_JUMPINGDOWN_RIGHT, MARIO_ANI_FIRE_HOLD_JUMPINGDOWN_LEFT,
@@ -848,7 +899,7 @@ void CMario::Render()
 	{
 		animation_set->at(ani)->Render(x, y, alpha);
 	}
-	RenderBoundingBox();
+	RenderBoundingBox(100);
 	if (tailTimer.IsStarted())
 		tail->Render();
 }
@@ -896,6 +947,10 @@ void CMario::Die()
 
 void CMario::Boost() {
 	DebugOut(L"BOOST");
+}
+
+void CMario::HoldKoompas() {
+	isReadyToHold = true;
 }
 
 void CMario::Attack() {
@@ -951,7 +1006,6 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
 {
 	left = x;
 	top = y;
-
 	if (GetMode() != Mode::Small)
 	{
 		right = left + MARIO_BIG_BBOX_WIDTH;
@@ -960,9 +1014,9 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
 		{
 			bottom -= MARIO_BIG_BBOX_HEIGHT - MARIO_BIG_BBOX_SITTING_HEIGHT;
 		}
-		if (GetMode() == Mode::Tanooki)
-			right += 5;
+		// mario tail
 	}
+
 	else
 	{
 		if (transformTimer.IsStarted())

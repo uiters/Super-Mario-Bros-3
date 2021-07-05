@@ -39,6 +39,7 @@ void CFirePlant::Shoot()
 void CFirePlant::Update(DWORD dt,
 	vector<LPGAMEOBJECT>* coObjects)
 {
+
 	if (dyingTimer.ElapsedTime() >= PIRANHAPLANT_DIYING_TIME && dyingTimer.IsStarted())
 		isDestroyed = true;
 	if (state == PIRANHAPLANT_STATE_DEATH)

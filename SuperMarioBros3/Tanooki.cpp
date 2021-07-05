@@ -46,4 +46,5 @@ void CTanooki::Render()
 		if (nx > 0)
 			CSprites::GetInstance()->sprites[TAIL_HIT_SPRITE_ID]->Draw(x + TAIL_BBOX_WIDTH - 2, y - HUD_HEIGHT);
 	}
+	//RenderBoundingBox(100);
 }

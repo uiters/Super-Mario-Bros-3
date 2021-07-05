@@ -53,20 +53,19 @@ class CKoopas : public CGameObject
 	Timer dyingTimer;
 
 public:
-	bool isBeingHeld = false;
+	bool isHold = false;
 	bool isKillable = false;
 	float lastStanding_Y;
 	bool CanPullBack = false;
 	float start_x = 0, start_y = 0;
 	int start_tag = 0;
 	CKoopas();
-	void SetIsBeingHeld(bool m) { isBeingHeld = m; };
+	void SetIsHold(bool m) { isHold = m; };
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 	virtual void SetState(int state);
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	void Reset();
-	int CalRevivable();
-	bool CalKillable(vector<LPGAMEOBJECT>* coObjects);
+	bool CalRevivable();
 	bool CalTurnable(LPGAMEOBJECT object, vector<LPGAMEOBJECT>* coObjects);
 };

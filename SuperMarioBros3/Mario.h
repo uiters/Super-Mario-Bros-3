@@ -252,7 +252,7 @@
 #define	MARIO_LEVEL_TAIL	3
 #define	MARIO_LEVEL_FIRE	4
 
-#define MARIO_BIG_BBOX_WIDTH			16
+#define MARIO_BIG_BBOX_WIDTH			15
 #define MARIO_BIG_BBOX_HEIGHT			27
 #define MARIO_BIG_BBOX_SITTING_HEIGHT	18
 #define MARIO_SMALL_BBOX_WIDTH			13
@@ -305,6 +305,7 @@ private:
 
 	Timer dieTimer;
 
+	// killing
 	Timer countKillTimer;
 	int countKill;
 
@@ -312,7 +313,6 @@ private:
 	CTanooki* tail;
 public:
 	Timer untouchableTimer;
-
 	float start_x;			// initial position of Mario at scene
 	float start_y;
 
@@ -321,9 +321,12 @@ public:
 	bool isShooting;
 	bool isGround;
 	bool isJumping;
-	bool isKicking;
 	bool isFlying;
-	bool isHolding;
+
+	//action with koopas
+	Timer kickTimer;
+	bool isHold;
+	bool isReadyToHold;
 	//game done
 	bool isGameDone = false;
 	// HUD
@@ -372,6 +375,7 @@ public:
 	void Sit();
 	void Die();
 	void Boost();
+	void HoldKoompas();
 	void Reset();
 	void Attack();
 	void SetState(int vState);

@@ -3,7 +3,7 @@
 void CBlock::Render()
 {
 	//animation_set->at(0)->Render(x, y);
-	RenderBoundingBox(0);
+	RenderBoundingBox(100);
 }
 
 void CBlock::GetBoundingBox(float& l, float& t, float& r, float& b)

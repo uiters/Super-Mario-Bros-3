@@ -1,4 +1,4 @@
-#include "Goomba.h"
+	#include "Goomba.h"
 #include "Brick.h"
 #include "Utils.h"
 #include "Block.h"
@@ -13,7 +13,7 @@ CGoomba::CGoomba()
 
 void CGoomba::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (state == GOOMBA_STATE_DIE_BY_TAIL)
+	if (state == GOOMBA_STATE_DIE_BY_MARIO)
 	{
 		left = top = right = bottom = 0;
 		return;
@@ -51,7 +51,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		isDestroyed = true;
 		return;
 	}
-	if (tag == GOOMBA_RED && state != GOOMBA_STATE_DIE && state != GOOMBA_STATE_DIE_BY_TAIL)
+	if (tag == GOOMBA_RED && state != GOOMBA_STATE_DIE && state != GOOMBA_STATE_DIE_BY_MARIO)
 	{
 		if (walkingTimer.ElapsedTime() >= GOOMBA_RED_TIME_WALKING && walkingTimer.IsStarted())
 		{
@@ -88,12 +88,12 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	coEvents.clear();
 	//// turn off collision when goomba kicked 
-	if (state != GOOMBA_STATE_DIE_BY_TAIL)
+	if (state != GOOMBA_STATE_DIE_BY_MARIO)
 		CalcPotentialCollisions(coObjects, coEvents);
 
 	float mLeft, mTop, mRight, mBottom;
 	float oLeft, oTop, oRight, oBottom;
-	if (mario != NULL && state != GOOMBA_STATE_DIE_BY_TAIL && state != GOOMBA_STATE_DIE)
+	if (mario != NULL && state != GOOMBA_STATE_DIE_BY_MARIO && state != GOOMBA_STATE_DIE)
 	{
 		mario->GetBoundingBox(mLeft, mTop, mRight, mBottom);
 		GetBoundingBox(oLeft, oTop, oRight, oBottom);
@@ -127,7 +127,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 	//// No collision occured, proceed normally
-	if (coEvents.size() == 0 || state == GOOMBA_STATE_DIE_BY_TAIL)
+	if (coEvents.size() == 0 || state == GOOMBA_STATE_DIE_BY_MARIO)
 	{
 		x += dx;
 		y += dy;
@@ -227,7 +227,6 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				x = x0 + dx;
 				y = y0 + dy;
 			}
-			
 		}
 	}
 	// limit screen
@@ -255,7 +254,7 @@ void CGoomba::Render()
 		ani = GOOMBA_RED_ANI_WINGSWALKING;
 		if (state == GOOMBA_STATE_RED_JUMPING || state == GOOMBA_STATE_RED_HIGHJUMPING)
 			ani = GOOMBA_RED_ANI_JUMPING;
-		if (state == GOOMBA_STATE_DIE_BY_TAIL)
+		if (state == GOOMBA_STATE_DIE_BY_MARIO)
 			ani = GOOMBA_RED_ANI_WALKING;
 		break;
 	case GOOMBA_RED_NORMAL:
@@ -265,7 +264,7 @@ void CGoomba::Render()
 		break;
 	}
 	animation_set->at(ani)->Render(x, y);
-	RenderBoundingBox(100);
+	RenderBoundingBox();
 }
 
 void CGoomba::SetState(int state)
@@ -278,7 +277,7 @@ void CGoomba::SetState(int state)
 		vy = 0;
 		StartDying();
 		break;
-	case GOOMBA_STATE_DIE_BY_TAIL:
+	case GOOMBA_STATE_DIE_BY_MARIO:
 		vy = -GOOMBA_DIE_DEFLECT_SPEED;
 		vx = -vx;
 		ay = GOOMBA_GRAVITY;

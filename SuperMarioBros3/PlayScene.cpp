@@ -419,8 +419,21 @@ void CPlayScene::Update(DWORD dt)
 
 	for (UINT i = 0; i < units.size(); i++)
 	{
+		LPGAMEOBJECT tmp;
 		LPGAMEOBJECT obj = units[i]->GetObj();
 		objects.push_back(obj);
+		//CalRevivable
+		for each (LPGAMEOBJECT object in objects)
+		{
+			if (dynamic_cast<CKoopas*>(object) && !dynamic_cast<CKoopas*>(object)->CalRevivable()
+				&& object->isEnable == false)
+			{
+				object->isEnable = true;
+				object->isDestroyed = false;
+			}
+
+		}
+
 		if (dynamic_cast<CGoomba*> (obj) || dynamic_cast<CKoopas*> (obj)
 			|| dynamic_cast<CPlant*> (obj)
 			|| dynamic_cast<CFirePlant*> (obj) || dynamic_cast<CCoin*> (obj)
@@ -522,6 +535,9 @@ void CPlaySceneKeyHandler::OnKeyUp(int KeyCode) {
 		break;
 	case DIK_UP:
 		mario->isSitting = false;
+	case DIK_A:
+		mario->isHold = false;
+		mario->isReadyToHold = false;
 	}
 }
 
@@ -562,9 +578,7 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_4:
 		mario->Transform(CMario::Mode::Tanooki);
 		break;
-	case DIK_A:
-		mario->Boost();
-		break;
+
 	case DIK_T:
 		mario->TelePort();
 		break;
@@ -588,5 +602,9 @@ void CPlaySceneKeyHandler::KeyState(BYTE* states)
 		mario->SetState(MARIO_STATE_WALKING_RIGHT);
 	else
 		mario->SetState(MARIO_STATE_IDLE);
-
+	if (game->IsKeyDown(DIK_A))
+	{
+		mario->Boost();
+		mario->HoldKoompas();
+	}
 }

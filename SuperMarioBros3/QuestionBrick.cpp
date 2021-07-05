@@ -169,7 +169,7 @@ void CQuestionBrick::Render()
 		else
 			ani = QUESTIONBRICK_ANI_IDLE; // question brick
 	animation_set->at(ani)->Render(x, y);
-	RenderBoundingBox();
+	RenderBoundingBox(100);
 }
 
 void CQuestionBrick::CreateItem(int itemtype)
