@@ -32,12 +32,12 @@
 #define MARIO_SHOOTING_TIME			150
 #define MARIO_KICKING_TIME			200	
 #define MARIO_FLAPPING_TIME			200	
-#define MARIO_RUNNING_STACK_TIME	250
+#define MARIO_RUNNING_STACK_TIME	200
 #define MARIO_SLOW_TIME				1000
 #define MARIO_SLOW_STACK_TIME		250
 #define MARIO_RELOAD_BULLET_TIME	500
 #define MARIO_TAIL_FLYING_TIME		250
-#define MARIO_FLYING_TIME			5000
+#define MARIO_FLYING_TIME			1750
 #define MARIO_TRANSFORMING_TIME		500
 #define MARIO_KILLSTREAK_TIME		1000
 #define MARIO_PIPE_TIME				1000
@@ -299,9 +299,11 @@ private:
 	Mode mode;
 	Mode prevMode;
 	Timer transformTimer;
+
+	//Boost speed and fly
 	Timer flyTimer;
-	//Timer runTimer;
-	//
+	Timer runningTimer;
+	Timer stoppingTimer;
 
 	Timer dieTimer;
 
@@ -321,8 +323,9 @@ public:
 	bool isShooting;
 	bool isGround;
 	bool isJumping;
-	bool isFlying;
-
+	//boost speed
+	bool isReadyToRun;
+	bool isChangeDirection = false;
 	//action with koopas
 	Timer kickTimer;
 	bool isHold;
@@ -332,7 +335,7 @@ public:
 	// HUD
 	int RunningStacks = 0;
 	int money = 0;
-	int life = 4;
+	int life = MARIO_DEFAULT_LIFES;
 	int score = 0;
 	//  tail
 	int tailState = 0;
@@ -374,8 +377,7 @@ public:
 	void Jump();
 	void Sit();
 	void Die();
-	void Boost();
-	void HoldKoompas();
+	void SlowSpeed();
 	void Reset();
 	void Attack();
 	void SetState(int vState);

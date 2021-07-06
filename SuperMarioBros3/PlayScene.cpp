@@ -536,6 +536,7 @@ void CPlaySceneKeyHandler::OnKeyUp(int KeyCode) {
 	case DIK_UP:
 		mario->isSitting = false;
 	case DIK_A:
+		mario->isReadyToRun = false;
 		mario->isHold = false;
 		mario->isReadyToHold = false;
 	}
@@ -604,7 +605,7 @@ void CPlaySceneKeyHandler::KeyState(BYTE* states)
 		mario->SetState(MARIO_STATE_IDLE);
 	if (game->IsKeyDown(DIK_A))
 	{
-		mario->Boost();
-		mario->HoldKoompas();
+		mario->isReadyToRun = true;
+		mario->isReadyToHold = true;
 	}
 }

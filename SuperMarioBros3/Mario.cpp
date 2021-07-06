@@ -125,6 +125,33 @@ void CMario::RunTimer() {
 	{
 		kickTimer.Reset();
 	}
+	if (runningTimer.ElapsedTime() >= MARIO_RUNNING_STACK_TIME && runningTimer.IsStarted() && vx != 0 && isReadyToRun)
+	{
+		runningTimer.Start();
+		RunningStacks++;
+		if (RunningStacks > MARIO_RUNNING_STACKS)
+		{
+			RunningStacks = MARIO_RUNNING_STACKS;
+
+			vx = nx * MARIO_RUNNING_SPEED_MAX;
+		}
+	}
+	if (flyTimer.ElapsedTime() >= MARIO_FLYING_TIME && flyTimer.IsStarted())
+	{
+		flyTimer.Reset();
+	}
+
+	if (stoppingTimer.ElapsedTime() >= MARIO_SLOW_STACK_TIME && stoppingTimer.IsStarted()&&!runningTimer.IsStarted())
+	{
+		stoppingTimer.Start();
+		RunningStacks--;
+		if (RunningStacks < 0)
+		{
+			RunningStacks = 0;
+			flyTimer.Reset();
+		}
+		DebugOut(L"STOP\n");
+	}
 }
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -133,6 +160,19 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 
+	if (!runningTimer.IsStarted() && isReadyToRun)
+	{
+		runningTimer.Start();
+		stoppingTimer.Reset();
+	}
+	// nếu chuyển hướng chạy hoặc thả nút boôst thì sẽ giảm tốc từ từ
+	else if (!stoppingTimer.IsStarted() && !isReadyToRun)
+	{
+		stoppingTimer.Start();
+		runningTimer.Reset();
+	}
+
+
 	RunTimer();
 
 	//slow down if change direction when running
@@ -140,6 +180,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		&& (state == MARIO_STATE_WALKING_LEFT || state == MARIO_STATE_WALKING_RIGHT))
 	{
 		vx = -nx * MARIO_WALKING_SPEED_MAX;
+		isChangeDirection = true;
 		if (RunningStacks < 0)
 			RunningStacks = 0;
 	}
@@ -147,14 +188,16 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//if (isAtIntroScene) 
 
 		//doing somthing
-
 	{
 		vx += ax * dt + RunningStacks * ax;
 		vy += ay * dt;
 		//limit the speed of mario 
-		if (abs(vx) >= MARIO_WALKING_SPEED_MAX)
+		if (abs(vx) >= MARIO_WALKING_SPEED_MAX && !isReadyToRun)
 		{
 			vx = nx * MARIO_WALKING_SPEED_MAX;
+		}
+		if (abs(vx) >= MARIO_RUNNING_SPEED_MAX && isReadyToRun) {
+			vx = nx * MARIO_RUNNING_SPEED_MAX;
 		}
 		// falling
 		if (vy > MARIO_JUMP_SPEED_MAX)
@@ -169,7 +212,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			ay = MARIO_GRAVITY;
 			isGround = false;
 		}
-		if (isFlying)
+		if (flyTimer.IsStarted())
 		{
 			vy = -MARIO_FLY_SPEED;
 			ay = -MARIO_GRAVITY;
@@ -182,6 +225,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//cant jump again until touch the ground
 	if (vy < 0)
 		isGround = false;
+	//limit Y
+	if (y < 40)
+		y = 40;
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
@@ -238,11 +284,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				LPCOLLISIONEVENT e = coEventsResult[i];
 				if (e->ny != 0 && !(dynamic_cast<CBlock*>(e->obj) && ny > 0))
 				{
-					if (!(dynamic_cast<CBrick*>(e->obj) && e->obj->tag == PIPE && isFlying))
+					if (!(dynamic_cast<CBrick*>(e->obj) && e->obj->tag == PIPE && flyTimer.IsStarted()))
 					{
 						isGround = true;
 						isJumping = false;
-						isFlying = false;
+						flyTimer.Reset();
 					}
 				}
 				GetBoundingBox(mLeft, mTop, mRight, mBottom);
@@ -564,7 +610,7 @@ void CMario::TransformSmallAni(int& ani) {
 				MARIO_ANI_SMALL_HOLD_JUMPINGDOWN_LEFT);
 		}
 		else {
-			if (isFlying)
+			if (flyTimer.IsStarted())
 			{
 				RenderJumping(ani,
 					MARIO_ANI_SMALL_FLY_RIGHT,
@@ -593,7 +639,7 @@ void CMario::TransformSmallAni(int& ani) {
 		else {
 			int ani_go_right = MARIO_ANI_SMALL_WALKING_RIGHT;
 			int ani_go_left = MARIO_ANI_SMALL_WALKING_LEFT;
-			if (abs(vx) > 0)
+			if (runningTimer.IsStarted())
 				if (abs(vx) >= MARIO_RUNNING_SPEED_MAX)
 				{
 					ani_go_right = MARIO_ANI_SMALL_WALKING_FAST_RIGHT;
@@ -632,7 +678,7 @@ void CMario::TransformBigAni(int& ani) {
 				MARIO_ANI_BIG_HOLD_JUMPINGDOWN_LEFT);
 		}
 		else {
-			if (isFlying)
+			if (flyTimer.IsStarted())
 			{
 				RenderJumping(ani,
 					MARIO_ANI_BIG_FLY_RIGHT,
@@ -660,7 +706,7 @@ void CMario::TransformBigAni(int& ani) {
 		else {
 			int ani_go_right = MARIO_ANI_BIG_WALKING_RIGHT;
 			int ani_go_left = MARIO_ANI_BIG_WALKING_LEFT;
-			if (abs(vx) > 0)
+			if (runningTimer.IsStarted())
 				if (abs(vx) >= MARIO_RUNNING_SPEED_MAX)
 				{
 					ani_go_right = MARIO_ANI_BIG_WALKING_FAST_RIGHT;
@@ -698,7 +744,7 @@ void CMario::TransformTanookiAni(int& ani) {
 				MARIO_ANI_TAIL_HOLD_JUMPINGDOWN_LEFT);
 		}
 		else {
-			if (isFlying)
+			if (flyTimer.IsStarted())
 			{
 				RenderJumping(ani,
 					MARIO_ANI_TAIL_FLY_UP_RIGHT,
@@ -726,7 +772,7 @@ void CMario::TransformTanookiAni(int& ani) {
 		else {
 			int ani_go_right = MARIO_ANI_TAIL_WALKING_RIGHT;
 			int ani_go_left = MARIO_ANI_TAIL_WALKING_LEFT;
-			if (abs(vx) > 0)
+			if (runningTimer.IsStarted())
 				if (abs(vx) >= MARIO_RUNNING_SPEED_MAX)
 				{
 					ani_go_right = MARIO_ANI_TAIL_WALKING_FAST_RIGHT;
@@ -771,7 +817,7 @@ void CMario::TransformFireAni(int& ani) {
 				MARIO_ANI_FIRE_HOLD_JUMPINGDOWN_LEFT);
 		}
 		else {
-			if (isFlying)
+			if (flyTimer.IsStarted())
 			{
 				RenderJumping(ani,
 					MARIO_ANI_FIRE_FLY_RIGHT,
@@ -800,7 +846,7 @@ void CMario::TransformFireAni(int& ani) {
 		else {
 			int ani_go_right = MARIO_ANI_FIRE_WALKING_RIGHT;
 			int ani_go_left = MARIO_ANI_FIRE_WALKING_LEFT;
-			if (abs(vx) > 0)
+			if (runningTimer.IsStarted())
 				if (abs(vx) >= MARIO_RUNNING_SPEED_MAX)
 				{
 					ani_go_right = MARIO_ANI_FIRE_WALKING_FAST_RIGHT;
@@ -923,6 +969,10 @@ void CMario::Jump() {
 	isJumping = true;
 	if (vy > -MARIO_JUMP_SPEED_MIN)
 		vy = -MARIO_JUMP_SPEED_MIN;
+	if (RunningStacks == MARIO_RUNNING_STACKS)
+	{
+		flyTimer.Start();
+	}
 	ay = -MARIO_ACCELERATION_JUMP;
 }
 
@@ -945,12 +995,8 @@ void CMario::Die()
 
 }
 
-void CMario::Boost() {
-	DebugOut(L"BOOST");
-}
-
-void CMario::HoldKoompas() {
-	isReadyToHold = true;
+void CMario::SlowSpeed() {
+	isChangeDirection = true;
 }
 
 void CMario::Attack() {
@@ -973,10 +1019,16 @@ void CMario::SetState(int state)
 	{
 	case MARIO_STATE_WALKING_RIGHT:
 		ax = MARIO_ACCELERATION;
+		if (ax < 0 && vy > 0)
+		{
+			isChangeDirection = true;
+		}
 		nx = 1;
 		break;
 	case MARIO_STATE_WALKING_LEFT:
 		ax = -MARIO_ACCELERATION;
+		if (ax > 0 && vy > 0)
+			isChangeDirection = true;
 		nx = -1;
 		break;
 	case MARIO_STATE_JUMPING:
