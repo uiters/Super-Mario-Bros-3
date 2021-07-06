@@ -27,6 +27,7 @@
 #define KOOPAS_REVIVE_TIME		2000
 #define KOOPAS_SHELL_TIME		5000
 #define KOOPAS_DIYING_TIME		1000
+#define KOOPPAS_RESPAWN_TIME	3000
 
 #define KOOPAS_ANI_WALKING_RIGHT	0
 #define KOOPAS_ANI_SPIN_RIGHT		1
@@ -51,7 +52,7 @@ class CKoopas : public CGameObject
 	Timer revivingTimer;
 	Timer shellTimer;
 	Timer dyingTimer;
-
+	Timer respawnTimer;
 public:
 	bool isHold = false;
 	bool isKillable = false;

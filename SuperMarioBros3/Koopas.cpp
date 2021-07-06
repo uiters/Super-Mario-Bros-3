@@ -32,8 +32,13 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (!isEnable)
 		return;
-	if (!cam->isAreaCamera(x, y))
-		Reset();
+	if (respawnTimer.ElapsedTime() >= KOOPPAS_RESPAWN_TIME && respawnTimer.IsStarted())
+	{
+		respawnTimer.Reset();
+		if (!cam->isAreaCamera(x, y))
+			Reset();
+	}
+
 	CGameObject::Update(dt);
 
 	CMario* mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
@@ -389,6 +394,7 @@ void CKoopas::SetState(int state)
 		vy = -KOOPAS_DIE_DEFLECT_SPEED;
 		vx = 0;
 		SetType(IGNORE);
+		respawnTimer.Start();
 		break;
 	}
 }
@@ -396,7 +402,10 @@ void CKoopas::SetState(int state)
 bool CKoopas::CalRevivable()
 {
 	Camera* cam = Camera::GetInstance();
-	return cam->isAreaCamera(x*1.5, y);
+	if (!cam->isAreaCamera(x * 1.5, y))
+		return false;
+	respawnTimer.Start();
+	return true;
 }
 
 bool CKoopas::CalTurnable(LPGAMEOBJECT object, vector<LPGAMEOBJECT>* coObjects)
