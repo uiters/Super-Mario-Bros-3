@@ -121,6 +121,10 @@ void CMario::RunTimer() {
 		tailState = 0;
 		tail->hit_times = 0;
 	}
+	if (shootingTimer.ElapsedTime() > MARIO_SHOOTING_TIME && shootingTimer.IsStarted())
+	{
+		shootingTimer.Reset();
+	}
 	if (kickTimer.ElapsedTime() > MARIO_KICKING_TIME && kickTimer.IsStarted())
 	{
 		kickTimer.Reset();
@@ -141,7 +145,7 @@ void CMario::RunTimer() {
 		flyTimer.Reset();
 	}
 
-	if (stoppingTimer.ElapsedTime() >= MARIO_SLOW_STACK_TIME && stoppingTimer.IsStarted()&&!runningTimer.IsStarted())
+	if (stoppingTimer.ElapsedTime() >= MARIO_SLOW_STACK_TIME && stoppingTimer.IsStarted() && !runningTimer.IsStarted())
 	{
 		stoppingTimer.Start();
 		RunningStacks--;
@@ -171,7 +175,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		stoppingTimer.Start();
 		runningTimer.Reset();
 	}
-
 
 	RunTimer();
 
@@ -545,7 +548,7 @@ void CMario::RenderBasicMoving(int& ani, int ani_jump_down_right, int ani_jump_d
 			//DebugOut(L"[KICK]\n");
 		}
 	}
-	if (isShooting)
+	if (shootingTimer.IsStarted())
 	{
 		if (nx > 0)
 			ani = MARIO_ANI_SHOOTING_RIGHT;
@@ -572,7 +575,7 @@ void CMario::RenderJumping(int& ani, int ani_jump_up_right, int ani_jump_up_left
 		else if (nx < 0 && vy >= 0)
 			ani = ani_jump_down_left;
 	}
-	if (isShooting)
+	if (shootingTimer.IsStarted())
 	{
 		if (nx > 0)
 			ani = MARIO_ANI_SHOOTING_JUMP_RIGHT;
@@ -1002,6 +1005,16 @@ void CMario::SlowSpeed() {
 void CMario::Attack() {
 	if (GetMode() == Mode::Fire)
 	{
+		if (ShootTimes < MARIO_FIRE_BULLETS)
+		{
+			shootingTimer.Start();
+			isReadyToShoot = true;
+			CFireBullet* bullet = new CFireBullet(x + nx * FIRE_BULLET_BBOX_WIDTH, y + FIRE_BULLET_SHOOT_DIFF * (MARIO_LEVEL_SMALL ? MARIO_SMALL_BBOX_HEIGHT : MARIO_BIG_BBOX_HEIGHT));
+			bullet->SetSpeed(nx * FIRE_BULLET_SPEED_X, FIRE_BULLET_SPEED_Y);
+			bullet->SetTemHeight(0);
+			((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetUnit()->AddUnit(bullet, ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetGrid());
+			ShootTimes++;
+		}
 		DebugOut(L"FIRE\n");
 	}
 	else if (GetMode() == Mode::Tanooki)
@@ -1117,7 +1130,7 @@ void CMario::AddScore(int ox, int oy, int s, bool isEnemy, bool showscore)
 void CMario::Reset()
 {
 	SetState(MARIO_STATE_IDLE);
-	Transform(Mode::Fire);
+	Transform(Mode::Small);
 	SetPosition(start_x, start_y);
 	SetSpeed(0, 0);
 	dead = false;

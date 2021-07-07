@@ -444,7 +444,7 @@ void CPlayScene::Update(DWORD dt)
 		else if (dynamic_cast<CBrick*> (obj) && obj->tag != WOOD && obj->tag != PLATFORM
 			|| (dynamic_cast<CQuestionBrick*> (obj) || (dynamic_cast<CBreakableBrick*> (obj))))
 			objectsRenderSecond.push_back(obj);
-		else if (dynamic_cast<CFirePlant*> (obj) || dynamic_cast<CPlantBullet*> (obj)
+		else if (dynamic_cast<CFireBullet*> (obj) || dynamic_cast<CPlantBullet*> (obj)
 			|| dynamic_cast<CMushroom*>(obj) && obj->state == MUSHROOM_STATE_WALK
 			|| dynamic_cast<CLeaf*> (obj) && obj->state == LEAF_STATE_FALLING
 			|| dynamic_cast<CScore*>(obj) || dynamic_cast<CPiece*>(obj)

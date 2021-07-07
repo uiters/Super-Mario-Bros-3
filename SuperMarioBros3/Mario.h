@@ -320,7 +320,6 @@ public:
 
 	bool dead;
 	bool isSitting;
-	bool isShooting;
 	bool isGround;
 	bool isJumping;
 	//boost speed
@@ -341,6 +340,10 @@ public:
 	int tailState = 0;
 	Timer tailTimer;
 	Timer tailStateTimer;
+	//shoot
+	Timer shootingTimer;
+	int ShootTimes = 0;
+	bool isReadyToShoot;
 	// swap map
 	bool wannaTele = false;
 	Timer pipeUpTimer;
