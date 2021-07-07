@@ -146,6 +146,7 @@
   <ItemGroup>
     <ClCompile Include="Abyss.cpp" />
     <ClCompile Include="Animations.cpp" />
+    <ClCompile Include="BackUp.cpp" />
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="Boomerang.cpp" />
     <ClCompile Include="BoomerangBro.cpp" />
@@ -183,11 +184,14 @@
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="WorldMapObject.cpp" />
+    <ClCompile Include="WorldPlayer.cpp" />
     <ClCompile Include="WorldScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Abyss.h" />
     <ClInclude Include="Animations.h" />
+    <ClInclude Include="BackUp.h" />
     <ClInclude Include="Block.h" />
     <ClInclude Include="Boomerang.h" />
     <ClInclude Include="BoomerangBro.h" />
@@ -226,6 +230,8 @@
     <ClInclude Include="Textures.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Utils.h" />
+    <ClInclude Include="WorldMapObject.h" />
+    <ClInclude Include="WorldPlayer.h" />
     <ClInclude Include="WorldScene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

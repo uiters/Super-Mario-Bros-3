@@ -169,6 +169,15 @@
     <ClCompile Include="Score.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BackUp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldMapObject.cpp">
+      <Filter>Map Objects\WorldMap</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldPlayer.cpp">
+      <Filter>Map Objects\WorldMap</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Brick.h">
@@ -293,6 +302,15 @@
     </ClInclude>
     <ClInclude Include="Score.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BackUp.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldMapObject.h">
+      <Filter>Map Objects\WorldMap</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldPlayer.h">
+      <Filter>Map Objects\WorldMap</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

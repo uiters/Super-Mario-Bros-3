@@ -1,3 +1,6 @@
-# Super-Mario-Bros-3
+#NHẬP MÔN NHẬP TRÌNH GAME
+Sinh viên thực hiện : Trần Đình Thiện - 17521080
 
-Nhập môn phát triển game
+Giảng viên hướng dẫn: Đinh Nguyễn Anh Dũng
+
+Game: SuperMarioBros3

@@ -121,6 +121,10 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 		SetCameraPosition((int)cx, (int)cy - 30);
 		hud->SetPosition(int(cx), HUD_CY / 2 - 40);
 	}
+	else if (sceneId == WORLD_SCENE)
+	{
+		SetCameraPosition(0, -HUD_HEIGHT);
+	}
 	else
 	{
 		SetCameraPosition((int)cx, (int)cy);
