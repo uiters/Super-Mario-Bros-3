@@ -148,7 +148,7 @@ void CWorldScene::_ParseSection_OBJECTS(string line)
 			DebugOut(L"[ERROR] PLAYER object was created before!\n");
 			return;
 		}
-		obj = new CWorldPlayer();
+		obj = new CWorldPlayer(x, y);
 		player = (CWorldPlayer*)obj;
 		DebugOut(L"[INFO] Player object created!\n");
 		break;
@@ -267,7 +267,6 @@ void CWorldScene::Load()
 	for (size_t i = 1; i < objects.size(); i++)
 		if (objects[i]->tag == OBJECT_TYPE_PORTAL && ((CWorldMapObject*)objects[i])->GetSceneId() == backup->scene && backup->scene != 0)
 			player->SetPosition(objects[i]->x, objects[i]->y);
-	CGame::GetInstance()->SetCamPos(0, -HUD_HEIGHT);
 	hud->SetPosition(0, current_map->GetMapHeight() - HUD_HEIGHT);
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
@@ -296,6 +295,7 @@ void CWorldScene::Update(DWORD dt)
 
 	for (size_t i = 0; i < objects.size(); i++)
 		objects[i]->Update(dt, &coObjects);
+	cam->Update(dt, isCameraAutoMove, cxcount);
 
 	hud->Update(dt, &coObjects);
 	// skip the rest if scene was already unloaded (Mario::Update might trigger WorldScene::Unload)

@@ -156,6 +156,47 @@ void CMario::RunTimer() {
 		}
 		DebugOut(L"STOP\n");
 	}
+	
+}
+
+void CMario::LimitSpeed() {
+	//slow down if change direction when running
+	if (vx * ax < 0 && abs(vx) > MARIO_WALKING_SPEED_MAX
+		&& (state == MARIO_STATE_WALKING_LEFT || state == MARIO_STATE_WALKING_RIGHT))
+	{
+		vx = -nx * MARIO_WALKING_SPEED_MAX;
+		isChangeDirection = true;
+		if (RunningStacks < 0)
+			RunningStacks = 0;
+	}
+	vx += ax * dt + RunningStacks * ax;
+	vy += ay * dt;
+	//limit the speed of mario 
+	if (abs(vx) >= MARIO_WALKING_SPEED_MAX && !isReadyToRun)
+	{
+		vx = nx * MARIO_WALKING_SPEED_MAX;
+	}
+	if (abs(vx) >= MARIO_RUNNING_SPEED_MAX && isReadyToRun) {
+		vx = nx * MARIO_RUNNING_SPEED_MAX;
+	}
+	// falling
+	if (vy > MARIO_JUMP_SPEED_MAX)
+	{
+		vy = MARIO_JUMP_SPEED_MAX;
+		ay = MARIO_GRAVITY;
+	}
+	// jump
+	if (vy <= -MARIO_JUMP_SPEED_MAX && !IsLostControl())
+	{
+		vy = -MARIO_JUMP_SPEED_MAX;
+		ay = MARIO_GRAVITY;
+		isGround = false;
+	}
+	if (flyTimer.IsStarted())
+	{
+		vy = -MARIO_FLY_SPEED;
+		ay = -MARIO_GRAVITY;
+	}
 }
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -163,6 +204,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGame* game = CGame::GetInstance();
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
+
 
 	if (!runningTimer.IsStarted() && isReadyToRun)
 	{
@@ -177,60 +219,16 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 
 	RunTimer();
+	LimitSpeed();
 
-	//slow down if change direction when running
-	if (vx * ax < 0 && abs(vx) > MARIO_WALKING_SPEED_MAX
-		&& (state == MARIO_STATE_WALKING_LEFT || state == MARIO_STATE_WALKING_RIGHT))
-	{
-		vx = -nx * MARIO_WALKING_SPEED_MAX;
-		isChangeDirection = true;
-		if (RunningStacks < 0)
-			RunningStacks = 0;
-	}
-	//update and limit speed
-	//if (isAtIntroScene) 
 
-		//doing somthing
-	{
-		vx += ax * dt + RunningStacks * ax;
-		vy += ay * dt;
-		//limit the speed of mario 
-		if (abs(vx) >= MARIO_WALKING_SPEED_MAX && !isReadyToRun)
-		{
-			vx = nx * MARIO_WALKING_SPEED_MAX;
-		}
-		if (abs(vx) >= MARIO_RUNNING_SPEED_MAX && isReadyToRun) {
-			vx = nx * MARIO_RUNNING_SPEED_MAX;
-		}
-		// falling
-		if (vy > MARIO_JUMP_SPEED_MAX)
-		{
-			vy = MARIO_JUMP_SPEED_MAX;
-			ay = MARIO_GRAVITY;
-		}
-		// jump
-		if (vy <= -MARIO_JUMP_SPEED_MAX && !IsLostControl())
-		{
-			vy = -MARIO_JUMP_SPEED_MAX;
-			ay = MARIO_GRAVITY;
-			isGround = false;
-		}
-		if (flyTimer.IsStarted())
-		{
-			vy = -MARIO_FLY_SPEED;
-			ay = -MARIO_GRAVITY;
-			isGround = false;
-		}
-	}
 	//handle for sitting when jump
 	if (state == MARIO_STATE_SITTING && vy < 0)
 		vy -= MARIO_ACCELERATION_JUMP * dt;
 	//cant jump again until touch the ground
 	if (vy < 0)
 		isGround = false;
-	//limit Y
-	if (y < 40)
-		y = 40;
+
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
@@ -499,10 +497,19 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 		}
 	}
+	//! Limit y when fly
+	Camera* cam = Camera::GetInstance();
+	DebugOut(L"camera Y::%f %f \n", cam->GetCameraPosition().y, y);
+
+	if (flyTimer.IsStarted() && cam->GetCameraPosition().y == 0 && y < 40) {
+		y = 30;
+	}
+
+	tail->Update(dt);
+
 	// clean up collision events
 	for (UINT i = 0; i < coEvents.size(); i++)
 		delete coEvents[i];
-	tail->Update(dt);
 }
 
 void CMario::RenderBasicMoving(int& ani, int ani_jump_down_right, int ani_jump_down_left,

@@ -539,7 +539,9 @@ void CPlaySceneKeyHandler::OnKeyUp(int KeyCode) {
 		mario->isReadyToRun = false;
 		mario->isHold = false;
 		mario->isReadyToHold = false;
+
 	}
+
 }
 
 void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
@@ -553,8 +555,8 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 	switch (KeyCode)
 	{
 	case DIK_SPACE:
-		/*if (mario->isGround)*/
-		mario->SetState(MARIO_STATE_JUMPING);
+		if (mario->isGround)
+			mario->SetState(MARIO_STATE_JUMPING);
 		break;
 		/*case DIK_DOWN:
 			break;

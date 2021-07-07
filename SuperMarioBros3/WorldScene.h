@@ -20,6 +20,7 @@ protected:
 	HUD* hud = NULL;
 	vector<LPGAMEOBJECT> objects;
 	Camera* cam;
+	float cxcount;
 
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_SPRITES(string line);

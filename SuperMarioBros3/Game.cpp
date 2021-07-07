@@ -347,11 +347,11 @@ void CGame::_ParseSection_SCENES(string line)
 		playscene->SetCamerAutoMove(isCameraAutoMove);
 		scenes[id] = playscene;
 	}
-	//if (type == WORLDSCENE)
-	//{
-	//	LPSCENE worldscene = new CWorldScene(id, path);
-	//	scenes[id] = worldscene;
-	//}
+	if (type == WORLDSCENE)
+	{
+		LPSCENE worldscene = new CWorldScene(id, path);
+		scenes[id] = worldscene;
+	}
 	/*if (type == INTROSCENE)
 	{
 		LPSCENE introscene = new CIntroScene(id, path);

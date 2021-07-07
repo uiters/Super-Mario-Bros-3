@@ -16,5 +16,5 @@
 
 // scene
 #define EXTRA_SCENE 2
-#define WORLD_SCENE 1
+#define WORLD_SCENE 0
 

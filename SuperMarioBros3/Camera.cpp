@@ -102,6 +102,7 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 			else if (cy > mapHeight - SCREEN_HEIGHT)
 			{
 				cy = mapHeight - SCREEN_HEIGHT + 32;
+
 			}
 			else //if (cy < mapHeight - SCREEN_HEIGHT)
 			{
@@ -123,7 +124,7 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 	}
 	else if (sceneId == WORLD_SCENE)
 	{
-		SetCameraPosition(0, -HUD_HEIGHT);
+		SetCameraPosition(0, -HUD_HEIGHT-6);
 	}
 	else
 	{

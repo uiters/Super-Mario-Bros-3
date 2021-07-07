@@ -363,6 +363,7 @@ public:
 	void Transform(Mode form);
 	//render
 	void Attacked();
+	void LimitSpeed();
 	void RenderBasicMoving(int& ani,
 		int ani_idle_right, int ani_idle_left, int ani_jump_down_right, int ani_jump_down_left,
 		int ani_baking_right, int ani_baking_left, int ani_walking_right, int ani_walking_left, int ani_kicking_right, int ani_kicking_left);
