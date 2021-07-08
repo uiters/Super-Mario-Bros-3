@@ -170,6 +170,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mario.cpp" />
     <ClCompile Include="Mushroom.cpp" />
+    <ClCompile Include="MusicalBrick.cpp" />
     <ClCompile Include="Piece.cpp" />
     <ClCompile Include="Plant.cpp" />
     <ClCompile Include="PlantBullet.cpp" />
@@ -216,6 +217,7 @@
     <ClInclude Include="Leaf.h" />
     <ClInclude Include="Mario.h" />
     <ClInclude Include="Mushroom.h" />
+    <ClInclude Include="MusicalBrick.h" />
     <ClInclude Include="Piece.h" />
     <ClInclude Include="Plant.h" />
     <ClInclude Include="PlantBullet.h" />

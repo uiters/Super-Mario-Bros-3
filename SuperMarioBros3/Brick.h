@@ -10,6 +10,7 @@
 #define WOOD		46
 #define QUESTION	42
 #define CLOUDY		26
+#define MUSICAL		150
 
 #define BRICK_ANI_IDLE				0
 

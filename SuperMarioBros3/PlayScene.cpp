@@ -9,6 +9,7 @@
 #include "BoomerangBro.h"
 #include "BreakableBrick.h"
 #include "Brick.h"
+#include "MusicalBrick.h"
 #include "Coin.h"
 #include "Define.h"
 #include "FirePlant.h"
@@ -47,6 +48,7 @@ using namespace std;
 #define OBJECT_TYPE_FIREPIRANHAPLANT	70
 #define OBJECT_TYPE_QUESTIONBRICK		142
 #define OBJECT_TYPE_BREAKABLEBRICK		112
+#define OBJECT_TYPE_MUSICALBRICK		150
 #define OBJECT_TYPE_ABYSS				113
 #define GRID							999
 
@@ -158,12 +160,15 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 {
 	wstring path = ToWSTR(line);
 	ParseObjFromFile(path.c_str());
+
 }
 
 void CPlayScene::ParseObjFromFile(LPCWSTR path)
 {
 	ifstream f;
 	f.open(path);
+	DebugOut(L"path::%s", path);
+
 	if (!f)
 		DebugOut(L"\nFailed to open object file!");
 	char str[MAX_SCENE_LINE];
@@ -234,6 +239,9 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 			break;
 		case OBJECT_TYPE_BREAKABLEBRICK:
 			obj = new CBreakableBrick();
+			break;
+		case OBJECT_TYPE_MUSICALBRICK:
+			obj = new CMusicalBrick();
 			break;
 		case OBJECT_TYPE_KOOPAS:
 			obj = new CKoopas();
@@ -329,7 +337,7 @@ void CPlayScene::_ParseSection_TILEMAP_DATA(string line)
 	f.open(path);
 	f >> ID >> rowMap >> columnMap >> rowTile >> columnTile >> totalTiles;
 	//Init Map Matrix
-
+	DebugOut(L"ID %d>> rowMap %d>> columnMap %d>> rowTile %d>> columnTile %d>> totalTiles %d", ID, rowMap, columnMap, rowTile, columnTile, totalTiles);
 	int** TileMapData = new int* [rowMap];
 	for (int i = 0; i < rowMap; i++)
 	{

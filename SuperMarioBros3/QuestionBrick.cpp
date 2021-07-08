@@ -151,7 +151,7 @@ void CQuestionBrick::SetState(int state = BRICK_STATE_IDLE)
 		ay = 0;
 		break;
 	default:
-		DebugOut(L"[INFO] state default");
+		DebugOut(L"[INFO] state question brick default\n");
 		break;
 
 	}

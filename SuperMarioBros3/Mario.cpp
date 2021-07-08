@@ -154,7 +154,7 @@ void CMario::RunTimer() {
 			RunningStacks = 0;
 			flyTimer.Reset();
 		}
-		DebugOut(L"STOP\n");
+		//DebugOut(L"STOP\n");
 	}
 	
 }
@@ -499,8 +499,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	//! Limit y when fly
 	Camera* cam = Camera::GetInstance();
-	DebugOut(L"camera Y::%f %f \n", cam->GetCameraPosition().y, y);
-
 	if (flyTimer.IsStarted() && cam->GetCameraPosition().y == 0 && y < 40) {
 		y = 30;
 	}
