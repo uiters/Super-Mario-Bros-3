@@ -62,28 +62,30 @@ void CMusicalBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 	float oLeft, oTop, oRight, oBottom;
 	float mLeft, mTop, mRight, mBottom;
+	if (mario != NULL)
+	{
+		mario->GetBoundingBox(mLeft, mTop, mRight, mBottom);
+		GetBoundingBox(oLeft, oTop, oRight, oBottom);
 
-	mario->GetBoundingBox(mLeft, mTop, mRight, mBottom);
-	GetBoundingBox(oLeft, oTop, oRight, oBottom);
-
-	if (isColliding(mLeft, mTop, mRight, mBottom)) {
-		//DebugOut(L"Mario->vy::%f\n", mario->vy);
-		if (state == MUSIC_BRICK_STATE_UP) {
-			//mario->SetIsJumpOnCMusicalBrick(true);
-			mario->vy = -0.5f;
+		if (isColliding(mLeft, mTop, mRight, mBottom)) {
+			//DebugOut(L"Mario->vy::%f\n", mario->vy);
+			if (state == MUSIC_BRICK_STATE_UP) {
+				mario->SetIsJumpOnMusicBrick(true);
+				mario->vy = -0.5f;
+			}
+			if (mario->state == MARIO_STATE_JUMPING) {
+				DebugOut(L"MARIO_JUMP\n");
+				mario->vy = -0.6f;
+			}
 		}
-	/*	if (mario->state == MARIO_STATE_JUMP) {
-			DebugOut(L"MARIO_JUMP\n");
-			mario->vy = -0.6f;
-		}*/
-	}
-	else {
-		//mario->SetIsJumpOnCMusicalBrick(false);
+		else {
+			mario->SetIsJumpOnMusicBrick(false);
+		}
+
+
 	}
 }
-
 void CMusicalBrick::SetState(int state) {
-	int previousState = GetState();
 	CGameObject::SetState(state);
 	switch (state)
 	{

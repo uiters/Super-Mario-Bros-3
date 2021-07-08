@@ -322,6 +322,7 @@ public:
 	bool isSitting;
 	bool isGround;
 	bool isJumping;
+	bool isJumpMusicBrick;
 	//boost speed
 	bool isReadyToRun;
 	bool isChangeDirection = false;
@@ -385,7 +386,7 @@ public:
 	void Reset();
 	void Attack();
 	void SetState(int vState);
-
+	void SetIsJumpOnMusicBrick(bool t);
 	void Update(DWORD dt, std::vector<LPGAMEOBJECT>* objects);
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	CTanooki* getTail() { return tail; }

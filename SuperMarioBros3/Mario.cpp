@@ -16,6 +16,7 @@
 #include "Tanooki.h"
 #include "FirePlant.h"
 #include "Score.h"
+#include "MusicalBrick.h"
 CMario::CMario(float x, float y) : CGameObject()
 {
 	Transform(Mode::Small);
@@ -156,7 +157,7 @@ void CMario::RunTimer() {
 		}
 		//DebugOut(L"STOP\n");
 	}
-	
+
 }
 
 void CMario::LimitSpeed() {
@@ -217,6 +218,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		stoppingTimer.Start();
 		runningTimer.Reset();
 	}
+
+	//if (!isJumpMusicBrick)
+	//{
+	//	vy += ay * dt;
+	//}
 
 	RunTimer();
 	LimitSpeed();
@@ -347,6 +353,26 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 					if (e->ny > 0 && vy < 0)
 						y = y0 + dy;
+				}
+				// music brick
+				else if (dynamic_cast<CMusicalBrick*>(e->obj)) {
+					CMusicalBrick* msBrick = dynamic_cast<CMusicalBrick*>(e->obj);
+					vx = 0;
+					if (e->nx != 0) {
+						vx = 0;
+					}
+					if (e->ny < 0) {
+						if (msBrick->GetState() == MUSIC_BRICK_STATE_IDLE && !msBrick->GetIsGoUp()) {
+							msBrick->SetState(MUSIC_BRICK_STATE_DOWN);
+							msBrick->SetIsPushedDown(true);
+						}
+					}
+					if (e->ny > 0) {
+						msBrick->SetState(MUSIC_BRICK_STATE_UP);
+						msBrick->SetIsPushedUp(true);
+						vy = 0;
+						ay = MARIO_GRAVITY;
+					}
 				}
 				//goomba
 				else if (dynamic_cast<CGoomba*>(e->obj))
@@ -1029,6 +1055,11 @@ void CMario::Attack() {
 		tailState = 1;
 		DebugOut(L"TAIL\n");
 	}
+}
+
+void CMario::SetIsJumpOnMusicBrick(bool b)
+{
+	isJumpMusicBrick = b;
 }
 
 void CMario::SetState(int state)
