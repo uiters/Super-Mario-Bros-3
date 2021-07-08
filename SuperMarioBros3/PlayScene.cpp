@@ -52,8 +52,6 @@ using namespace std;
 #define OBJECT_TYPE_ABYSS				113
 #define GRID							999
 
-#define OBJECT_TYPE_FLOATINGWOOD		26
-
 #define OBJECT_TYPE_PORTAL	50
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
@@ -450,7 +448,9 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CSwitch*> (obj))
 			objectsRenderFirst.push_back(obj);
 		else if (dynamic_cast<CBrick*> (obj) && obj->tag != WOOD && obj->tag != PLATFORM
-			|| (dynamic_cast<CQuestionBrick*> (obj) || (dynamic_cast<CBreakableBrick*> (obj))))
+			|| (dynamic_cast<CQuestionBrick*> (obj) || (dynamic_cast<CBreakableBrick*> (obj)))
+			|| dynamic_cast<CMusicalBrick*>(obj)
+	|| dynamic_cast<CBrick*>(obj))
 			objectsRenderSecond.push_back(obj);
 		else if (dynamic_cast<CFireBullet*> (obj) || dynamic_cast<CPlantBullet*> (obj)
 			|| dynamic_cast<CMushroom*>(obj) && obj->state == MUSHROOM_STATE_WALK

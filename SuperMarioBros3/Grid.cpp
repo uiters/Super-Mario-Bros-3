@@ -149,7 +149,7 @@ void Grid::Get(Camera* cam, vector<Unit*>& listUnits)
 		endCol = ENDCOL;
 	if (startCol < 0)
 		startCol = 0;
-	//DebugOut(L"[GRID COL] %d %d\n", startCol, endCol);
+	DebugOut(L"[GRID COL] %d %d\n", startCol, endCol);
 	int startRow = (int)(cam_y / CELL_HEIGHT);
 	int endRow = (int)ceil((cam_y + SCREEN_HEIGHT) / CELL_HEIGHT);
 	int ENDROW = (int)ceil((mapHeight) / CELL_HEIGHT);
