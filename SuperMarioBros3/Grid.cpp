@@ -202,7 +202,6 @@ void Grid::UpdateGrid(vector<Unit*>& units)
 
 void Grid::Out()
 {
-	DebugOut(L"\nNumber of Unit: %d\n", numRows);
 
 	int c = 0;
 	for (int i = 0; i < numRows; i++)

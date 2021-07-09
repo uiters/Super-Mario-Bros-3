@@ -7,6 +7,7 @@
 #include "Abyss.h"
 #include "Portal.h"
 #include "BoomerangBro.h"
+#include "Boomerang.h"
 #include "BreakableBrick.h"
 #include "Brick.h"
 #include "MusicalBrick.h"
@@ -299,7 +300,7 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 			int gridCols = atoi(tokens[1].c_str());
 			int gridRows = atoi(tokens[2].c_str());
 			grid = new Grid(gridCols, gridRows);
-			DebugOut(L"\nParseSection_GRID: Done");
+			DebugOut(L"\nParseSection_GRID: Done\n");
 			break;
 		}
 		default:

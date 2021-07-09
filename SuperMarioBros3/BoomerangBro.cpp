@@ -6,6 +6,7 @@ CBoomerangBrother::CBoomerangBrother()
 {
 	SetState(BOOMERANG_BROTHER_STATE_FORWARD);
 	nx = 1;
+
 }
 void CBoomerangBrother::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
@@ -20,32 +21,15 @@ void CBoomerangBrother::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vy += BOOMERANG_BROTHER_GRAVITY * dt;
 	if (x < start_x)
 		vx = BOOMERANG_BROTHER_SPEED;
+
 	if (x > start_x + BOOMERANG_BROTHER_LIMIT_RANGE)
 		vx = -BOOMERANG_BROTHER_SPEED;
-	if (state == BOOMERANG_BROTHER_STATE_DIE)
-	{
-		x += dx;
-		y += dy;
-		
-	}
+
+
 	CMario* mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	float mLeft, mTop, mRight, mBottom;
 	float oLeft, oTop, oRight, oBottom;
-	if (mario != NULL && state != BOOMERANG_BROTHER_STATE_DIE)
-	{
-		if (mario->tailTimer.IsStarted() && mario->GetMode() == CMario::Mode::Tanooki)
-		{
-			mario->getTail()->GetBoundingBox(mLeft, mTop, mRight, mBottom);
-			GetBoundingBox(oLeft, oTop, oRight, oBottom);
-			if (isColliding(floor(mLeft), mTop, ceil(mRight), mBottom))
-			{
-				mario->AddScore(x, y, 1000, true);
-				SetState(BOOMERANG_BROTHER_STATE_DIE);
-				return;
-			}
-		}
-	}
-	
+
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
@@ -100,13 +84,18 @@ void CBoomerangBrother::Render()
 	int ani = 0;
 	if (nx > 0)
 	{
-	
+		if (state == BOOMERANG_STATE_IDLE)
+			ani = BOOMERANG_BROTHER_ANI_AIM_RIGHT;
+		else
 			ani = BOOMERANG_BROTHER_ANI_THROW_RIGHT;
 	}
 	else
 	{
-	
+		if (state == BOOMERANG_STATE_IDLE)
+			ani = BOOMERANG_BROTHER_ANI_AIM_LEFT;
+		else
 			ani = BOOMERANG_BROTHER_ANI_THROW_LEFT;
+		//ani = BOOMERANG_BROTHER_ANI_THROW_LEFT;
 	}
 	animation_set->at(ani)->Render(x, y);
 	RenderBoundingBox();

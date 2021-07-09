@@ -1,6 +1,9 @@
 #pragma once
 #include "GameObject.h"
-class CBoomerang : public CGameObject
+
+class CBoomerang :
+	public CGameObject
 {
+
 };
 
