@@ -6,6 +6,7 @@ CMusicalBrick::CMusicalBrick() {
 	start_y = y;
 	start_x = x;
 	SetState(MUSIC_BRICK_STATE_IDLE);
+
 }
 
 void CMusicalBrick::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -23,81 +24,62 @@ void CMusicalBrick::Render() {
 
 void CMusicalBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	CGameObject::Update(dt);
-
-	CPlayScene* currentScene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
-
-	CMario* mario = currentScene->GetPlayer();
-
 	y += dy;
-	//DebugOut(L"y - start_y = %f\n", y - start_y);
-	if (state == MUSIC_BRICK_STATE_DOWN) {
-		if (isPushedDown) {
-			if (y - start_y >= MUSIC_PUSH_MAX_HEIGHT) {
-				StopPushedDown();
-				SetState(MUSIC_BRICK_STATE_UP);
-			}
+
+	if (state == MUSIC_BRICK_STATE_HIT_FROM_TOP)
+	{
+		y += 3;
+		if (isDown && !isUp)
+		{
+			isDown = false;
+			isUp = true;
+			//DebugOut(L"condition1::");
+			
 		}
-		if (isGoDown) {
+		else
 			if (y >= start_y) {
 				y = start_y;
 				SetState(MUSIC_BRICK_STATE_IDLE);
+				//DebugOut(L"condition2::");
 			}
-		}
 	}
+	if (state == MUSIC_BRICK_STATE_HIT_FROM_DOWN)
+	{
+		y -= 3;
+		if (isUp && !isDown)
+		{
+			isUp = false;
+			isDown = true;
 
-	if (state == MUSIC_BRICK_STATE_UP) {
-		if (isPushedUp) {
-			if (start_y - y >= MUSIC_PUSH_MAX_HEIGHT) {
-				StopPushedUp();
-				SetState(MUSIC_BRICK_STATE_DOWN);
-			}
+			//DebugOut(L"condition3::");
 		}
-		if (isGoUp) {
+		else
 			if (y <= start_y) {
 				y = start_y;
 				SetState(MUSIC_BRICK_STATE_IDLE);
+				//DebugOut(L"condition4::");
 			}
-		}
+
 	}
 
-	float oLeft, oTop, oRight, oBottom;
-	float mLeft, mTop, mRight, mBottom;
-	if (mario != NULL)
-	{
-		mario->GetBoundingBox(mLeft, mTop, mRight, mBottom);
-		GetBoundingBox(oLeft, oTop, oRight, oBottom);
-
-		if (isColliding(mLeft, mTop, mRight, mBottom)) {
-			//DebugOut(L"Mario->vy::%f\n", mario->vy);
-			if (state == MUSIC_BRICK_STATE_UP) {
-				mario->SetIsJumpOnMusicBrick(true);
-				mario->vy = -0.5f;
-			}
-			if (mario->state == MARIO_STATE_JUMPING) {
-				DebugOut(L"MARIO_JUMP\n");
-				mario->vy = -0.6f;
-			}
-		}
-		else {
-			mario->SetIsJumpOnMusicBrick(false);
-		}
-
-
-	}
 }
 void CMusicalBrick::SetState(int state) {
 	CGameObject::SetState(state);
 	switch (state)
 	{
 	case MUSIC_BRICK_STATE_IDLE:
-		vx = vy = 0;
-		Reset();
+		ay = vy = 0;
+		isDown = false;
+		isUp = false;
+		boundTimer.Reset();
 		break;
-	case MUSIC_BRICK_STATE_DOWN:
+	case MUSIC_BRICK_STATE_HIT_FROM_TOP:
 		vy = MUSIC_BRICK_SPEED;
+		ay = MUSIC_BRICK_SPEED_UP;
 		break;
-	case MUSIC_BRICK_STATE_UP:
+	case MUSIC_BRICK_STATE_HIT_FROM_DOWN:
 		vy = -MUSIC_BRICK_SPEED;
+		ay = -MUSIC_BRICK_SPEED_UP;
 		break;
 	}
 }

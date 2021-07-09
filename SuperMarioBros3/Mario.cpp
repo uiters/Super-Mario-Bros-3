@@ -206,7 +206,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 
-
+	DebugOut(L"x %f y %f\n", x, y);
 	if (!runningTimer.IsStarted() && isReadyToRun)
 	{
 		runningTimer.Start();
@@ -218,11 +218,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		stoppingTimer.Start();
 		runningTimer.Reset();
 	}
-
-	//if (!isJumpMusicBrick)
-	//{
-	//	vy += ay * dt;
-	//}
 
 	RunTimer();
 	LimitSpeed();
@@ -357,19 +352,20 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				// music brick
 				else if (dynamic_cast<CMusicalBrick*>(e->obj)) {
 					CMusicalBrick* msBrick = dynamic_cast<CMusicalBrick*>(e->obj);
-					vx = 0;
 					if (e->nx != 0) {
 						vx = 0;
 					}
 					if (e->ny < 0) {
-						if (msBrick->GetState() == MUSIC_BRICK_STATE_IDLE && !msBrick->GetIsGoUp()) {
-							msBrick->SetState(MUSIC_BRICK_STATE_DOWN);
-							msBrick->SetIsPushedDown(true);
-						}
+						msBrick->SetState(MUSIC_BRICK_STATE_HIT_FROM_TOP);
+						msBrick->isUp = false;
+						msBrick->isDown = true;
+						ay = -MARIO_GRAVITY;
+						vy = -MARIO_JUMP_DEFLECT_SPEED;
 					}
 					if (e->ny > 0) {
-						msBrick->SetState(MUSIC_BRICK_STATE_UP);
-						msBrick->SetIsPushedUp(true);
+						msBrick->SetState(MUSIC_BRICK_STATE_HIT_FROM_DOWN);
+						msBrick->isUp = true;
+						msBrick->isDown = false;
 						vy = 0;
 						ay = MARIO_GRAVITY;
 					}
@@ -1007,6 +1003,7 @@ void CMario::Jump() {
 	{
 		flyTimer.Start();
 	}
+	// increase high when jump
 	ay = -MARIO_ACCELERATION_JUMP;
 }
 
@@ -1057,10 +1054,6 @@ void CMario::Attack() {
 	}
 }
 
-void CMario::SetIsJumpOnMusicBrick(bool b)
-{
-	isJumpMusicBrick = b;
-}
 
 void CMario::SetState(int state)
 {

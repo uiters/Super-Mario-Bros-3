@@ -240,6 +240,7 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 			break;
 		case OBJECT_TYPE_MUSICALBRICK:
 			obj = new CMusicalBrick();
+			((CMusicalBrick*)obj)->start_y = y;
 			break;
 		case OBJECT_TYPE_KOOPAS:
 			obj = new CKoopas();
@@ -450,7 +451,7 @@ void CPlayScene::Update(DWORD dt)
 		else if (dynamic_cast<CBrick*> (obj) && obj->tag != WOOD && obj->tag != PLATFORM
 			|| (dynamic_cast<CQuestionBrick*> (obj) || (dynamic_cast<CBreakableBrick*> (obj)))
 			|| dynamic_cast<CMusicalBrick*>(obj)
-	|| dynamic_cast<CBrick*>(obj))
+			|| dynamic_cast<CBrick*>(obj))
 			objectsRenderSecond.push_back(obj);
 		else if (dynamic_cast<CFireBullet*> (obj) || dynamic_cast<CPlantBullet*> (obj)
 			|| dynamic_cast<CMushroom*>(obj) && obj->state == MUSHROOM_STATE_WALK
