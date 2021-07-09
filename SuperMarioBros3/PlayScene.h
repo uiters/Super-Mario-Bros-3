@@ -74,6 +74,8 @@ public:
 	Grid* GetGrid() { return grid; }
 	HUD* GetHUD() { return hud; }
 	void SetPlayer(CMario* m) { player = m; }
+	void LoadBackUp();
+	void BackUpPlayer();
 	//friend class CPlaySceneKeyHandler;
 };
 

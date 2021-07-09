@@ -214,6 +214,7 @@ void CMario::LimitSpeed() {
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGame* game = CGame::GetInstance();
+	Camera* cam = Camera::GetInstance();
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 
@@ -226,6 +227,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	if (((CPlayScene*)game->GetCurrentScene())->isGameDone2 == true)
 		return;
+	if (y > ABYSS_HIGH)
+	{
+		GameDoneTimer.Reset();
+		((CPlayScene*)game->GetCurrentScene())->isGameDone3 = true;
+		life--;
+		return;
+	}
+
 
 	//DebugOut(L"x %f y %f\n", x, y);
 	if (!runningTimer.IsStarted() && isReadyToRun)
@@ -509,14 +518,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						}
 					}
 				}
-				// Abyss
-				else if (dynamic_cast<CAbyss*>(e->obj))
-				{
-					GameDoneTimer.Reset();
-					((CPlayScene*)game->GetCurrentScene())->isGameDone3 = true;
-					life--;
-					return;
-				}
 				//switch
 				else if (dynamic_cast<CSwitch*>(e->obj))
 				{
@@ -562,7 +563,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 	//! Limit y when fly
-	Camera* cam = Camera::GetInstance();
 	if (flyTimer.IsStarted() && cam->GetCameraPosition().y == 0 && y < 40) {
 		y = 30;
 	}

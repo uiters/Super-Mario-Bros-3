@@ -167,8 +167,7 @@ void Grid::Get(Camera* cam, vector<Unit*>& listUnits)
 				if (unit->GetObj()->isDestroyed == false)
 				{
 					listUnits.push_back(unit);
-					unit = unit->next;
-					
+					unit = unit->next;			
 				}
 				else
 				{
@@ -231,6 +230,7 @@ void Grid::ClearAll()
 			{
 				if (cells[i * 10 + j] == unit)
 					cells[i * 10 + j] = unit->next;
+				DebugOut(L"i %d, j%d\n", i, j);
 				if (unit->next != NULL)
 					unit->next->prev = unit->prev;
 				if (unit->prev != NULL)

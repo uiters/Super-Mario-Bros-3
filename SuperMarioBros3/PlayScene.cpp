@@ -26,6 +26,7 @@
 #include "Score.h"
 #include "PlantBullet.h"
 #include "PlantBullet.h"
+#include "BackUp.h"
 
 
 using namespace std;
@@ -261,7 +262,6 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 			break;
 		case OBJECT_TYPE_ABYSS:
 			obj = new CAbyss();
-			DebugOut(L"OKOK");
 			break;
 		case OBJECT_TYPE_PIRANHAPLANT:
 			obj = new CPlant();
@@ -510,14 +510,28 @@ void CPlayScene::Render()
 		objectsRenderThird[i]->Render();
 	hud->Render();
 }
+void CPlayScene::LoadBackUp()
+{
+	CBackUp* backup = CBackUp::GetInstance();
+	if (id != 2)
+		backup->LoadBackUp(player);
 
+}
+void CPlayScene::BackUpPlayer()
+{
+	if (player != NULL)
+	{
+		CBackUp* backup = CBackUp::GetInstance();
+		backup->BackUpMario(player);
+	}
+}
 /*
 	Unload current scene
 */
 void CPlayScene::Unload()
 {
-	if (grid != nullptr)
-		grid->ClearAll();
+	//if (grid != nullptr)
+	//	grid->ClearAll();
 	if (player != nullptr)
 		delete player;
 
@@ -564,7 +578,10 @@ void CPlaySceneKeyHandler::OnKeyUp(int KeyCode) {
 		mario->isReadyToRun = false;
 		mario->isHold = false;
 		mario->isReadyToHold = false;
-
+	case DIK_SPACE:
+		mario->ay = MARIO_GRAVITY;
+		mario->vy = 0.01f;
+		break;
 	}
 
 }

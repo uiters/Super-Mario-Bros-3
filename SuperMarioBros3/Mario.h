@@ -282,6 +282,8 @@
 #define MARIO_FIRE_BULLETS				2
 #define MARIO_SITTING_RENDER_DIFF_5		5 
 
+#define ABYSS_HIGH 460
+
 #define MARIO	0
 #define LUIGI	1
 

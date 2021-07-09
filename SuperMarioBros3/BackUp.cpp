@@ -20,6 +20,8 @@ void CBackUp::BackUpMario(CMario* mario)
 		scene = CGame::GetInstance()->GetCurrentScene()->GetId();
 		if (scene == 2 || scene == 5)
 			scene--;
+		cards = mario->cards;
+
 	}
 
 }
@@ -32,6 +34,8 @@ void CBackUp::LoadBackUp(CMario* mario)
 		mario->score = score;
 		mario->Transform(mode);
 		mario->money = money;
+		mario->cards = cards;
+
 	}
 
 }

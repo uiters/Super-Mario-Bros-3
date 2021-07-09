@@ -3,6 +3,7 @@
 #include"Textures.h"
 #include"PlayScene.h"
 #include"WorldScene.h"
+#include "BackUp.h"
 
 #define HUD_DIFF_FIRST_ROW		8
 #define HUD_DIFF_SECOND_ROW		16
@@ -18,8 +19,14 @@
 #define HUD_SCORE_MAX	7
 HUD::HUD(int type_hud)
 {
+	CBackUp* backup = CBackUp::GetInstance();
+	nlife = backup->life;
 	remainTime = DEFAULT_TIME;
+	score = backup->score;
+	money = backup->money;
+	time = backup->time;
 	runningStacks = 0;
+	cards = backup->cards;
 	this->type_hud = type_hud;
 	if (type_hud == PLAYSCENE_HUD)
 	{
