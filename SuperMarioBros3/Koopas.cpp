@@ -277,8 +277,6 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				CMusicalBrick* msBrick = dynamic_cast<CMusicalBrick*>(e->obj);
 				msBrick->SetState(MUSIC_BRICK_STATE_HIT_FROM_TOP);
-				msBrick->isUp = false;
-				msBrick->isDown = true;
 				this->vx = -this->vx;
 			}
 			if (dynamic_cast<CBreakableBrick*>(e->obj) && state == KOOPAS_STATE_SPINNING && e->nx != 0 && ceil(mBottom) != oTop)

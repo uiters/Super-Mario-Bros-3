@@ -1,11 +1,9 @@
 ﻿#include <algorithm>
 #include <assert.h>
 #include "Utils.h"
-
 #include "Mario.h"
 #include "Game.h"
 #include "PlayScene.h"
-
 #include "Brick.h"
 #include "Block.h"
 #include "BreakableBrick.h"
@@ -206,7 +204,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 
-	DebugOut(L"x %f y %f\n", x, y);
+	//DebugOut(L"x %f y %f\n", x, y);
 	if (!runningTimer.IsStarted() && isReadyToRun)
 	{
 		runningTimer.Start();
@@ -357,15 +355,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 					if (e->ny < 0) {
 						msBrick->SetState(MUSIC_BRICK_STATE_HIT_FROM_TOP);
-						msBrick->isUp = false;
-						msBrick->isDown = true;
 						ay = -MARIO_GRAVITY;
 						vy = -MARIO_JUMP_DEFLECT_SPEED;
 					}
 					if (e->ny > 0) {
 						msBrick->SetState(MUSIC_BRICK_STATE_HIT_FROM_DOWN);
-						msBrick->isUp = true;
-						msBrick->isDown = false;
 						vy = 0;
 						ay = MARIO_GRAVITY;
 					}
@@ -457,8 +451,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						{
 							if (isReadyToHold)
 							{
-								koopas->SetIsHold(true);
 								isHold = true;
+								koopas->SetIsHold(true);
 							}
 							else
 							{

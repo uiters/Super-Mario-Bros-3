@@ -251,10 +251,9 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 			((CKoopas*)obj)->start_y = y;
 			break;
 		case OBJECT_TYPE_BOOMERANGBROTHER:
-			obj = new CBoomerangBro();
-			/*obj = new CBoomerangBrother();
+			obj = new CBoomerangBrother();
 			obj->SetType(MOVING);
-			((CBoomerangBrother*)obj)->start_x = x;*/
+			((CBoomerangBrother*)obj)->start_x = x;
 			break;
 		case OBJECT_TYPE_BLOCK:
 			obj = new CBlock();
@@ -444,6 +443,7 @@ void CPlayScene::Update(DWORD dt)
 		if (dynamic_cast<CGoomba*> (obj) || dynamic_cast<CKoopas*> (obj)
 			|| dynamic_cast<CPlant*> (obj)
 			|| dynamic_cast<CFirePlant*> (obj) || dynamic_cast<CCoin*> (obj)
+			|| dynamic_cast<CBoomerangBrother*> (obj)
 			|| dynamic_cast<CMushroom*> (obj) && obj->state == MUSHROOM_STATE_UP
 			|| dynamic_cast<CLeaf*> (obj) && obj->state == LEAF_STATE_UP
 			|| dynamic_cast<CSwitch*> (obj))
@@ -616,7 +616,8 @@ void CPlaySceneKeyHandler::KeyState(BYTE* states)
 		mario->SetState(MARIO_STATE_IDLE);
 	if (game->IsKeyDown(DIK_A))
 	{
-		mario->isReadyToRun = true;
 		mario->isReadyToHold = true;
+		if (!mario->isHold)
+			mario->isReadyToRun = true;
 	}
 }

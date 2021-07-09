@@ -19,15 +19,11 @@
 #define MUSIC_BRICK_STATE_DOWN 2
 
 class CMusicalBrick :public CGameObject {
-
-
 	Timer boundTimer;
 
 public:
 	float start_y = 0;
 	float start_x = 0;
-	bool isDown = false;
-	bool isUp = false;
 	CMusicalBrick();
 
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);

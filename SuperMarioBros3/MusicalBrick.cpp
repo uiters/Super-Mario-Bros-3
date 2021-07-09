@@ -24,44 +24,50 @@ void CMusicalBrick::Render() {
 
 void CMusicalBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	CGameObject::Update(dt);
+
 	y += dy;
-
-	if (state == MUSIC_BRICK_STATE_HIT_FROM_TOP)
+	CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+	CMario* mario = {};
+	if (scene != NULL)
+		mario = ((CPlayScene*)scene)->GetPlayer();
+	if (boundTimer.ElapsedTime() > MUSICBRICK_BOUND_TIME && boundTimer.IsStarted() && state == MUSIC_BRICK_STATE_HIT_FROM_TOP && mario != nullptr)
 	{
-		y += 3;
-		if (isDown && !isUp)
-		{
-			isDown = false;
-			isUp = true;
-			//DebugOut(L"condition1::");
-			
-		}
-		else
-			if (y >= start_y) {
-				y = start_y;
-				SetState(MUSIC_BRICK_STATE_IDLE);
-				//DebugOut(L"condition2::");
-			}
+		boundTimer.Reset();
+		vy += ay * dt;
 	}
-	if (state == MUSIC_BRICK_STATE_HIT_FROM_DOWN)
+	if (boundTimer.ElapsedTime() > MUSICBRICK_BOUND_TIME && boundTimer.IsStarted() && state == MUSIC_BRICK_STATE_HIT_FROM_DOWN && mario != nullptr)
 	{
-		y -= 3;
-		if (isUp && !isDown)
-		{
-			isUp = false;
-			isDown = true;
-
-			//DebugOut(L"condition3::");
-		}
-		else
-			if (y <= start_y) {
-				y = start_y;
-				SetState(MUSIC_BRICK_STATE_IDLE);
-				//DebugOut(L"condition4::");
-			}
-
+		boundTimer.Reset();
+		vy -= ay * dt;
 	}
-
+	float mLeft, mTop, mRight, mBottom;
+	float oLeft, oTop, oRight, oBottom;
+	mario->GetBoundingBox(mLeft, mTop, mRight, mBottom);
+	GetBoundingBox(oLeft, oTop, oRight, oBottom);
+	if (state == MUSIC_BRICK_STATE_IDLE && mario != NULL)
+	{
+		float mLeft, mTop, mRight, mBottom;
+		float oLeft, oTop, oRight, oBottom;
+		if (mario->tailTimer.IsStarted() && mario->GetMode() == CMario::Mode::Tanooki)
+		{
+			mario->getTail()->GetBoundingBox(mLeft, mTop, mRight, mBottom);
+			GetBoundingBox(oLeft, oTop, oRight, oBottom);
+			if (isColliding(floor(mLeft), mTop, ceil(mRight), mBottom) && mario->getTail()->hit_times == 0)
+			{
+				SetState(MUSIC_BRICK_STATE_HIT_FROM_TOP);
+			}
+		}
+	}
+	if (y > start_y + 5)
+	{
+		y = start_y;
+		SetState(MUSIC_BRICK_STATE_IDLE);
+	}
+	else if (y < start_y - 5)
+	{
+		y = start_y;
+		SetState(MUSIC_BRICK_STATE_IDLE);
+	}
 }
 void CMusicalBrick::SetState(int state) {
 	CGameObject::SetState(state);
@@ -69,17 +75,17 @@ void CMusicalBrick::SetState(int state) {
 	{
 	case MUSIC_BRICK_STATE_IDLE:
 		ay = vy = 0;
-		isDown = false;
-		isUp = false;
 		boundTimer.Reset();
 		break;
 	case MUSIC_BRICK_STATE_HIT_FROM_TOP:
 		vy = MUSIC_BRICK_SPEED;
 		ay = MUSIC_BRICK_SPEED_UP;
+		boundTimer.Start();
 		break;
 	case MUSIC_BRICK_STATE_HIT_FROM_DOWN:
 		vy = -MUSIC_BRICK_SPEED;
 		ay = -MUSIC_BRICK_SPEED_UP;
+		boundTimer.Start();
 		break;
 	}
 }
