@@ -261,6 +261,7 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 			break;
 		case OBJECT_TYPE_ABYSS:
 			obj = new CAbyss();
+			DebugOut(L"OKOK");
 			break;
 		case OBJECT_TYPE_PIRANHAPLANT:
 			obj = new CPlant();
@@ -413,6 +414,12 @@ void CPlayScene::Update(DWORD dt)
 {
 	if (player == NULL) return;
 
+	if (isGameDone3)
+	{
+		CGame::GetInstance()->SwitchScene(0);
+		return;
+	}
+
 	cam = Camera::GetInstance();
 
 	vector<LPGAMEOBJECT> coObjects;
@@ -531,6 +538,9 @@ void CPlayScene::Unload()
 	isGameDone1 = false;
 	isGameDone2 = false;
 	isGameDone3 = false;
+
+	gamedone1 = nullptr;
+	gamedone2 = nullptr;
 
 	Camera::GetInstance()->SetCameraPosition(0, 0);
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);

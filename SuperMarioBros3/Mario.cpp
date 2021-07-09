@@ -16,6 +16,7 @@
 #include "Score.h"
 #include "MusicalBrick.h"
 #include "Card.h"
+#include "Abyss.h"
 CMario::CMario(float x, float y) : CGameObject()
 {
 	Transform(Mode::Small);
@@ -38,13 +39,17 @@ void CMario::Attacked()
 	untouchableTimer.Start();
 	if (GetMode() == Mode::Small)
 	{
+		CGame* game = CGame::GetInstance();
 		SetState(MARIO_STATE_DIE);
+		GameDoneTimer.Reset();
+		((CPlayScene*)game->GetCurrentScene())->isGameDone3 = true;
 		return;
 	}
 	if (GetMode() == Mode::Tanooki || GetMode() == Mode::Fire)
 		Transform(Mode::Super);
 	else if (GetMode() == Mode::Super)
 		Transform(Mode::Small);
+
 }
 
 void CMario::Transform(Mode m) {
@@ -504,6 +509,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						}
 					}
 				}
+				// Abyss
+				else if (dynamic_cast<CAbyss*>(e->obj))
+				{
+					GameDoneTimer.Reset();
+					((CPlayScene*)game->GetCurrentScene())->isGameDone3 = true;
+					life--;
+					return;
+				}
 				//switch
 				else if (dynamic_cast<CSwitch*>(e->obj))
 				{
@@ -531,15 +544,15 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				//card
 				else if (dynamic_cast<CCard*>(e->obj))
 				{
-				srand(time(NULL));
-				int id = rand() % 3 + 1;
-				e->obj->vy = -CARD_SPEED;
-				e->obj->SetState(id);
-				GameDoneTimer.Start();
-				cards.push_back(id);
-				vy = 0;
-				ay = MARIO_GRAVITY;
-				isJumping = false;
+					srand(time(NULL));
+					int id = rand() % 3 + 1;
+					e->obj->vy = -CARD_SPEED;
+					e->obj->SetState(id);
+					GameDoneTimer.Start();
+					cards.push_back(id);
+					vy = 0;
+					ay = MARIO_GRAVITY;
+					isJumping = false;
 				}
 				//port
 				else if (dynamic_cast<CPortal*>(e->obj))

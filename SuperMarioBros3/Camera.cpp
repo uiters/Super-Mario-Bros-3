@@ -81,7 +81,7 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 		if (mapWidth > SCREEN_WIDTH) {
 			if (cx + 5 < SCREEN_WIDTH / 2) {
 				cx = pos.x;
-				DebugOut(L"deci1\n");
+				//DebugOut(L"deci1\n");
 			}
 			else if (cx + SCREEN_WIDTH / 2 > mapWidth - 1) {
 				cx = mapWidth - SCREEN_WIDTH;
@@ -89,14 +89,14 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 			}
 			else {
 				cx = cx + 5 + SCREEN_WIDTH / 2 - SCREEN_WIDTH;
-				DebugOut(L"deci3\n");
+				//DebugOut(L"deci3\n");
+				((CPlayScene*)game->GetCurrentScene())->isGameDone1 = true;
 
 			}
 		}
 		else {
 			cx = 0;
-			DebugOut(L"deci4\n");
-
+			//DebugOut(L"deci4\n");
 		}
 
 		if (mapHeight > SCREEN_HEIGHT)
