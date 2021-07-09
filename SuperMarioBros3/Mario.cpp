@@ -15,6 +15,7 @@
 #include "FirePlant.h"
 #include "Score.h"
 #include "MusicalBrick.h"
+#include "Card.h"
 CMario::CMario(float x, float y) : CGameObject()
 {
 	Transform(Mode::Small);
@@ -75,6 +76,13 @@ void CMario::Transform(Mode m) {
 }
 
 void CMario::RunTimer() {
+
+	if (GameDoneTimer.ElapsedTime() > MARIO_GAMEDONE_TIME && GameDoneTimer.IsStarted())
+	{
+		GameDoneTimer.Reset();
+		CGame::GetInstance()->SwitchScene(0);
+		return;
+	}
 	if (transformTimer.ElapsedTime() >= MARIO_TRANSFORMING_TIME && transformTimer.IsStarted())
 	{
 		transformTimer.Reset();
@@ -204,6 +212,16 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 
+
+	if (GameDoneTimer.ElapsedTime() > MARIO_GAMEDONE_TIME && GameDoneTimer.IsStarted())
+	{
+		GameDoneTimer.Reset();
+		((CPlayScene*)game->GetCurrentScene())->isGameDone3 = true;
+		return;
+	}
+	if (((CPlayScene*)game->GetCurrentScene())->isGameDone2 == true)
+		return;
+
 	//DebugOut(L"x %f y %f\n", x, y);
 	if (!runningTimer.IsStarted() && isReadyToRun)
 	{
@@ -295,6 +313,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				e->obj->GetBoundingBox(oLeft, oTop, oRight, oBottom);
 				//brick
 				if (dynamic_cast<CBrick*>(e->obj)) {
+					if (GameDoneTimer.IsStarted())
+					{
+						SetState(MARIO_STATE_WALKING_RIGHT);
+						vx = MARIO_WALKING_SPEED_MAX;
+						this->nx = 1;
+					}
 					if (!(tag == PIPE))
 					{
 						if (e->ny < 0) // mario collide from top to bottom
@@ -505,7 +529,18 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				//mario
 
 				//card
-
+				else if (dynamic_cast<CCard*>(e->obj))
+				{
+				srand(time(NULL));
+				int id = rand() % 3 + 1;
+				e->obj->vy = -CARD_SPEED;
+				e->obj->SetState(id);
+				GameDoneTimer.Start();
+				cards.push_back(id);
+				vy = 0;
+				ay = MARIO_GRAVITY;
+				isJumping = false;
+				}
 				//port
 				else if (dynamic_cast<CPortal*>(e->obj))
 				{

@@ -54,7 +54,7 @@ void HUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		runningStacks = mario->RunningStacks;
 		score = mario->score;
 		money = mario->money;
-		if (!mario->isGameDone)
+		if (!mario->GameDoneTimer.IsStarted())
 			time += dt;
 		remainTime = DEFAULT_TIME - time / 1000;
 	}

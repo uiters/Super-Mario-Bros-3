@@ -527,6 +527,11 @@ void CPlayScene::Unload()
 	player = nullptr;
 	grid = nullptr;
 	hud = nullptr;
+
+	isGameDone1 = false;
+	isGameDone2 = false;
+	isGameDone3 = false;
+
 	Camera::GetInstance()->SetCameraPosition(0, 0);
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 

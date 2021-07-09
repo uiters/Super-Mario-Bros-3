@@ -331,12 +331,14 @@ public:
 	bool isHold;
 	bool isReadyToHold;
 	//game done
-	bool isGameDone = false;
+	Timer GameDoneTimer;
 	// HUD
 	int RunningStacks = 0;
 	int money = 0;
 	int life = MARIO_DEFAULT_LIFES;
 	int score = 0;
+	//card
+	vector<int> cards;
 	//  tail
 	int tailState = 0;
 	Timer tailTimer;
