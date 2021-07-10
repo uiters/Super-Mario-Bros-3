@@ -352,11 +352,11 @@ void CGame::_ParseSection_SCENES(string line)
 		LPSCENE worldscene = new CWorldScene(id, path);
 		scenes[id] = worldscene;
 	}
-	/*if (type == INTROSCENE)
+	if (type == INTROSCENE)
 	{
 		LPSCENE introscene = new CIntroScene(id, path);
 		scenes[id] = introscene;
-	}*/
+	}
 }
 
 /*

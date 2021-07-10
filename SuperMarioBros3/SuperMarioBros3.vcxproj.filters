@@ -181,6 +181,9 @@
     <ClCompile Include="MusicalBrick.cpp">
       <Filter>Map Objects\Bricks</Filter>
     </ClCompile>
+    <ClCompile Include="IntroGround.cpp">
+      <Filter>Map Objects\Bricks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Brick.h">
@@ -316,6 +319,9 @@
       <Filter>Map Objects\WorldMap</Filter>
     </ClInclude>
     <ClInclude Include="MusicalBrick.h">
+      <Filter>Map Objects\Bricks</Filter>
+    </ClInclude>
+    <ClInclude Include="IntroGround.h">
       <Filter>Map Objects\Bricks</Filter>
     </ClInclude>
   </ItemGroup>

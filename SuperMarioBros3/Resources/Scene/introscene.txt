@@ -1,7 +1,7 @@
 # id	file_path	transparent_color_r	g	b
 [TEXTURES]
 1	Resources\Textures\mar.png	68	145	190
-2	Resources\Textures\title.png	0	0	0
+2	Resources\Textures\title.png	255	255	255
 3	Resources\Textures\title.png	255	255	255
 10	Resources\Textures\enemies.png	3	26	110
 21	Resources\Textures\misc2.png	166	185	255

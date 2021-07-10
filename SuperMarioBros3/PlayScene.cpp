@@ -606,7 +606,7 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 			break;*/
 	case DIK_C:
 	{
-		if (!mario->tailTimer.IsStarted() || !mario->isSitting)
+		if (!mario->tailTimer.IsStarted() && !mario->isSitting)
 			mario->Attack();
 		break;
 	}
