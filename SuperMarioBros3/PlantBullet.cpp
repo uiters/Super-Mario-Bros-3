@@ -46,7 +46,7 @@ void CPlantBullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		mario->GetBoundingBox(mLeft, mTop, mRight, mBottom);
 		if (isColliding(floor(mLeft), floor(mTop), ceil(mRight), ceil(mBottom)) && !mario->untouchableTimer.IsStarted())
 		{
-			//mario->Attacked();
+			mario->Attacked();
 			isDestroyed = true;
 		}
 	}

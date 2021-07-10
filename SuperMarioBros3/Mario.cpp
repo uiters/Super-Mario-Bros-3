@@ -430,9 +430,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					else if (goomba->GetState() != GOOMBA_STATE_DIE)
 					{
 						y = y0;
-						//if (!untouchableTimer.IsStarted())
-							//Attacked();
-						//else
+						if (!untouchableTimer.IsStarted())
+							Attacked();
+						else
 						{
 							x = x0 + dx;
 							y = y0;
@@ -508,7 +508,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					if (!untouchableTimer.IsStarted())
 					{
-						//Attacked();
+						Attacked();
 					}
 					else {
 						x = x0 + dx;
