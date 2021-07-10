@@ -1,4 +1,4 @@
-#include <algorithm>
+﻿#include <algorithm>
 #include <assert.h>
 #include "Utils.h"
 #include "BackUp.h"
@@ -15,6 +15,7 @@ CWorldPlayer::CWorldPlayer(float x, float y) : CGameObject()
 	start_y = y;
 	this->x = x;
 	this->y = y;
+	//if scene 1 thì di chuyển xuống đc
 	SetMove(false, false, true, false);
 }
 void CWorldPlayer::CalcPotentialCollisions(vector<LPGAMEOBJECT>* coObjects, vector<LPCOLLISIONEVENT>& coEvents)

@@ -43,6 +43,7 @@ void CMario::Attacked()
 		SetState(MARIO_STATE_DIE);
 		GameDoneTimer.Reset();
 		((CPlayScene*)game->GetCurrentScene())->isGameDone3 = true;
+		life--;
 		return;
 	}
 	if (GetMode() == Mode::Tanooki || GetMode() == Mode::Fire)
@@ -968,7 +969,10 @@ void CMario::RenderTanookiAni(int ani, int alpha)
 	}
 	else
 	{
-		animation_set->at(ani)->Render(x, y, alpha);
+		if (GetMode() != Mode::Tanooki)
+			animation_set->at(ani)->Render(x, y, alpha);
+		else
+			animation_set->at(ani)->Render(nx > 0 ? x - 5 : x, y, alpha);
 	}
 
 }
@@ -1208,8 +1212,29 @@ void CMario::Reset()
 }
 
 void CMario::TelePort() {
-	if (nx > 0)
-		SetPosition(x + 1300, start_y);
+	//int i = 0;
+	//switch (i)
+	//{
+	//case 0:
+
+	//	break;
+	//case 1:
+
+	//	break;
+	//case 2:
+
+	//	break;
+	//}
+	//i++;
+	//if(i>2)
+	//{
+	//	i = 0;
+	//}
+
+	int scene = CGame::GetInstance()->GetCurrentScene()->GetId();
+	if (scene == 1)
+		SetPosition(2258, 50);
 	else
-		SetPosition(x - 1300, start_y);
+		SetPosition(0, 0);
+
 }

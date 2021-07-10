@@ -327,7 +327,9 @@ void CWorldScene::Unload()
 	hud = nullptr;
 	fonts = nullptr;
 
+	Camera::GetInstance()->SetCameraPosition(0, 0);
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
+
 }
 void CWorldSceneKeyHandler::OnKeyDown(int KeyCode)
 {
@@ -357,6 +359,7 @@ void CWorldSceneKeyHandler::OnKeyDown(int KeyCode)
 		case DIK_S:
 			if (player->sceneId > 0)
 				player->ChooseScene();
+			DebugOut(L"Enter Map");
 			break;
 
 		}

@@ -261,7 +261,7 @@ Resources\Tilemap\world1.txt
 12	499
 #===PLAYER-ANISET=====
 #----MARIO----
-20	501	502	503	504
+20	501	502	504	503
 #----LUGI----
 21	511	512	513	504
 [OBJECTS]
