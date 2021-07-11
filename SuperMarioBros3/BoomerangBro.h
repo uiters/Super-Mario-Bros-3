@@ -22,15 +22,13 @@
 #define BOOMERANG_BROTHER_ACTIVE_RANGE		80
 
 
-#define BOOMERANG_BROTHER_AIM_TIME			1000
+#define BOOMERANG_BROTHER_AIM_TIME			500
 #define BOOMERANG_BROTHER_RELOAD_TIME		2000
 #define BOOMERANG_BROTHER_THROW_TIME		500
-#define BOOMERANG_BROTHER_CHANGE_TIME		1000
+#define BOOMERANG_BROTHER_CHANGE_TIME		3000
 
 #define BOOMERANG_BROTHER_BOOMERANGS		2
 
-//TODO:: will exchange
-#define BOOMERANG_STATE_IDLE 0
 
 class CBoomerangBrother :
 	public CGameObject
@@ -38,16 +36,18 @@ class CBoomerangBrother :
 	Timer aimTimer;
 	Timer throwTimer;
 	Timer reloadTimer;
-	Timer changeTimer;
-	vector <CBoomerang*> boomerangs;
-	int bmrIndex = 0;
+	Timer chargeTimer;
+	CBoomerang* boomerang = NULL;
+	int currentBoomerang = 0;
 public:
 	float start_x = 0;
 	CBoomerangBrother();
+	void HoldBoomerang();
+	void ThrowBoomerang();
+	void DemolishBoomerang();
 	virtual void SetState(int state);
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 
 };
-

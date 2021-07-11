@@ -20,7 +20,7 @@
 
 class CSwitch : public CGameObject
 {
-	float start_y;
+	float start_y = 0;
 public:
 	bool isAppear = false;
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);

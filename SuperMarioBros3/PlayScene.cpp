@@ -167,7 +167,6 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 {
 	ifstream f;
 	f.open(path);
-	DebugOut(L"path::%s", path);
 
 	if (!f)
 		DebugOut(L"\nFailed to open object file!");
@@ -306,6 +305,7 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 		}
 		default:
 			DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
+			//obj = new CBoomerang(80, 380);
 			return;
 		}
 		if (object_type != GRID)
@@ -450,7 +450,8 @@ void CPlayScene::Update(DWORD dt)
 
 		if (dynamic_cast<CGoomba*> (obj) || dynamic_cast<CKoopas*> (obj)
 			|| dynamic_cast<CPlant*> (obj)
-			|| dynamic_cast<CFirePlant*> (obj) || dynamic_cast<CCoin*> (obj)
+			|| dynamic_cast<CFirePlant*> (obj)
+			|| dynamic_cast<CCoin*> (obj)
 			|| dynamic_cast<CBoomerangBrother*> (obj)
 			|| dynamic_cast<CMushroom*> (obj) && obj->state == MUSHROOM_STATE_UP
 			|| dynamic_cast<CLeaf*> (obj) && obj->state == LEAF_STATE_UP
@@ -465,7 +466,8 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CMushroom*>(obj) && obj->state == MUSHROOM_STATE_WALK
 			|| dynamic_cast<CLeaf*> (obj) && obj->state == LEAF_STATE_FALLING
 			|| dynamic_cast<CScore*>(obj) || dynamic_cast<CPiece*>(obj)
-			|| dynamic_cast<CCard*>(obj))
+			|| dynamic_cast<CCard*>(obj)
+			|| dynamic_cast<CBoomerang*>(obj))
 			objectsRenderThird.push_back(obj);
 	}
 

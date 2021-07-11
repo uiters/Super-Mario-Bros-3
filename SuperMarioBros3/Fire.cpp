@@ -172,7 +172,7 @@ void CFireBullet::Render()
 	else
 		ani = FIRE_BULLET_ANI_LEFT;
 	animation_set->at(ani)->Render(x, y);
-	RenderBoundingBox(50);
+	RenderBoundingBox();
 }
 
 void CFireBullet::GetBoundingBox(float& l, float& t, float& r, float& b)

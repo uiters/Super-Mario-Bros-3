@@ -17,6 +17,7 @@
 #include "MusicalBrick.h"
 #include "Card.h"
 #include "Abyss.h"
+#include "BoomerangBro.h"
 CMario::CMario(float x, float y) : CGameObject()
 {
 	Transform(Mode::Small);
@@ -448,7 +449,33 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 				}
 				//bomerang
-
+				else if (dynamic_cast<CBoomerangBrother*>(e->obj))
+				{
+					CBoomerangBrother* bro = dynamic_cast<CBoomerangBrother*>(e->obj);
+					// jump on top >> kill Goomba and deflect a bit 
+					if (e->ny < 0)
+					{
+						if (bro->GetState() != BOOMERANG_BROTHER_STATE_DIE)
+						{
+							AddScore(bro->x, bro->y, 1000, true);
+							bro->SetState(BOOMERANG_BROTHER_STATE_DIE);
+							vy = -MARIO_JUMP_DEFLECT_SPEED;
+							vx = 0.3f;
+						}
+					}
+					else
+					{
+						if (untouchableTimer.IsStarted())
+						{
+							x = x0 + dx;
+							y = y0;
+						}
+						else
+							y = y0;
+						if (!untouchableTimer.IsStarted() && bro->GetState() != GOOMBA_STATE_DIE && !tailTimer.IsStarted())
+							Attacked();
+					}
+				}
 				//koopas
 				else if (dynamic_cast<CKoopas*>(e->obj)) // if e->obj is Koopas 
 				{
