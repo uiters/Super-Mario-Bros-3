@@ -264,9 +264,17 @@ void CWorldScene::Load()
 	hud = new HUD(WORLDSCENE_HUD);
 	//set position of player
 	CBackUp* backup = CBackUp::GetInstance();
+
 	for (size_t i = 1; i < objects.size(); i++)
 		if (objects[i]->tag == OBJECT_TYPE_PORTAL && ((CWorldMapObject*)objects[i])->GetSceneId() == backup->scene && backup->scene != 0)
+		{
 			player->SetPosition(objects[i]->x, objects[i]->y);
+			if (backup->scene == 3)
+			{
+				player->SetMove(true, false, true, false);
+			}
+			player->sceneId = backup->scene;
+		}
 	hud->SetPosition(0, current_map->GetMapHeight() - HUD_HEIGHT);
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);

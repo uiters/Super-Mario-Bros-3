@@ -20,7 +20,7 @@ void CAnimation::Add(int spriteId, DWORD time)
 
 	LPANIMATION_FRAME frame = new CAnimationFrame(sprite, t);
 	frames.push_back(frame);
-	//DebugOut(L"[INFO] Animation ID %d added!\n", spriteId);
+	DebugOut(L"[INFO] Animation ID %d added!\n", spriteId);
 }
 
 // NOTE: sometimes Animation object is NULL ??? HOW ??? 
@@ -103,5 +103,5 @@ LPANIMATION_SET CAnimationSets::Get(unsigned int id)
 void CAnimationSets::Add(int id, LPANIMATION_SET ani_set)
 {
 	animation_sets[id] = ani_set;
-	//DebugOut(L"[INFO] AnimationSet ID %d added!\n", id);
+	DebugOut(L"[INFO] AnimationSet ID %d added!\n", id);
 }

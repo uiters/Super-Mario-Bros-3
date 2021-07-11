@@ -36,9 +36,6 @@
     <Filter Include="Map Objects\Player">
       <UniqueIdentifier>{0eb4833e-9cc3-4c56-a8ad-1ccdb28e69f5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Map Objects\WorldMap">
-      <UniqueIdentifier>{35d352a8-9c1c-4ef7-bf10-d0c34385d7e4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Camera">
       <UniqueIdentifier>{17792401-d21f-44b6-a6b9-c15fb7f2602b}</UniqueIdentifier>
     </Filter>
@@ -48,6 +45,9 @@
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Map Objects\WorldMap">
+      <UniqueIdentifier>{35d352a8-9c1c-4ef7-bf10-d0c34385d7e4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
