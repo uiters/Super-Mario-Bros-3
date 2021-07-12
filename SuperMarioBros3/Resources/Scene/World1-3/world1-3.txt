@@ -287,3 +287,9 @@
 # === Boomerang Koopas ===
 48	334	390	80	3	2
 #48	208	384	90	2	1
+# --- SCENE PORTAL ----
+#type	x	y	ani	scene	tag start_x start_y	pipeUp
+#150	484	368	100	95	2	3
+#150	510	336	100	95	2	3
+#50	2258	110	0	2	1	132	0	0	0	16
+#50	352	380	0	4	1	130	147	1	0

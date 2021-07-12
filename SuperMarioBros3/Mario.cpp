@@ -1040,10 +1040,12 @@ void CMario::Render()
 			sprite_id = MARIO_SPRITE_PIPE_FIRE;
 		CSprites::GetInstance()->sprites[sprite_id]->Draw(x, y - HUD_HEIGHT, alpha);
 	}
+
 	else if (GetMode() == Mode::Tanooki)
 	{
 		RenderTanookiAni(ani, alpha);
 	}
+
 	else
 	{
 		animation_set->at(ani)->Render(x, y, alpha);

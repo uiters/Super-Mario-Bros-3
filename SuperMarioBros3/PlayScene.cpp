@@ -152,7 +152,6 @@ void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
 		LPANIMATION ani = animations->Get(ani_id);
 		s->push_back(ani);
 	}
-
 	CAnimationSets::GetInstance()->Add(ani_set_id, s);
 }
 
@@ -305,7 +304,6 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 		}
 		default:
 			DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
-			//obj = new CBoomerang(80, 380);
 			return;
 		}
 		if (object_type != GRID)
