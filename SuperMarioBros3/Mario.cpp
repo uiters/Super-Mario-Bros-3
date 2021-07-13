@@ -102,7 +102,7 @@ void CMario::RunTimer() {
 	{
 		pipeDownTimer.Reset();
 		isSitting = false;
-		//DebugOut(L"[INFO] portal-scene:: %d", portal->GetSceneId());
+		DebugOut(L"[INFO] pipeDownTimer portal-scene:: %d", portal->GetSceneId());
 		if (wannaTele)
 			CGame::GetInstance()->SwitchExtraScene(portal->GetSceneId(), portal->start_x, portal->start_y, portal->pipeUp);
 		else
@@ -111,11 +111,24 @@ void CMario::RunTimer() {
 			ay = MARIO_GRAVITY;
 		}
 	}
+	else if (pipeUpTimer.ElapsedTime() >= MARIO_PIPE_TIME && pipeUpTimer.IsStarted() && isTravel)
+	{
+		pipeUpTimer.Reset();
+		isTravel = false;
+		if (wannaTele)
+			CGame::GetInstance()->SwitchExtraScene(portal->GetSceneId(), portal->start_x, portal->start_y, portal->pipeUp);
+		else
+		{
+			vx = vy = 0;
+			ay = MARIO_GRAVITY;
+		}
+	}
+
 	if (pipeUpTimer.ElapsedTime() >= MARIO_PIPE_TIME && pipeUpTimer.IsStarted())
 	{
 		pipeUpTimer.Reset();
 		isSitting = false;
-		//DebugOut(L"[INFO] portal-scene:: %d", portal->GetSceneId());
+		DebugOut(L"[INFO] pipeUpTimer portal-scene:: %d", portal->GetSceneId());
 		if (wannaTele)
 			CGame::GetInstance()->SwitchBackScene(portal->GetSceneId(), portal->start_x, portal->start_y);
 		else

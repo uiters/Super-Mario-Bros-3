@@ -67,6 +67,7 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 		cx = countx;
 		cy = 200;
 		SetCameraPosition((int)countx, cy);
+		hud->SetPosition(int(cx), (int)cy + 187);
 		return;
 	}
 	else
@@ -84,7 +85,6 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 				cx = cx + 5 + SCREEN_WIDTH / 2 - SCREEN_WIDTH;
 				//DebugOut(L"deci3\n");
 				//((CPlayScene*)game->GetCurrentScene())->isGameDone1 = true;
-
 			}
 		}
 		else {
@@ -116,7 +116,7 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 		//cy -= SCREEN_HEIGHT / 2;
 	}
 	int sceneId = game->GetCurrentScene()->GetId();
-	if (sceneId == EXTRA_SCENE)
+	if (sceneId == EXTRA_MAP1_1_1)
 	{
 		SetCameraPosition((int)cx, (int)cy - 30);
 		hud->SetPosition(int(cx), HUD_CY / 2 - 40);

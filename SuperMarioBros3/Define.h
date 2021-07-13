@@ -15,6 +15,7 @@
 #define MAX_FRAME_RATE 144
 
 // scene
-#define EXTRA_SCENE 2
+#define EXTRA_MAP1_1_1 2
+#define	EXTRA_MAP1_3_1	4
 #define WORLD_SCENE 0
 

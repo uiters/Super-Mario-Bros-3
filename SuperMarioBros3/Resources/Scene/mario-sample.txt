@@ -1,5 +1,5 @@
 [SETTINGS]
-start	3
+start	5
 #id		path		type		isCameraMove
 [SCENES]
 0	Resources\Scene\worldscene.txt	1	1
