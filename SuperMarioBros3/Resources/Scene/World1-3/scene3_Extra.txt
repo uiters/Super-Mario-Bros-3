@@ -1,0 +1,36 @@
+# id	file_path	transparent_color_r	g	b
+[TEXTURES]
+31	Resources\Tilemap\world1-3-1_bank.png	255	255	255
+[TILEMAP DATA]
+Resources\Tilemap\world1-3-1.txt
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+# ==== Brick ==== 
+22001	16	0	32	16	31
+22002	32	0	48	16	31
+22003	48	0	64	16	31
+22004	80	0	96	16	31
+22005	96	0	112	16	31
+22006	80	16	96	0	31
+22007	96	16	112	0	31
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
+# ==== Brick =========
+6221	22002	100
+6223	22003	100
+6224	22004	100
+6225	22005	100
+6226	22006	100
+6227	22007	100
+# id	ani1	ani2	ani3
+#
+[ANIMATION_SETS]
+# Brick
+421	6221
+423	6223
+124	6224
+125	6225
+126	6226
+127	6227
+[OBJECTS]
+Resources\Scene\World1-3\world1-3-1.txt

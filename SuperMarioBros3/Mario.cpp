@@ -97,6 +97,7 @@ void CMario::RunTimer() {
 	if (untouchableTimer.ElapsedTime() >= MARIO_UNTOUCHABLE_TIME && untouchableTimer.IsStarted()) {
 		untouchableTimer.Reset();
 	}
+
 	if (pipeDownTimer.ElapsedTime() >= MARIO_PIPE_TIME && pipeDownTimer.IsStarted())
 	{
 		pipeDownTimer.Reset();
@@ -123,6 +124,7 @@ void CMario::RunTimer() {
 			ay = MARIO_GRAVITY;
 		}
 	}
+
 	if (tailStateTimer.ElapsedTime() >= MARIO_TURNING_STATE_TIME && tailTimer.IsStarted())
 	{
 		tailStateTimer.Start();
@@ -158,7 +160,6 @@ void CMario::RunTimer() {
 	{
 		flyTimer.Reset();
 	}
-
 	if (stoppingTimer.ElapsedTime() >= MARIO_SLOW_STACK_TIME && stoppingTimer.IsStarted() && !runningTimer.IsStarted())
 	{
 		stoppingTimer.Start();
@@ -170,7 +171,6 @@ void CMario::RunTimer() {
 		}
 		//DebugOut(L"STOP\n");
 	}
-
 }
 
 void CMario::LimitSpeed() {
@@ -582,10 +582,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					vy = 0;
 					ay = MARIO_GRAVITY;
 					isJumping = false;
-				}
-				//port
-				else if (dynamic_cast<CPortal*>(e->obj))
-				{
 				}
 			}
 		}
@@ -1029,7 +1025,7 @@ void CMario::Render()
 
 	if (untouchableTimer.IsStarted()) alpha = MARIO_RENDER_ALPHA / 2;
 
-	if (pipeDownTimer.IsStarted() == true || pipeUpTimer.IsStarted() == true)
+	if (pipeDownTimer.IsStarted() || pipeUpTimer.IsStarted())
 	{
 		int sprite_id = MARIO_SPRITE_PIPE_SMALL;
 		if (GetMode() == Mode::Super)

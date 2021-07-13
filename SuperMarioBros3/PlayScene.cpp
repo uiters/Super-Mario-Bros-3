@@ -335,7 +335,6 @@ void CPlayScene::_ParseSection_TILEMAP_DATA(string line)
 	f.open(path);
 	f >> ID >> rowMap >> columnMap >> rowTile >> columnTile >> totalTiles;
 	//Init Map Matrix
-	DebugOut(L"ID %d>> rowMap %d>> columnMap %d>> rowTile %d>> columnTile %d>> totalTiles %d", ID, rowMap, columnMap, rowTile, columnTile, totalTiles);
 	int** TileMapData = new int* [rowMap];
 	for (int i = 0; i < rowMap; i++)
 	{
@@ -348,6 +347,8 @@ void CPlayScene::_ParseSection_TILEMAP_DATA(string line)
 	current_map = new CMap(ID, rowMap, columnMap, rowTile, columnTile, totalTiles);
 	current_map->ExtractTileFromTileSet();
 	current_map->SetTileMapData(TileMapData);
+	DebugOut(L"[INFO] _ParseSection_TILEMAP_DATA done:: \n");
+
 }
 
 void CPlayScene::Load()

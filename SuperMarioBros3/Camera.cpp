@@ -57,26 +57,19 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 	mapHeight = currentMap->GetMapHeight();
 	mapWidth = currentMap->GetMapWidth();
 	player->GetPosition(cx, cy);
-	//if (false)
-	//{
-	//	if (player->nx > 0)
-	//		cx -= 8;
-	//	else if (player->nx < 0)
-	//		cx += 8;
-	//}
 	D3DXVECTOR3 pos = GetCameraPosition();
 
-	//if (typeCamera)
-	//{
-	//	if (pos.x > mapWidth - SCREEN_WIDTH - 1)
-	//		return;
-	//	countx = countx + CAMERA_SPEED_X * dt;
-	//	cx = countx;
-	//	cy = 200;
-	//	SetCameraPosition((int)countx,cy );
-	//	return;
-	//}
-	//else
+	if (typeCamera)
+	{
+		if (pos.x > mapWidth - SCREEN_WIDTH - 1)
+			return;
+		countx = countx + CAMERA_SPEED_X * dt;
+		cx = countx;
+		cy = 200;
+		SetCameraPosition((int)countx, cy);
+		return;
+	}
+	else
 	{
 		if (mapWidth > SCREEN_WIDTH) {
 			if (cx + 5 < SCREEN_WIDTH / 2) {
@@ -85,12 +78,12 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 			}
 			else if (cx + SCREEN_WIDTH / 2 > mapWidth - 1) {
 				cx = mapWidth - SCREEN_WIDTH;
-				((CPlayScene*)game->GetCurrentScene())->isGameDone1 = true;
+				//((CPlayScene*)game->GetCurrentScene())->isGameDone1 = true;
 			}
 			else {
 				cx = cx + 5 + SCREEN_WIDTH / 2 - SCREEN_WIDTH;
 				//DebugOut(L"deci3\n");
-				((CPlayScene*)game->GetCurrentScene())->isGameDone1 = true;
+				//((CPlayScene*)game->GetCurrentScene())->isGameDone1 = true;
 
 			}
 		}

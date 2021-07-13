@@ -58,6 +58,7 @@ void CMusicalBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 			}
 		}
 	}
+
 	if (y > start_y + 5)
 	{
 		y = start_y;

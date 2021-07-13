@@ -151,7 +151,7 @@ void CQuestionBrick::SetState(int state = BRICK_STATE_IDLE)
 		ay = 0;
 		break;
 	default:
-		DebugOut(L"[INFO] state question brick default\n");
+		//DebugOut(L"[INFO]State Questionbrick default\n");
 		break;
 
 	}
@@ -169,7 +169,7 @@ void CQuestionBrick::Render()
 		else
 			ani = QUESTIONBRICK_ANI_IDLE; // question brick
 	animation_set->at(ani)->Render(x, y);
-	RenderBoundingBox(100);
+	RenderBoundingBox();
 }
 
 void CQuestionBrick::CreateItem(int itemtype)

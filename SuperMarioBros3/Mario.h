@@ -351,6 +351,7 @@ public:
 	bool isReadyToShoot;
 	// swap map
 	bool wannaTele = false;
+	bool isTravel = false;
 	Timer pipeUpTimer;
 	Timer pipeDownTimer;
 	CPortal* portal = NULL;
