@@ -51,6 +51,8 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 	CGame* game = CGame::GetInstance();
 	// Update camera to follow mario
 	float cx, cy, mapHeight, mapWidth;
+	float r, l, t, b;
+	int sceneId = game->GetCurrentScene()->GetId();
 	HUD* hud = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetHUD();
 	CMap* currentMap = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetMap();
 	CMario* player = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
@@ -59,13 +61,65 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 	player->GetPosition(cx, cy);
 	D3DXVECTOR3 pos = GetCameraPosition();
 
-	if (typeCamera)
+	bool isDoneGame = ((CPlayScene*)game->GetCurrentScene())->isGameDone3;
+
+	// camera moving
+	if (!isDoneGame)
+	{
+		//limit X
+		if (cx >= mapWidth - MARIO_BIG_BBOX_WIDTH)//Right edge
+			player->x = mapWidth - MARIO_BIG_BBOX_WIDTH;
+		else if (cx <= 0)//Left edge
+			player->x = 0;
+		//limit Y
+		if (cy >= mapHeight)
+			player->y = mapHeight + 100;
+		else if (cy <= 20)
+			player->y = 20;
+
+		if (sceneId == EXTRA_MAP1_3_1)
+		{
+			if (cx - 1 <= pos.x)
+			{
+				player->SetState(MARIO_STATE_WALKING_RIGHT);
+				player->vx = 0.1f;
+				player->nx = 1;
+			}
+			if (cx >= pos.x + SCREEN_WIDTH - 32)
+			{
+				player->x = pos.x + SCREEN_WIDTH - 32;
+			}
+		}
+	}
+
+	if (typeCamera && sceneId == EXTRA_MAP1_3_1)
 	{
 		if (pos.x > mapWidth - SCREEN_WIDTH - 1)
 			return;
 		countx = countx + CAMERA_SPEED_X * dt;
 		cx = countx;
-		cy = 200;
+		/*cy = 200;*/
+		if (mapHeight > SCREEN_HEIGHT)
+		{
+			if (cy < SCREEN_HEIGHT - 32)
+			{
+				cy = 0;
+			}
+			else if (cy > mapHeight - SCREEN_HEIGHT)
+			{
+				cy = mapHeight - SCREEN_HEIGHT + 32;
+
+			}
+			else //if (cy < mapHeight - SCREEN_HEIGHT)
+			{
+				cy = cy - SCREEN_HEIGHT / 2 + 32;
+			}
+		}
+		else
+		{
+			cy = mapHeight - SCREEN_HEIGHT;
+		}
+		if (cy < 0) cy = 0;
 		SetCameraPosition((int)countx, cy);
 		hud->SetPosition(int(cx), (int)cy + 187);
 		return;
@@ -75,21 +129,16 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 		if (mapWidth > SCREEN_WIDTH) {
 			if (cx + 5 < SCREEN_WIDTH / 2) {
 				cx = pos.x;
-				//DebugOut(L"deci1\n");
 			}
 			else if (cx + SCREEN_WIDTH / 2 > mapWidth - 1) {
 				cx = mapWidth - SCREEN_WIDTH;
-				//((CPlayScene*)game->GetCurrentScene())->isGameDone1 = true;
 			}
 			else {
 				cx = cx + 5 + SCREEN_WIDTH / 2 - SCREEN_WIDTH;
-				//DebugOut(L"deci3\n");
-				//((CPlayScene*)game->GetCurrentScene())->isGameDone1 = true;
 			}
 		}
 		else {
 			cx = 0;
-			//DebugOut(L"deci4\n");
 		}
 
 		if (mapHeight > SCREEN_HEIGHT)
@@ -115,7 +164,6 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 		if (cy < 0) cy = 0;
 		//cy -= SCREEN_HEIGHT / 2;
 	}
-	int sceneId = game->GetCurrentScene()->GetId();
 	if (sceneId == EXTRA_MAP1_1_1)
 	{
 		SetCameraPosition((int)cx, (int)cy - 30);
