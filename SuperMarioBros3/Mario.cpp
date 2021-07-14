@@ -157,6 +157,11 @@ void CMario::RunTimer() {
 	{
 		kickTimer.Reset();
 	}
+	if (slowTimer.ElapsedTime() > MARIO_SLOW_TIME && slowTimer.IsStarted())
+	{
+		slowTimer.Reset();
+		isReadyToRun = true;
+	}
 	if (runningTimer.ElapsedTime() >= MARIO_RUNNING_STACK_TIME && runningTimer.IsStarted() && vx != 0 && isReadyToRun)
 	{
 		runningTimer.Start();
@@ -171,6 +176,8 @@ void CMario::RunTimer() {
 	if (flyTimer.ElapsedTime() >= MARIO_FLYING_TIME && flyTimer.IsStarted())
 	{
 		flyTimer.Reset();
+		runningTimer.Reset();
+		SlowSpeed();
 	}
 	if (stoppingTimer.ElapsedTime() >= MARIO_SLOW_STACK_TIME && stoppingTimer.IsStarted() && !runningTimer.IsStarted())
 	{
@@ -179,9 +186,10 @@ void CMario::RunTimer() {
 		if (RunningStacks < 0)
 		{
 			RunningStacks = 0;
+			runningTimer.Reset();
 			flyTimer.Reset();
 		}
-		//DebugOut(L"STOP\n");
+		DebugOut(L"STOP\n");
 	}
 }
 
@@ -198,12 +206,16 @@ void CMario::LimitSpeed() {
 	vx += ax * dt + RunningStacks * ax;
 	vy += ay * dt;
 	//limit the speed of mario 
-	if (abs(vx) >= MARIO_WALKING_SPEED_MAX && !isReadyToRun)
+	if (abs(vx) >= MARIO_WALKING_SPEED_MAX)
 	{
-		vx = nx * MARIO_WALKING_SPEED_MAX;
-	}
-	if (abs(vx) >= MARIO_RUNNING_SPEED_MAX && isReadyToRun) {
-		vx = nx * MARIO_RUNNING_SPEED_MAX;
+		if (!runningTimer.IsStarted())
+			vx = nx * MARIO_WALKING_SPEED_MAX;
+		else
+			if (abs(vx) >= MARIO_RUNNING_SPEED_MAX && vx * ax > 0)
+				if (RunningStacks < MARIO_RUNNING_STACKS)
+					vx = nx * MARIO_RUNNING_SPEED_MAX;
+				else
+					vx = nx * MARIO_SPEED_MAX;
 	}
 	// falling
 	if (vy > MARIO_JUMP_SPEED_MAX)
@@ -217,11 +229,13 @@ void CMario::LimitSpeed() {
 		vy = -MARIO_JUMP_SPEED_MAX;
 		ay = MARIO_GRAVITY;
 		isGround = false;
+		isReadyToJump = false;
 	}
 	if (flyTimer.IsStarted())
 	{
 		vy = -MARIO_FLY_SPEED;
 		ay = -MARIO_GRAVITY;
+		isReadyToJump = false;
 	}
 }
 
@@ -249,27 +263,13 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		return;
 	}
 
-
-	//DebugOut(L"x %f y %f\n", x, y);
-	if (!runningTimer.IsStarted() && isReadyToRun)
-	{
-		runningTimer.Start();
-		stoppingTimer.Reset();
-	}
-	// nếu chuyển hướng chạy hoặc thả nút boôst thì sẽ giảm tốc từ từ
-	else if (!stoppingTimer.IsStarted() && !isReadyToRun)
-	{
-		stoppingTimer.Start();
-		runningTimer.Reset();
-	}
-
 	RunTimer();
 	LimitSpeed();
-
 
 	//handle for sitting when jump
 	if (state == MARIO_STATE_SITTING && vy < 0)
 		vy -= MARIO_ACCELERATION_JUMP * dt;
+	//handle for changing direction when jump
 	//cant jump again until touch the ground
 	if (vy < 0)
 		isGround = false;
@@ -334,6 +334,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					{
 						isGround = true;
 						isJumping = false;
+						isChangeDirection = false;
 						flyTimer.Reset();
 					}
 				}
@@ -357,12 +358,20 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						{
 							vy = 0;
 							ay = MARIO_GRAVITY;
+							isReadyToJump = false;
+							isGround = false;
+							isJumping = false;
 						}
 						if (e->nx != 0)
 						{
 							if (ceil(mBottom) != oTop)
 							{
 								vx = 0;
+								if (runningTimer.IsStarted() && tag != PIPE)
+								{
+									runningTimer.Reset();
+									stoppingTimer.Start();
+								}
 							}
 						}
 					}
@@ -585,7 +594,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					{
 						//vy = -MARIO_JUMP_SPEED_MAX;
 						ay = MARIO_GRAVITY;
-						//isReadyToJump = false;
+						isReadyToJump = false;
 					}
 					else if (e->ny < 0)
 					{
@@ -612,7 +621,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					cards.push_back(id);
 					vy = 0;
 					ay = MARIO_GRAVITY;
-					isJumping = false;
+					isReadyToJump = false;
 				}
 				//else if (dynamic_cast<CPortal*>(e->obj))
 				//{
@@ -1098,6 +1107,11 @@ void CMario::Stop() {
 		vx = 0;
 		ax = 0;
 	}
+	if (runningTimer.IsStarted())
+	{
+		runningTimer.Reset();
+		stoppingTimer.Start();
+	}
 }
 
 void CMario::Jump() {
@@ -1133,11 +1147,13 @@ void CMario::Die()
 }
 
 void CMario::SlowSpeed() {
-	isChangeDirection = true;
+	slowTimer.Start();
+	isReadyToRun = false;
 }
 
 void CMario::Attack() {
-	if (GetMode() == Mode::Fire)
+
+	if (GetMode() == Mode::Fire && !shootingTimer.IsStarted() && !isSitting)
 	{
 		if (ShootTimes < MARIO_FIRE_BULLETS)
 		{
@@ -1151,7 +1167,7 @@ void CMario::Attack() {
 		}
 		DebugOut(L"FIRE\n");
 	}
-	else if (GetMode() == Mode::Tanooki)
+	else if (GetMode() == Mode::Tanooki && !tailTimer.IsStarted() && !isSitting)
 	{
 		tailTimer.Start();
 		tailStateTimer.Start();
@@ -1166,17 +1182,29 @@ void CMario::SetState(int state)
 	switch (state)
 	{
 	case MARIO_STATE_WALKING_RIGHT:
-		ax = MARIO_ACCELERATION;
 		if (ax < 0 && vy > 0)
 		{
 			isChangeDirection = true;
 		}
+		if (ax < 0 && RunningStacks != 0)
+		{
+			stoppingTimer.Start();
+			runningTimer.Reset();
+			SlowSpeed();
+		}
+		ax = MARIO_ACCELERATION;
 		nx = 1;
 		break;
 	case MARIO_STATE_WALKING_LEFT:
-		ax = -MARIO_ACCELERATION;
 		if (ax > 0 && vy > 0)
 			isChangeDirection = true;
+		if (ax > 0 && RunningStacks != 0)
+		{
+			stoppingTimer.Start();
+			runningTimer.Reset();
+			SlowSpeed();
+		}
+		ax = -MARIO_ACCELERATION;
 		nx = -1;
 		break;
 	case MARIO_STATE_JUMPING:
@@ -1184,6 +1212,7 @@ void CMario::SetState(int state)
 		break;
 	case MARIO_STATE_IDLE:
 		Stop();
+		SlowSpeed();
 		break;
 	case MARIO_STATE_SITTING:
 		Sit();
@@ -1214,7 +1243,6 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
 		{
 			bottom -= MARIO_BIG_BBOX_HEIGHT - MARIO_BIG_BBOX_SITTING_HEIGHT;
 		}
-		// mario tail
 	}
 
 	else
@@ -1262,39 +1290,13 @@ void CMario::AddScore(int ox, int oy, int s, bool isEnemy, bool showscore)
 /*
 	Reset Mario status to the beginning state of a scene
 */
-void CMario::Reset()
-{
-	SetState(MARIO_STATE_IDLE);
-	Transform(Mode::Small);
-	SetPosition(start_x, start_y);
-	SetSpeed(0, 0);
-	dead = false;
-}
 
 void CMario::TelePort() {
-	//int i = 0;
-	//switch (i)
-	//{
-	//case 0:
-
-	//	break;
-	//case 1:
-
-	//	break;
-	//case 2:
-
-	//	break;
-	//}
-	//i++;
-	//if(i>2)
-	//{
-	//	i = 0;
-	//}
 
 	int scene = CGame::GetInstance()->GetCurrentScene()->GetId();
 	if (scene == 1)
 		SetPosition(2258, 50);
-	else
-		SetPosition(0, 0);
+	else if (scene == 3)
+		SetPosition(2108, 400);
 
 }

@@ -33,7 +33,7 @@
 #define MARIO_KICKING_TIME			200	
 #define MARIO_FLAPPING_TIME			200	
 #define MARIO_RUNNING_STACK_TIME	200
-#define MARIO_SLOW_TIME				1000
+#define MARIO_SLOW_TIME				500
 #define MARIO_SLOW_STACK_TIME		250
 #define MARIO_RELOAD_BULLET_TIME	500
 #define MARIO_TAIL_FLYING_TIME		250
@@ -302,10 +302,7 @@ private:
 	Mode prevMode;
 	Timer transformTimer;
 
-	//Boost speed and fly
-	Timer flyTimer;
-	Timer runningTimer;
-	Timer stoppingTimer;
+
 
 	Timer dieTimer;
 
@@ -319,15 +316,22 @@ public:
 	Timer untouchableTimer;
 	float start_x;			// initial position of Mario at scene
 	float start_y;
+	//Boost speed and fly
+	Timer flyTimer;
+	Timer runningTimer;
+	Timer stoppingTimer;
 
 	bool dead;
 	bool isSitting;
 	bool isGround;
 	bool isJumping;
+	bool isReadyToJump;
 	bool isJumpMusicBrick;
 	//boost speed
-	bool isReadyToRun;
+	bool isReadyToRun = true;
 	bool isChangeDirection = false;
+	Timer slowTimer;
+
 	//action with koopas
 	Timer kickTimer;
 	bool isHold;

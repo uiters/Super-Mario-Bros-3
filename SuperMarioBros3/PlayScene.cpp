@@ -582,9 +582,13 @@ void CPlaySceneKeyHandler::OnKeyUp(int KeyCode) {
 		mario->isReadyToRun = false;
 		mario->isHold = false;
 		mario->isReadyToHold = false;
-	case DIK_SPACE:
-		mario->ay = MARIO_GRAVITY;
-		mario->vy = 0.01f;
+	case DIK_S:
+		if (!mario->isGround)
+		{
+			mario->isReadyToJump = false;
+			mario->ay = MARIO_GRAVITY;
+			mario->vy = 0.01f;
+		}
 		break;
 	}
 
@@ -600,22 +604,21 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 
 	switch (KeyCode)
 	{
-	case DIK_SPACE:
+	case DIK_S:
 		if (mario->isGround)
+		{
+			mario->isReadyToJump = true;
 			mario->SetState(MARIO_STATE_JUMPING);
+		}
 		break;
 	case DIK_DOWN:
 		break;
 	case DIK_UP:
 		mario->isSitting = true;
 		break;
-	case DIK_C:
-	{
-		if (!mario->tailTimer.IsStarted() && !mario->isSitting)
-			mario->Attack();
+	case DIK_A:
+		mario->Attack();
 		break;
-	}
-	break;
 	case DIK_1:
 		mario->Transform(CMario::Mode::Small);
 		break;
@@ -628,7 +631,6 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_4:
 		mario->Transform(CMario::Mode::Tanooki);
 		break;
-
 	case DIK_T:
 		mario->TelePort();
 		break;
@@ -655,10 +657,11 @@ void CPlaySceneKeyHandler::KeyState(BYTE* states)
 	if (game->IsKeyDown(DIK_A))
 	{
 		mario->isReadyToHold = true;
-		if (!mario->isHold)
-			mario->isReadyToRun = true;
-		else if (mario->isHold)
-			mario->isReadyToRun = false;
+		if (!mario->runningTimer.IsStarted() && mario->vx != 0 && mario->isReadyToRun)
+			mario->runningTimer.Start();
 
 	}
+	if (game->IsKeyDown(DIK_S) && mario->isReadyToJump)
+		mario->SetState(MARIO_STATE_JUMPING);
+
 }
