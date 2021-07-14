@@ -273,11 +273,12 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 				}
 			}
-			if (dynamic_cast<CMusicalBrick*>(e->obj) && state == KOOPAS_STATE_SPINNING && e->nx != 0)
+			if (dynamic_cast<CMusicalBrick*>(e->obj) && state == KOOPAS_STATE_SPINNING)
 			{
 				CMusicalBrick* msBrick = dynamic_cast<CMusicalBrick*>(e->obj);
-				msBrick->SetState(MUSIC_BRICK_STATE_HIT_FROM_TOP);
 				this->vx = -this->vx;
+				this->nx = -this->nx;
+				msBrick->SetState(MUSIC_BRICK_STATE_HIT_FROM_TOP);
 			}
 			if (dynamic_cast<CBreakableBrick*>(e->obj) && state == KOOPAS_STATE_SPINNING && e->nx != 0 && ceil(mBottom) != oTop)
 			{
@@ -327,7 +328,19 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// clean up collision events
 	for (UINT i = 0; i < coEvents.size(); i++)
 		delete coEvents[i];
-	CalRevivable();
+	if (this->x <= 0)
+	{
+		if (state == KOOPAS_STATE_SPINNING)
+		{
+			this->nx = -this->nx;
+			vx = this->nx * KOOPAS_WALKING_SPEED * 5;
+		}
+		else {
+			this->nx = -this->nx;
+			vx = this->nx * KOOPAS_WALKING_SPEED;
+		}
+	}
+	//CalRevivable();
 }
 
 void CKoopas::Render()
@@ -367,7 +380,7 @@ void CKoopas::Render()
 	}
 	animation_set->at(ani)->Render(x, y);
 
-	RenderBoundingBox();
+	RenderBoundingBox(50);
 }
 
 void CKoopas::SetState(int state)
@@ -441,5 +454,5 @@ void CKoopas::Reset()
 	SetState(KOOPAS_STATE_WALKING);
 	tag = start_tag;
 	type = MOVING;
-	isEnable = false;
+	isEnable = true;
 }

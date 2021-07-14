@@ -7,7 +7,6 @@ CPortal::CPortal(int scene_id, float start_x, float start_y)
 	this->start_x = start_x;
 	this->start_y = start_y;
 	SetType(IGNORE);
-
 }
 
 void CPortal::Render()
@@ -20,8 +19,11 @@ void CPortal::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x;
 	t = y;
-	r = x + PORTAL_BBOX_WIDTH;
 	b = y + PORTAL_BBOX_HEIGHT;
+	if (scene_id == 4)
+		r = x + PORTAL_BBOX_WIDTH_1_3;
+	else
+		r = x + PORTAL_BBOX_WIDTH;
 }
 
 void CPortal::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -35,14 +37,19 @@ void CPortal::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		mario->GetBoundingBox(mLeft, mTop, mRight, mBottom);
 		GetBoundingBox(oLeft, oTop, oRight, oBottom);
 		if (isColliding(floor(mLeft), floor(mTop), ceil(mRight), ceil(mBottom))
-			&& (mario->isSitting || mario->isJumpMusicBrick)
+			&& mario->isSitting
 			&& mLeft >= oLeft && mRight <= oRight)
 		{
-			DebugOut(L"Portal change map::\n");
 			mario->portal = this;
 			if (tag == BACKTOPLAYSCENE)
 			{
-				mario->pipeUpTimer.Start();
+				if (scene_id == 1)
+					mario->pipeUpTimer.Start();
+
+				else if (scene_id == 3)
+					mario->pipeDownTimer.Start();
+
+				mario->isBackScene = true;
 				mario->wannaTele = true;
 			}
 			if (tag == TOEXTRASCENE && scene_id == 2)
@@ -50,13 +57,16 @@ void CPortal::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				mario->pipeDownTimer.Start();
 				mario->wannaTele = true;
 			}
-			else if (tag == TOEXTRASCENE && scene_id == 4)
-			{
-				mario->pipeUpTimer.Start();
-				mario->wannaTele = true;
-				mario->isTravel = true;
-			}
 			return;
+		}
+		if (tag == TOEXTRASCENE && scene_id == 4 && mario->isJumpMusicBrick)
+		{
+			mario->portal = this;
+			mario->isJumpMusicBrick = false;
+			mario->pipeUpTimer.Start();
+			mario->wannaTele = true;
+			mario->isTravel = true;
+			DebugOut(L"tele map");
 		}
 	}
 }

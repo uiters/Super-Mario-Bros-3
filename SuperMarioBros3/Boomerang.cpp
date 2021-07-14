@@ -44,7 +44,7 @@ void CBoomerang::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CMario* mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	float mLeft, mTop, mRight, mBottom;
 	float oLeft, oTop, oRight, oBottom;
-	if (mario != NULL && state != BOOMERANG_STATE_IDLE)
+	if (mario != NULL)
 	{
 		if (!mario->untouchableTimer.IsStarted())
 		{
@@ -78,7 +78,7 @@ void CBoomerang::Render()
 		else
 			ani = BOOMERANG_ANI_LEFT;
 	}
-	animation_set->at(0)->Render(x- BOOMERANG_DIFF, y - BOOMERANG_DIFF);
+	animation_set->at(0)->Render(x - BOOMERANG_DIFF, y - BOOMERANG_DIFF);
 	RenderBoundingBox();
 }
 void CBoomerang::SetState(int state)

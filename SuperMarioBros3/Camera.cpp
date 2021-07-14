@@ -143,7 +143,7 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 
 		if (mapHeight > SCREEN_HEIGHT)
 		{
-			if (cy < SCREEN_HEIGHT - 32)
+			if (cy < SCREEN_HEIGHT - 48)
 			{
 				cy = 0;
 			}
@@ -187,9 +187,8 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 bool Camera::isAreaCamera(float x, float y) {
 	CGame* game = CGame::GetInstance();
 
-	bool xInViewPort = x >= GetCameraPosition().x && x < GetCameraPosition().x + game->GetScreenWidth();
+	bool xInViewPort = x >= GetCameraPosition().x - 32 && x < GetCameraPosition().x + game->GetScreenWidth();
 	bool yInViewPort = y >= GetCameraPosition().y - (SCREEN_HEIGHT - game->GetScreenHeight()) && y < GetCameraPosition().y + SCREEN_HEIGHT;
-
 	return xInViewPort && yInViewPort;
 }
 

@@ -102,42 +102,41 @@ void CMario::RunTimer() {
 	{
 		pipeDownTimer.Reset();
 		isSitting = false;
-		DebugOut(L"[INFO] pipeDownTimer portal-scene:: %d", portal->GetSceneId());
+		//DebugOut(L"[INFO] pipeDownTimer portal-scene:: %d", portal->GetSceneId());
 		if (wannaTele)
 			CGame::GetInstance()->SwitchExtraScene(portal->GetSceneId(), portal->start_x, portal->start_y, portal->pipeUp);
-		else
+		else if (wannaTele && isBackScene)
 		{
-			vx = vy = 0;
-			ay = MARIO_GRAVITY;
-		}
-	}
-	else if (pipeUpTimer.ElapsedTime() >= MARIO_PIPE_TIME && pipeUpTimer.IsStarted() && isTravel)
-	{
-		pipeUpTimer.Reset();
-		isTravel = false;
-		if (wannaTele)
-			CGame::GetInstance()->SwitchExtraScene(portal->GetSceneId(), portal->start_x, portal->start_y, portal->pipeUp);
-		else
-		{
-			vx = vy = 0;
-			ay = MARIO_GRAVITY;
-		}
-	}
-
-	if (pipeUpTimer.ElapsedTime() >= MARIO_PIPE_TIME && pipeUpTimer.IsStarted())
-	{
-		pipeUpTimer.Reset();
-		isSitting = false;
-		DebugOut(L"[INFO] pipeUpTimer portal-scene:: %d", portal->GetSceneId());
-		if (wannaTele)
 			CGame::GetInstance()->SwitchBackScene(portal->GetSceneId(), portal->start_x, portal->start_y);
+			isSitting = false;
+			isBackScene = false;
+		}
 		else
 		{
 			vx = vy = 0;
 			ay = MARIO_GRAVITY;
 		}
 	}
-
+	else if (pipeUpTimer.ElapsedTime() >= MARIO_PIPE_TIME && pipeUpTimer.IsStarted())
+	{
+		pipeUpTimer.Reset();
+		if (wannaTele && isTravel)
+		{
+			CGame::GetInstance()->SwitchExtraScene(portal->GetSceneId(), portal->start_x, portal->start_y, portal->pipeUp);
+			isTravel = false;
+		}
+		else if (wannaTele && isBackScene)
+		{
+			CGame::GetInstance()->SwitchBackScene(portal->GetSceneId(), portal->start_x, portal->start_y);
+			isSitting = false;
+			isBackScene = false;
+		}
+		else
+		{
+			vx = vy = 0;
+			ay = MARIO_GRAVITY;
+		}
+	}
 	if (tailStateTimer.ElapsedTime() >= MARIO_TURNING_STATE_TIME && tailTimer.IsStarted())
 	{
 		tailStateTimer.Start();
@@ -297,7 +296,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		else if (pipeUpTimer.IsStarted())
 		{
 			if (GetMode() == Mode::Small)
-				y += -0.3f; // perfect position which is not overloap
+				y += -0.5f; // perfect position which is not overloap
 			else
 				y += -0.5f;
 		}
@@ -406,15 +405,34 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					if (e->nx != 0) {
 						vx = 0;
 					}
-					if (e->ny < 0) {
+					if (e->ny < 0 && msBrick->tag != 96 && msBrick->isEnable) {
 						msBrick->SetState(MUSIC_BRICK_STATE_HIT_FROM_TOP);
 						ay = -MARIO_GRAVITY;
 						vy = -MARIO_JUMP_DEFLECT_SPEED;
 					}
-					if (e->ny > 0) {
+					else if (e->ny < 0 && msBrick->tag == 96 && vy>0 && !msBrick->isEnable)
+					{
+						y = y0 + dy;
+					}
+					//portal extra 1-3-1
+					else if (e->ny < 0 && msBrick->tag == 96 && vy>0 && msBrick->isEnable)
+					{
+						msBrick->SetState(MUSIC_BRICK_STATE_HIT_FROM_TOP);
+						ay = -MARIO_GRAVITY;
+						vy = -MARIO_JUMP_DEFLECT_SPEED;
+						isJumpMusicBrick = true;
+					}
+					if (e->ny > 0 && msBrick->tag != 96) {
 						msBrick->SetState(MUSIC_BRICK_STATE_HIT_FROM_DOWN);
 						vy = 0;
 						ay = MARIO_GRAVITY;
+					}
+					else if (e->ny > 0 && msBrick->tag == 96 && vy < 0)
+					{
+						msBrick->SetState(MUSIC_BRICK_STATE_HIT_FROM_DOWN);
+						vy = 0;
+						ay = MARIO_GRAVITY;
+						msBrick->isEnable = true;
 					}
 				}
 				//goomba
@@ -596,6 +614,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					ay = MARIO_GRAVITY;
 					isJumping = false;
 				}
+				//else if (dynamic_cast<CPortal*>(e->obj))
+				//{
+				//y = y0 + dy;
+				//}
 			}
 		}
 	}

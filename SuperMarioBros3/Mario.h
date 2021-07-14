@@ -352,6 +352,7 @@ public:
 	// swap map
 	bool wannaTele = false;
 	bool isTravel = false;
+	bool isBackScene = false;
 	Timer pipeUpTimer;
 	Timer pipeDownTimer;
 	CPortal* portal = NULL;

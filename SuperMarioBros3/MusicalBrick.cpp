@@ -6,7 +6,6 @@ CMusicalBrick::CMusicalBrick() {
 	start_y = y;
 	start_x = x;
 	SetState(MUSIC_BRICK_STATE_IDLE);
-
 }
 
 void CMusicalBrick::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -18,8 +17,15 @@ void CMusicalBrick::GetBoundingBox(float& left, float& top, float& right, float&
 }
 
 void CMusicalBrick::Render() {
-	animation_set->at(0)->Render(x, y);
-	RenderBoundingBox();
+	if (tag != 96)
+	{
+		animation_set->at(0)->Render(x, y);
+		RenderBoundingBox();
+	}
+	else if (tag == 96 && isEnable) {
+		animation_set->at(0)->Render(x, y);
+		RenderBoundingBox(50);
+	}
 }
 
 void CMusicalBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
@@ -35,15 +41,13 @@ void CMusicalBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		boundTimer.Reset();
 		vy += ay * dt;
 	}
+
 	if (boundTimer.ElapsedTime() > MUSICBRICK_BOUND_TIME && boundTimer.IsStarted() && state == MUSIC_BRICK_STATE_HIT_FROM_DOWN && mario != nullptr)
 	{
 		boundTimer.Reset();
 		vy -= ay * dt;
 	}
-	float mLeft, mTop, mRight, mBottom;
-	float oLeft, oTop, oRight, oBottom;
-	mario->GetBoundingBox(mLeft, mTop, mRight, mBottom);
-	GetBoundingBox(oLeft, oTop, oRight, oBottom);
+
 	if (state == MUSIC_BRICK_STATE_IDLE && mario != NULL)
 	{
 		float mLeft, mTop, mRight, mBottom;

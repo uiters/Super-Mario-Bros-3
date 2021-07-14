@@ -240,6 +240,9 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 			break;
 		case OBJECT_TYPE_MUSICALBRICK:
 			obj = new CMusicalBrick();
+			obj->SetTag(tag);
+			if (tag == 96)
+				obj->isEnable = false;
 			((CMusicalBrick*)obj)->start_y = y;
 			break;
 		case OBJECT_TYPE_KOOPAS:
@@ -436,7 +439,7 @@ void CPlayScene::Update(DWORD dt)
 		LPGAMEOBJECT obj = units[i]->GetObj();
 		objects.push_back(obj);
 		//CalRevivable
-		for each (LPGAMEOBJECT object in objects)
+		for each (auto object in objects)
 		{
 			if (dynamic_cast<CKoopas*>(object) && !dynamic_cast<CKoopas*>(object)->CalRevivable()
 				&& object->isEnable == false)
@@ -601,10 +604,11 @@ void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 		if (mario->isGround)
 			mario->SetState(MARIO_STATE_JUMPING);
 		break;
-		/*case DIK_DOWN:
-			break;
-		case DIK_UP:
-			break;*/
+	case DIK_DOWN:
+		break;
+	case DIK_UP:
+		mario->isSitting = true;
+		break;
 	case DIK_C:
 	{
 		if (!mario->tailTimer.IsStarted() && !mario->isSitting)
@@ -653,5 +657,8 @@ void CPlaySceneKeyHandler::KeyState(BYTE* states)
 		mario->isReadyToHold = true;
 		if (!mario->isHold)
 			mario->isReadyToRun = true;
+		else if (mario->isHold)
+			mario->isReadyToRun = false;
+
 	}
 }
