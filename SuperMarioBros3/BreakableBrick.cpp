@@ -27,7 +27,7 @@ void CBreakableBrick::Render()
 	if (isDestroyed)
 		return;
 	animation_set->at(0)->Render(x, y);
-	RenderBoundingBox();
+	RenderBoundingBox(75);
 }
 void CBreakableBrick::Break()
 {

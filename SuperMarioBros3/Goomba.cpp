@@ -1,4 +1,4 @@
-	#include "Goomba.h"
+#include "Goomba.h"
 #include "Brick.h"
 #include "Utils.h"
 #include "Block.h"
@@ -95,6 +95,18 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	float oLeft, oTop, oRight, oBottom;
 	if (mario != NULL && state != GOOMBA_STATE_DIE_BY_MARIO && state != GOOMBA_STATE_DIE)
 	{
+		if (mario->tailTimer.IsStarted() && mario->GetMode() == CMario::Mode::Tanooki)
+		{
+			mario->getTail()->GetBoundingBox(mLeft, mTop, mRight, mBottom);
+			GetBoundingBox(oLeft, oTop, oRight, oBottom);
+			if (isColliding(floor(mLeft), mTop, ceil(mRight), mBottom))
+			{
+				mario->AddScore(x, y, 100, true);
+				this->nx = mario->nx;
+				SetState(GOOMBA_STATE_DIE_BY_MARIO);
+				return;
+			}
+		}
 		mario->GetBoundingBox(mLeft, mTop, mRight, mBottom);
 		GetBoundingBox(oLeft, oTop, oRight, oBottom);
 		if (isColliding(floor(mLeft), floor(mTop), ceil(mRight), ceil(mBottom)))

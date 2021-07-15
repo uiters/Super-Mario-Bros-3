@@ -109,10 +109,10 @@ void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (state == MUSHROOM_STATE_UP)
 	{
 		y += dy;
-		if (start_y - y >= MUSHROOM_BBOX_HEIGHT)
+		if (start_y - y >= 32)
 		{
 			vy = 0;
-			y = start_y - MUSHROOM_BBOX_HEIGHT - 0.1f;
+			y = start_y - 32 - 0.1f;
 			SetState(MUSHROOM_STATE_WALK);
 		}
 	}

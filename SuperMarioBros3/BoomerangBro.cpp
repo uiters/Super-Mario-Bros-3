@@ -83,6 +83,7 @@ void CBoomerangBrother::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (isColliding(floor(mLeft), mTop, ceil(mRight), mBottom))
 			{
 				mario->AddScore(x, y, 1000, true);
+				this->nx = mario->nx;
 				SetState(BOOMERANG_BROTHER_STATE_DIE);
 			}
 		}

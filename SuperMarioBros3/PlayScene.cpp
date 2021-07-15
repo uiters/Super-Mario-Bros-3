@@ -280,6 +280,7 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 			break;
 		case OBJECT_TYPE_CARD:
 			obj = new CCard();
+			DebugOut(L"created card x=%f\n y=%f\n", x, y);
 			break;
 		case OBJECT_TYPE_PORTAL:
 		{
@@ -443,11 +444,7 @@ void CPlayScene::Update(DWORD dt)
 		{
 			if (dynamic_cast<CKoopas*>(object) && !dynamic_cast<CKoopas*>(object)->CalRevivable()
 				&& object->isEnable == false)
-			{
 				object->isEnable = true;
-				object->isDestroyed = false;
-			}
-
 		}
 
 		if (dynamic_cast<CGoomba*> (obj) || dynamic_cast<CKoopas*> (obj)
@@ -498,6 +495,7 @@ void CPlayScene::Update(DWORD dt)
 void CPlayScene::Render()
 {
 	if (player == NULL) return;
+
 	/*if (isGameDone1)
 		gamedone1->Draw(Camera::GetInstance()->GetCameraPosition().x + GAMEDONE_1_DIFF_X, Camera::GetInstance()->GetCameraPosition().y + GAMEDONE_1_DIFF_Y);
 	if (isGameDone2)
@@ -566,7 +564,7 @@ void CPlayScene::Unload()
 }
 
 void CPlaySceneKeyHandler::OnKeyUp(int KeyCode) {
-	DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
+	//DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
 	CMario* mario = ((CPlayScene*)scene)->GetPlayer();
 
 	if (mario == NULL || mario->IsLostControl() || mario->IsDead() || mario->isPipe()) return;
@@ -596,7 +594,7 @@ void CPlaySceneKeyHandler::OnKeyUp(int KeyCode) {
 
 void CPlaySceneKeyHandler::OnKeyDown(int KeyCode)
 {
-	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
+	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 
 	CMario* mario = ((CPlayScene*)scene)->GetPlayer();
 
@@ -646,14 +644,6 @@ void CPlaySceneKeyHandler::KeyState(BYTE* states)
 	//disable control key when Mario die 
 	if (mario == NULL || mario->IsLostControl() || mario->IsDead() || mario->isPipe()) return;
 	//check current key state
-	if (game->IsKeyDown(DIK_DOWN))
-		mario->SetState(MARIO_STATE_SITTING);
-	else if (game->IsKeyDown(DIK_LEFT))
-		mario->SetState(MARIO_STATE_WALKING_LEFT);
-	else if (game->IsKeyDown(DIK_RIGHT))
-		mario->SetState(MARIO_STATE_WALKING_RIGHT);
-	else
-		mario->SetState(MARIO_STATE_IDLE);
 	if (game->IsKeyDown(DIK_A))
 	{
 		mario->isReadyToHold = true;
@@ -663,5 +653,12 @@ void CPlaySceneKeyHandler::KeyState(BYTE* states)
 	}
 	if (game->IsKeyDown(DIK_S) && mario->isReadyToJump)
 		mario->SetState(MARIO_STATE_JUMPING);
-
+	else if (game->IsKeyDown(DIK_RIGHT))
+		mario->SetState(MARIO_STATE_WALKING_RIGHT);
+	else if (game->IsKeyDown(DIK_DOWN))
+		mario->SetState(MARIO_STATE_SITTING);
+	else if (game->IsKeyDown(DIK_LEFT))
+		mario->SetState(MARIO_STATE_WALKING_LEFT);
+	else
+		mario->SetState(MARIO_STATE_IDLE);
 }

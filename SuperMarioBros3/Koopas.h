@@ -16,7 +16,7 @@
 #define KOOPAS_SHELL_DEFLECT_SPEED		0.4f
 #define KOOPAS_BBOX_WIDTH				15
 #define KOOPAS_BBOX_HEIGHT				26
-#define KOOPAS_BBOX_SHELL_HEIGHT		15
+#define KOOPAS_BBOX_SHELL_HEIGHT		16
 
 #define KOOPAS_STATE_WALKING	100
 #define KOOPAS_STATE_SHELL_UP	200
@@ -27,7 +27,7 @@
 #define KOOPAS_REVIVE_TIME		2000
 #define KOOPAS_SHELL_TIME		5000
 #define KOOPAS_DIYING_TIME		1000
-#define KOOPPAS_RESPAWN_TIME	3000
+#define KOOPPAS_RESPAWN_TIME	2000
 
 #define KOOPAS_ANI_WALKING_RIGHT	0
 #define KOOPAS_ANI_SPIN_RIGHT		1
@@ -53,6 +53,8 @@ class CKoopas : public CGameObject
 	Timer shellTimer;
 	Timer dyingTimer;
 	Timer respawnTimer;
+	int temp = 0;
+
 public:
 	bool isHold = false;
 	bool isKillable = false;

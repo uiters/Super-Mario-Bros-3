@@ -31,15 +31,17 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	Camera* cam = Camera::GetInstance();
 
-	if (!isEnable)
-		return;
+
+	//if (!isEnable)
+	//	return;
 	if (respawnTimer.ElapsedTime() >= KOOPPAS_RESPAWN_TIME && respawnTimer.IsStarted())
 	{
 		respawnTimer.Reset();
 		if (!cam->isAreaCamera(x, y))
 			Reset();
 	}
-
+	if (!cam->isAreaCamera(x, y))
+		return;
 	CGameObject::Update(dt);
 
 	CMario* mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
@@ -323,6 +325,12 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 				//DebugOut(L"[KOOPAS] kx: %f ky: %f bx: %f by: %f\n", x, y, e->obj->x, e->obj->y);
 			}
+			if (dynamic_cast<CCoin*>(e->obj)) {
+				if (e->nx != 0)
+				{
+					x = x0 + dx;
+				}
+			}
 		}
 	}
 	// clean up collision events
@@ -340,6 +348,8 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			vx = this->nx * KOOPAS_WALKING_SPEED;
 		}
 	}
+
+	DebugOut(L"temp::%d\n", temp);
 	//CalRevivable();
 }
 
@@ -380,7 +390,7 @@ void CKoopas::Render()
 	}
 	animation_set->at(ani)->Render(x, y);
 
-	RenderBoundingBox(50);
+	RenderBoundingBox(75);
 }
 
 void CKoopas::SetState(int state)
@@ -432,18 +442,28 @@ bool CKoopas::CalTurnable(LPGAMEOBJECT object, vector<LPGAMEOBJECT>* coObjects)
 {
 	Camera* cam = Camera::GetInstance();
 	if (!cam->isAreaCamera(x, y))
+	{
+		temp = 1;
 		return false;
+	}
 	for (UINT i = 0; i < coObjects->size(); i++)
 		if (dynamic_cast<CBrick*>(coObjects->at(i)) || dynamic_cast<CBlock*>(coObjects->at(i)))
 			if (abs(coObjects->at(i)->y == object->y))
 			{
 				if (nx > 0)
 					if (coObjects->at(i)->x > object->x && coObjects->at(i)->x - BRICK_BBOX_WIDTH < object->x + BRICK_BBOX_WIDTH)
+					{
+						temp = 2;
 						return false;
+					}
 				if (nx < 0)
 					if (coObjects->at(i)->x + BRICK_BBOX_WIDTH > object->x - BRICK_BBOX_WIDTH && coObjects->at(i)->x < object->x)
+					{
+						temp = 3;
 						return false;
+					}
 			}
+	temp = 4;
 	return true;
 }
 void CKoopas::Reset()

@@ -271,8 +271,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		vy -= MARIO_ACCELERATION_JUMP * dt;
 	//handle for changing direction when jump
 	//cant jump again until touch the ground
-	if (vy < 0)
-		isGround = false;
+	//if (vy < 0)
+	//	isGround = false;
 
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -434,6 +434,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					if (e->ny > 0 && msBrick->tag != 96) {
 						msBrick->SetState(MUSIC_BRICK_STATE_HIT_FROM_DOWN);
 						vy = 0;
+						isReadyToJump = false;
 						ay = MARIO_GRAVITY;
 					}
 					else if (e->ny > 0 && msBrick->tag == 96 && vy < 0)
@@ -441,6 +442,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						msBrick->SetState(MUSIC_BRICK_STATE_HIT_FROM_DOWN);
 						vy = 0;
 						ay = MARIO_GRAVITY;
+						isReadyToJump = false;
 						msBrick->isEnable = true;
 					}
 				}
@@ -523,7 +525,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					if (e->ny < 0)
 					{
 						AddScore(koopas->x, koopas->y, 100, true);
-						vy = -1.5f * MARIO_JUMP_DEFLECT_SPEED;
+						vy = -1.3f * MARIO_JUMP_DEFLECT_SPEED;
 						if (this->nx > 0)
 						{
 							if (vx < MARIO_WALKING_SPEED_MIN * 2)
@@ -546,7 +548,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					else
 					{
 						if (e->ny > 0)
+						{
 							y = y0;
+							Attacked();
+						}
 						if (untouchableTimer.IsStarted())
 						{
 							x = x0 + dx;
@@ -1049,6 +1054,7 @@ void CMario::Render()
 	int ani = -1;
 	int alpha = MARIO_RENDER_ALPHA;
 
+
 	if (transformTimer.IsStarted())
 	{
 		TransformAni(ani);
@@ -1297,6 +1303,6 @@ void CMario::TelePort() {
 	if (scene == 1)
 		SetPosition(2258, 50);
 	else if (scene == 3)
-		SetPosition(2108, 400);
+		SetPosition(2108, 380);
 
 }

@@ -202,5 +202,4 @@ void CQuestionBrick::CreateItem(int itemtype)
 		tmp_ani_set = animation_sets->Get(SWITCH_ANI_SET_ID);
 	}
 	item->SetAnimationSet(tmp_ani_set);
-
 }
