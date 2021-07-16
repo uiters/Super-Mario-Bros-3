@@ -440,12 +440,12 @@ void CPlayScene::Update(DWORD dt)
 		LPGAMEOBJECT obj = units[i]->GetObj();
 		objects.push_back(obj);
 		//CalRevivable
-		for each (auto object in objects)
-		{
-			if (dynamic_cast<CKoopas*>(object) && !dynamic_cast<CKoopas*>(object)->CalRevivable()
-				&& object->isEnable == false)
-				object->isEnable = true;
-		}
+		//for each (auto object in objects)
+		//{
+		//	if (dynamic_cast<CKoopas*>(object) && !dynamic_cast<CKoopas*>(object)->CalRevivable()
+		//		&& object->isEnable == false)
+		//		object->isEnable = true;
+		//}
 
 		if (dynamic_cast<CGoomba*> (obj) || dynamic_cast<CKoopas*> (obj)
 			|| dynamic_cast<CPlant*> (obj)
@@ -495,6 +495,8 @@ void CPlayScene::Update(DWORD dt)
 void CPlayScene::Render()
 {
 	if (player == NULL) return;
+
+	gamedone1->Draw(0,400);
 
 	/*if (isGameDone1)
 		gamedone1->Draw(Camera::GetInstance()->GetCameraPosition().x + GAMEDONE_1_DIFF_X, Camera::GetInstance()->GetCameraPosition().y + GAMEDONE_1_DIFF_Y);
