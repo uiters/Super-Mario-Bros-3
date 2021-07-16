@@ -121,4 +121,5 @@ void HUD::SetHUD(HUD* hud)
 	money = hud->money;
 	time = hud->time;
 	runningStacks = hud->runningStacks;
+	cards = hud->cards;
 }

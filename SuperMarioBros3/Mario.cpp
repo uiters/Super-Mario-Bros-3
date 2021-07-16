@@ -253,8 +253,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		((CPlayScene*)game->GetCurrentScene())->isGameDone3 = true;
 		return;
 	}
-	if (((CPlayScene*)game->GetCurrentScene())->isGameDone2 == true)
-		return;
+
 	if (y > ABYSS_HIGH)
 	{
 		GameDoneTimer.Reset();
@@ -627,6 +626,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					vy = 0;
 					ay = MARIO_GRAVITY;
 					isReadyToJump = false;
+					int sceneId = ((CPlayScene*)game->GetCurrentScene())->GetId();
+					if (sceneId == 1)
+						((CPlayScene*)game->GetCurrentScene())->isGameDone1 = true;
+					else if (sceneId == 3)
+						((CPlayScene*)game->GetCurrentScene())->isGameDone2 = true;
 				}
 				//else if (dynamic_cast<CPortal*>(e->obj))
 				//{

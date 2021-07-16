@@ -42,12 +42,12 @@
     <Filter Include="Grid">
       <UniqueIdentifier>{21cea5ec-113b-449c-ba48-81fb1cef892c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map Objects\WorldMap">
+      <UniqueIdentifier>{35d352a8-9c1c-4ef7-bf10-d0c34385d7e4}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Map Objects\WorldMap">
-      <UniqueIdentifier>{35d352a8-9c1c-4ef7-bf10-d0c34385d7e4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

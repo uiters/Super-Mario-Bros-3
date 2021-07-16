@@ -55,9 +55,9 @@ protected:
 	void _ParseSection_TILEMAP_DATA(string line);
 	void ParseObjFromFile(LPCWSTR path);
 
+	LPSPRITE gamedone1 = nullptr;
 	LPSPRITE gamedone2 = nullptr;
 public:
-	LPSPRITE gamedone1 = nullptr;
 	bool isGameDone1 = false;
 	bool isGameDone2 = false;
 	bool isGameDone3 = false;

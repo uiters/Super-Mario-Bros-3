@@ -495,11 +495,7 @@ void CPlayScene::Update(DWORD dt)
 void CPlayScene::Render()
 {
 	if (player == NULL) return;
-
-	/*if (isGameDone1)
-		gamedone1->Draw(Camera::GetInstance()->GetCameraPosition().x + GAMEDONE_1_DIFF_X, Camera::GetInstance()->GetCameraPosition().y + GAMEDONE_1_DIFF_Y);
-	if (isGameDone2)
-		gamedone2->Draw(Camera::GetInstance()->GetCameraPosition().x + GAMEDONE_2_DIFF_X, Camera::GetInstance()->GetCameraPosition().y + GAMEDONE_2_DIFF_Y);*/
+	
 	current_map->Render();
 	player->Render();
 	//for (int i = 0; i < objects.size(); i++)
@@ -511,6 +507,10 @@ void CPlayScene::Render()
 	for (int i = 0; i < objectsRenderThird.size(); i++)
 		objectsRenderThird[i]->Render();
 	hud->Render();
+	if (isGameDone1)
+		gamedone1->Draw(Camera::GetInstance()->GetCameraPosition().x + GAMEDONE_1_DIFF_X, Camera::GetInstance()->GetCameraPosition().y + GAMEDONE_1_DIFF_Y);
+	if (isGameDone2)
+		gamedone1->Draw(Camera::GetInstance()->GetCameraPosition().x + GAMEDONE_2_DIFF_X, Camera::GetInstance()->GetCameraPosition().y + GAMEDONE_2_DIFF_Y);
 }
 void CPlayScene::LoadBackUp()
 {

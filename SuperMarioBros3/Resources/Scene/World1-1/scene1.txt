@@ -10,7 +10,7 @@
 50	Resources\Textures\enemies-2.png	0	128	128
 60	Resources\Textures\HUD.png	0	255	255
 80	Resources\Textures\fonts.png	0	224	142
-90	Resources\Textures\card.png	0	183	239
+90	Resources\Textures\card.png	0	183	239	255
 100	Resources\Textures\mario-left.png	255	255	255
 110	Resources\Textures\mario-right.png	255	255	255
 [TILEMAP DATA]
