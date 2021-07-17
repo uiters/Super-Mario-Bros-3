@@ -393,8 +393,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				//breakablebrick
 				if (dynamic_cast<CBreakableBrick*>(e->obj) && e->ny > 0)
 				{
-					AddScore(e->obj->x, e->obj->y, 10, false, false);
-					((CBreakableBrick*)e->obj)->Break();
+					if (GetMode() != Mode::Small)
+					{
+						AddScore(e->obj->x, e->obj->y, 10, false, false);
+						((CBreakableBrick*)e->obj)->Break();
+					}
 				}
 				//block
 				else if (dynamic_cast<CBlock*>(e->obj)) {
