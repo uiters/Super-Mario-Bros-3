@@ -125,16 +125,16 @@ void CWorldScene::_ParseSection_OBJECTS(string line)
 	if (tokens.size() < 3) return; // skip invalid lines - an object set must have at least id, x, y
 	int tag = 0, option_tag_1 = 0, option_tag_2 = 0;
 	int object_type = atoi(tokens[0].c_str());
-	float x = atof(tokens[1].c_str());
-	float y = atof(tokens[2].c_str());
+	double x = atof(tokens[1].c_str());
+	double y = atof(tokens[2].c_str());
 
-	int ani_set_id = atoi(tokens[3].c_str());
+	int ani_set_id = (int)atoi(tokens[3].c_str());
 	if (tokens.size() >= 5)
-		tag = atof(tokens[4].c_str());
+		tag = (int)atof(tokens[4].c_str());
 	if (tokens.size() >= 6)
-		option_tag_1 = atof(tokens[5].c_str());
+		option_tag_1 = (int)atof(tokens[5].c_str());
 	if (tokens.size() >= 7)
-		option_tag_2 = atof(tokens[6].c_str());
+		option_tag_2 = (int)atof(tokens[6].c_str());
 
 
 	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
@@ -160,7 +160,7 @@ void CWorldScene::_ParseSection_OBJECTS(string line)
 			cgUp = atof(tokens[6].c_str());
 			cgRight = atof(tokens[7].c_str());
 			cgDown = atof(tokens[8].c_str());
-			int sceneid = atof(tokens[9].c_str());
+			int sceneid = (int)atof(tokens[9].c_str());
 			obj = new CWorldMapObject(sceneid);
 			((CWorldMapObject*)obj)->SetMove(cgLeft, cgUp, cgRight, cgDown);
 			obj->SetTag(tag);
@@ -275,7 +275,7 @@ void CWorldScene::Load()
 			}
 			player->sceneId = backup->scene;
 		}
-	hud->SetPosition(0, current_map->GetMapHeight() - HUD_HEIGHT);
+	hud->SetPosition(0, current_map->GetMapHeight() - (float)HUD_HEIGHT);
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 }

@@ -436,7 +436,6 @@ void CPlayScene::Update(DWORD dt)
 
 	for (UINT i = 0; i < units.size(); i++)
 	{
-		LPGAMEOBJECT tmp;
 		LPGAMEOBJECT obj = units[i]->GetObj();
 		objects.push_back(obj);
 		//CalRevivable
