@@ -122,7 +122,7 @@ void CPlayScene::_ParseSection_ANIMATIONS(string line)
 	LPANIMATION ani = new CAnimation();
 
 	int ani_id = atoi(tokens[0].c_str());
-	for (int i = 1; i < tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time  
+	for (unsigned int i = 1; i < tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time  
 	{
 		int sprite_id = atoi(tokens[i].c_str());
 		int frame_time = atoi(tokens[i + 1].c_str());
@@ -145,7 +145,7 @@ void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
 		s = new CAnimationSet();
 	CAnimations* animations = CAnimations::GetInstance();
 
-	for (int i = 1; i < tokens.size(); i++)
+	for (unsigned int i = 1; i < tokens.size(); i++)
 	{
 		int ani_id = atoi(tokens[i].c_str());
 
@@ -186,18 +186,18 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 		float  x, y;
 		if (object_type != 999)
 		{
-			x = atof(tokens[1].c_str());
-			y = atof(tokens[2].c_str());
+			x = (float)atof(tokens[1].c_str());
+			y = (float)atof(tokens[2].c_str());
 
-			ani_set_id = atoi(tokens[3].c_str());
+			ani_set_id = (int)atoi(tokens[3].c_str());
 			if (tokens.size() >= 5)
-				tag = atof(tokens[4].c_str());
+				tag = (int)atof(tokens[4].c_str());
 			if (tokens.size() >= 6)
-				option_tag_1 = atof(tokens[5].c_str());
+				option_tag_1 = (int)atof(tokens[5].c_str());
 			if (tokens.size() >= 7)
-				option_tag_2 = atof(tokens[6].c_str());
+				option_tag_2 = (int)atof(tokens[6].c_str());
 			if (tokens.size() >= 8)
-				option_tag_3 = atof(tokens[7].c_str());
+				option_tag_3 = (int)atof(tokens[7].c_str());
 		}
 
 		CAnimationSets* animation_sets = CAnimationSets::GetInstance();
@@ -287,8 +287,8 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 			int scene_id = atoi(tokens[4].c_str());
 			int isToExtraScene = atoi(tokens[5].c_str());
 			float start_x = 0, start_y = 0;
-			start_x = atoi(tokens[6].c_str());
-			start_y = atoi(tokens[7].c_str());
+			start_x = (float)atoi(tokens[6].c_str());
+			start_y = (float)atoi(tokens[7].c_str());
 			obj = new CPortal(scene_id, start_x, start_y);
 			int pu = atoi(tokens[8].c_str());
 			if (pu == 1)
@@ -494,16 +494,16 @@ void CPlayScene::Update(DWORD dt)
 void CPlayScene::Render()
 {
 	if (player == NULL) return;
-	
+
 	current_map->Render();
 	player->Render();
 	//for (int i = 0; i < objects.size(); i++)
 	//	objects[i]->Render();
-	for (int i = 0; i < objectsRenderFirst.size(); i++)
+	for (unsigned int i = 0; i < objectsRenderFirst.size(); i++)
 		objectsRenderFirst[i]->Render();
-	for (int i = 0; i < objectsRenderSecond.size(); i++)
+	for (unsigned int i = 0; i < objectsRenderSecond.size(); i++)
 		objectsRenderSecond[i]->Render();
-	for (int i = 0; i < objectsRenderThird.size(); i++)
+	for (unsigned int i = 0; i < objectsRenderThird.size(); i++)
 		objectsRenderThird[i]->Render();
 	hud->Render();
 	if (isGameDone1)

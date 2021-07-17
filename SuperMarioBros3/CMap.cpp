@@ -27,8 +27,8 @@ void CMap::Render()
 	float mx, my;
 	mx = cam->GetCameraPosition().x;
 	my = cam->GetCameraPosition().y;
-	int FirstColumn = floor(mx / TILE_WIDTH);
-	int LastColumn = ceil((mx + CGame::GetInstance()->GetScreenWidth()) / TILE_WIDTH);
+	int FirstColumn = (int)floor(mx / TILE_WIDTH);
+	int LastColumn = (int)ceil((mx + CGame::GetInstance()->GetScreenWidth()) / TILE_WIDTH);
 	if (LastColumn >= TotalColumnsOfMap)
 		LastColumn = TotalColumnsOfMap - 1;
 
@@ -38,7 +38,7 @@ void CMap::Render()
 		{
 			int index = TileMap[CurrentRow][CurrentColumn] - 1;
 			if (index < TotalTiles)
-				Tiles.at(index)->Draw(CurrentColumn * TILE_WIDTH, CurrentRow * TILE_HEIGHT - HUD_HEIGHT);
+				Tiles.at(index)->Draw((float)(CurrentColumn * TILE_WIDTH), (float)(CurrentRow * TILE_HEIGHT - HUD_HEIGHT));
 		}
 	//DebugOut(L"CMap Render");
 

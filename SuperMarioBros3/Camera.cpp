@@ -26,12 +26,12 @@ D3DXVECTOR3 Camera::GetPositionInCamera(D3DXVECTOR3 position)
 	return D3DXVECTOR3(pos.x, pos.y, 0);
 }
 
-void Camera::SetCameraPosition(float x, float y)
+void Camera::SetCameraPosition(int x, int y)
 {
 	if (!block)
 	{
-		this->cameraPosition.x = x;
-		this->cameraPosition.y = y;
+		this->cameraPosition.x = (float)x;
+		this->cameraPosition.y = (float)y;
 	}
 }
 
@@ -50,7 +50,8 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 {
 	CGame* game = CGame::GetInstance();
 	// Update camera to follow mario
-	float cx, cy, mapHeight, mapWidth;
+	float cx, cy;
+	int mapHeight, mapWidth;
 	int sceneId = game->GetCurrentScene()->GetId();
 	HUD* hud = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetHUD();
 	CMap* currentMap = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetMap();
@@ -67,12 +68,12 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 	{
 		//limit X
 		if (cx >= mapWidth - MARIO_BIG_BBOX_WIDTH)//Right edge
-			player->x = mapWidth - MARIO_BIG_BBOX_WIDTH;
+			player->x = (float)mapWidth - MARIO_BIG_BBOX_WIDTH;
 		else if (cx <= 0)//Left edge
 			player->x = 0;
 		//limit Y
 		if (cy >= mapHeight)
-			player->y = mapHeight + 100;
+			player->y = (float)mapHeight + 100;
 		else if (cy <= 20)
 			player->y = 20;
 
@@ -106,7 +107,7 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 			}
 			else if (cy > mapHeight - SCREEN_HEIGHT)
 			{
-				cy = mapHeight - SCREEN_HEIGHT + 32;
+				cy = (float)mapHeight - SCREEN_HEIGHT + 32;
 
 			}
 			else //if (cy < mapHeight - SCREEN_HEIGHT)
@@ -116,10 +117,10 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 		}
 		else
 		{
-			cy = mapHeight - SCREEN_HEIGHT;
+			cy = (float)mapHeight - SCREEN_HEIGHT;
 		}
 		if (cy < 0) cy = 0;
-		SetCameraPosition((int)countx, cy);
+		SetCameraPosition((int)countx, (int)cy);
 		hud->SetPosition(int(cx), (int)cy + 187);
 		return;
 	}
@@ -130,7 +131,7 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 				cx = pos.x;
 			}
 			else if (cx + SCREEN_WIDTH / 2 > mapWidth - 1) {
-				cx = mapWidth - SCREEN_WIDTH;
+				cx = (float)mapWidth - SCREEN_WIDTH;
 			}
 			else {
 				cx = cx + 5 + SCREEN_WIDTH / 2 - SCREEN_WIDTH;
@@ -148,7 +149,7 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 			}
 			else if (cy > mapHeight - SCREEN_HEIGHT)
 			{
-				cy = mapHeight - SCREEN_HEIGHT + 32;
+				cy = (float)mapHeight - SCREEN_HEIGHT + 32;
 
 			}
 			else //if (cy < mapHeight - SCREEN_HEIGHT)
@@ -158,7 +159,7 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 		}
 		else
 		{
-			cy = mapHeight - SCREEN_HEIGHT;
+			cy = (float)mapHeight - SCREEN_HEIGHT;
 		}
 		if (cy < 0) cy = 0;
 		//cy -= SCREEN_HEIGHT / 2;
@@ -166,7 +167,7 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 	if (sceneId == EXTRA_MAP1_1_1)
 	{
 		SetCameraPosition((int)cx, (int)cy - 30);
-		hud->SetPosition(int(cx), HUD_CY / 2 - 40);
+		hud->SetPosition((int)cx, HUD_CY / 2 - 40);
 	}
 	else if (sceneId == WORLD_SCENE)
 	{
@@ -175,10 +176,10 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 	else
 	{
 		SetCameraPosition((int)cx, (int)cy);
-		hud->SetPosition(int(cx), HUD_CY);
+		hud->SetPosition((int)cx, HUD_CY);
 		if (cy == 0)
 		{
-			hud->SetPosition(int(cx), HUD_CY / 2 - 10);
+			hud->SetPosition((int)cx, HUD_CY / 2 - 10);
 		}
 	}
 }

@@ -11,11 +11,11 @@ Sprite animation
 class CAnimationFrame
 {
 	LPSPRITE sprite;
-	ULONGLONG time;
+	DWORD time;
 
 public:
 	CAnimationFrame(LPSPRITE sprite, int time) { this->sprite = sprite; this->time = time; }
-	ULONGLONG GetTime() { return time; }
+	DWORD GetTime() { return time; }
 	LPSPRITE GetSprite() { return sprite; }
 };
 
@@ -24,8 +24,8 @@ typedef CAnimationFrame* LPANIMATION_FRAME;
 class CAnimation
 {
 	ULONGLONG lastFrameTime;
-	ULONGLONG currentFrame;
-	ULONGLONG defaultTime;
+	int currentFrame;
+	int defaultTime;
 	vector<LPANIMATION_FRAME> frames;
 public:
 	CAnimation(int defaultTime = 100) { this->defaultTime = defaultTime; lastFrameTime = -1; currentFrame = -1; }

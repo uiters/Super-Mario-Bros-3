@@ -79,7 +79,7 @@ void CWorldScene::_ParseSection_ANIMATIONS(string line)
 	LPANIMATION ani = new CAnimation();
 
 	int ani_id = atoi(tokens[0].c_str());
-	for (int i = 1; i < tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time  
+	for (unsigned int i = 1; i < tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time  
 	{
 		int sprite_id = atoi(tokens[i].c_str());
 		int frame_time = atoi(tokens[i + 1].c_str());
@@ -103,7 +103,7 @@ void CWorldScene::_ParseSection_ANIMATION_SETS(string line)
 		s = new CAnimationSet();
 	CAnimations* animations = CAnimations::GetInstance();
 
-	for (int i = 1; i < tokens.size(); i++)
+	for (unsigned int i = 1; i < tokens.size(); i++)
 	{
 		int ani_id = atoi(tokens[i].c_str());
 
@@ -125,8 +125,8 @@ void CWorldScene::_ParseSection_OBJECTS(string line)
 	if (tokens.size() < 3) return; // skip invalid lines - an object set must have at least id, x, y
 	int tag = 0, option_tag_1 = 0, option_tag_2 = 0;
 	int object_type = atoi(tokens[0].c_str());
-	double x = atof(tokens[1].c_str());
-	double y = atof(tokens[2].c_str());
+	float x = (float)atof(tokens[1].c_str());
+	float y = (float)atof(tokens[2].c_str());
 
 	int ani_set_id = (int)atoi(tokens[3].c_str());
 	if (tokens.size() >= 5)
@@ -312,7 +312,7 @@ void CWorldScene::Update(DWORD dt)
 void CWorldScene::Render()
 {
 	current_map->Render();
-	for (int i = 0; i < objects.size(); i++)
+	for (unsigned int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
 	hud->Render();
 }
@@ -322,7 +322,7 @@ void CWorldScene::Render()
 */
 void CWorldScene::Unload()
 {
-	for (int i = 0; i < objects.size(); i++)
+	for (unsigned int i = 0; i < objects.size(); i++)
 		delete objects[i];
 	objects.clear();
 

@@ -66,7 +66,7 @@ void CIntroScene::_ParseSection_ANIMATIONS(string line) {
 	LPANIMATION ani = new CAnimation();
 
 	int ani_id = atoi(tokens[0].c_str());
-	for (int i = 1; i < tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time  
+	for (unsigned int i = 1; i < tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time  
 	{
 		int sprite_id = atoi(tokens[i].c_str());
 		int frame_time = atoi(tokens[i + 1].c_str());
@@ -92,7 +92,7 @@ void CIntroScene::_ParseSection_ANIMATION_SETS(string line) {
 		s = new CAnimationSet();
 	CAnimations* animations = CAnimations::GetInstance();
 
-	for (int i = 1; i < tokens.size(); i++)
+	for (unsigned int i = 1; i < tokens.size(); i++)
 	{
 		int ani_id = atoi(tokens[i].c_str());
 
@@ -112,16 +112,16 @@ void CIntroScene::_ParseSection_OBJECTS(string line) {
 	if (tokens.size() < 3) return; // skip invalid lines - an object set must have at least id, x, y
 	int tag = 0, option_tag_1 = 0, option_tag_2 = 0;
 	int object_type = atoi(tokens[0].c_str());
-	float x = atof(tokens[1].c_str());
-	float y = atof(tokens[2].c_str());
+	float x = (float)atof(tokens[1].c_str());
+	float y = (float)atof(tokens[2].c_str());
 
 	int ani_set_id = atoi(tokens[3].c_str());
 	if (tokens.size() >= 5)
-		tag = atof(tokens[4].c_str());
+		tag = (int)atof(tokens[4].c_str());
 	if (tokens.size() >= 6)
-		option_tag_1 = atof(tokens[5].c_str());
+		option_tag_1 = (int)atof(tokens[5].c_str());
 	if (tokens.size() >= 7)
-		option_tag_2 = atof(tokens[6].c_str());
+		option_tag_2 = (int)atof(tokens[6].c_str());
 
 
 	CAnimationSets* animation_sets = CAnimationSets::GetInstance();

@@ -19,7 +19,7 @@ void Timer::Reset()
 	started = false;
 }
 
-DWORD Timer::ElapsedTime()
+ULONGLONG Timer::ElapsedTime()
 {
 	if (timeStart == -1) return 0;
 	return GetTickCount64() - timeStart;

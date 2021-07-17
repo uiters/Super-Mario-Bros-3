@@ -5,7 +5,7 @@
 class Timer
 {
 private:
-	DWORD timeStart;
+	ULONGLONG timeStart;
 	bool started;
 public:
 	Timer();
@@ -13,6 +13,6 @@ public:
 	bool IsStarted() { return this->started; }
 	void Start();
 	void Reset();
-	DWORD ElapsedTime();
+	ULONGLONG ElapsedTime();
 };
 

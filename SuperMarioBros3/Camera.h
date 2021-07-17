@@ -19,7 +19,7 @@ public:
 	Camera();
 	static Camera* GetInstance();
 	D3DXVECTOR3 GetPositionInCamera(D3DXVECTOR3 position);
-	void SetCameraPosition(float x, float y);
+	void SetCameraPosition(int x, int y);
 	void Setwidthheight(int x, int y);
 	D3DXVECTOR3 GetCameraPosition();
 	void Update(DWORD dt, int typeCamera, float& countx);
