@@ -16,6 +16,9 @@
 #define GOOMBA_RED_TIME_JUMPING			125
 #define GOOMBA_TIME_DIYING				250
 #define GOOMBA_TIME_DIYING_BY_TAIL		1000
+// SUPER GOOMBA
+#define GOOMBA_BIG_TIME_WALKING		5000
+#define GOOMBA_BIG_TIME_READY_FLY	5000
 
 #define GOOMBA_RED_JUMPING_STACKS	3
 
@@ -26,7 +29,10 @@
 #define GOOMBA_NORMAL_BBOX_HEIGHT		15
 #define GOOMBA_RED_BBOX_HEIGHT			17
 #define GOOMBA_RED_BBOX_WINGS_HEIGHT	22
-
+// SUPER GOOMBA
+#define GOOMBA_BIG_BBOX_WIDTH			20
+#define GOOMBA_BIG_BBOX_HEIGHT			19
+#define GOOMBA_BIG_BBOX_WINGS_HEIGHT	24
 
 #define GOOMBA_BBOX_HEIGHT_DIE			9
 
@@ -36,6 +42,11 @@
 #define GOOMBA_STATE_RED_JUMPING		400
 #define GOOMBA_STATE_RED_HIGHJUMPING	450
 #define GOOMBA_STATE_RED_WINGSWALKING	500
+#define GOOMBA_STATE_YELLOW_WINGSWALKING 600
+// SUPER GOOMBA
+#define GOOMBA_STATE_FLYING				550
+#define GOOMBA_STATE_WINGSWALKING		600
+#define GOOMBA_STATE_WINGSJUMPING		650
 
 #define GOOMBA_NORMAL_ANI_WALKING		0
 #define GOOMBA_NORMAL_ANI_DIE			1
@@ -43,11 +54,16 @@
 #define GOOMBA_RED_ANI_WINGSWALKING		3
 #define GOOMBA_RED_ANI_WALKING			4
 #define GOOMBA_RED_ANI_DIE				5
+// SUPER GOOMBA
+#define GOOMBA_ANI_FLY	6
+#define GOOMBA_ANI_WALK	7
+#define GOOMBA_ANI_WING_WALK	8
+
 
 #define GOOMBA_NORMAL			0
 #define GOOMBA_RED				1
 #define GOOMBA_RED_NORMAL		2
-
+#define GOOMBA_SUPER			3
 
 class CGoomba : public CGameObject
 {
@@ -66,4 +82,5 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 	void StartDying(bool l = false) { dyingTimer.Start(); if (l) isWhackedDying = true; else isDying = true; }
+	//void HandleBigGoomba();
 };

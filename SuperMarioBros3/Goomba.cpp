@@ -274,6 +274,12 @@ void CGoomba::Render()
 		if (state == GOOMBA_STATE_DIE)
 			ani = GOOMBA_RED_ANI_DIE;
 		break;
+	case GOOMBA_SUPER:
+		ani = GOOMBA_ANI_WING_WALK;
+		if (state == GOOMBA_STATE_RED_JUMPING || state == GOOMBA_STATE_RED_HIGHJUMPING)
+			ani = GOOMBA_ANI_FLY;
+		if (state == GOOMBA_STATE_DIE)
+			ani = GOOMBA_NORMAL_ANI_DIE;
 	}
 	animation_set->at(ani)->Render(x, y);
 	RenderBoundingBox();
@@ -309,6 +315,58 @@ void CGoomba::SetState(int state)
 		walkingTimer.Start();
 		ay = GOOMBA_GRAVITY;
 		break;
+	case GOOMBA_STATE_YELLOW_WINGSWALKING:
+		walkingTimer.Start();
+		ay = GOOMBA_GRAVITY;
+
 	}
 	CGameObject::SetState(state);
 }
+
+//void CGoomba::HandleBigGoomba() {
+//	if (tag == GOOMBA_YELLOW) {
+//		if (isWalking && GetTickCount64() - walking_start >= GOOMBA_BIG_TIME_WALKING && !isFlying) {
+//			isReadyToFly = true;
+//			start_ready_fly = GetTickCount64();
+//			y -= GOOMBA_BIG_BBOX_WINGS_HEIGHT - GOOMBA_BIG_BBOX_HEIGHT + 2;
+//			StopWalking();
+//		}
+//
+//		if (isReadyToFly && GetTickCount64() - start_ready_fly >= GOOMBA_BIG_TIME_READY_FLY && !isFlying) {
+//			isReadyToFly = false;
+//			start_ready_fly = 0;
+//			SetState(GOOMBA_STATE_FLYING);
+//		}
+//
+//		if (isFlying && GetTickCount64() - start_drop >= GOOMBA_BIG_TIME_DROP) {
+//			DebugOut(L"[IN]::%d\n", poopGoomba);
+//			start_drop = 0;
+//			poopGoomba++;
+//			CreatePoopGoomba();
+//		}
+//
+//		if (poopGoomba > MAX_POOP_GOOMBA) {
+//			ay = GOOMBA_GRAVITY;
+//			isFlying = false;
+//			poopGoomba = 0;
+//			SetState(GOOMBA_STATE_WINGSWALKING);
+//		}
+//
+//		else if (poopGoomba <= MAX_POOP_GOOMBA && start_drop == 0) {
+//			start_drop = GetTickCount64();
+//		}
+//
+//		DebugOut(L"[POOP_GOOMBA]::%d\n", poopGoomba);
+//
+//		//! LIMIT Y
+//		if (y <= 300.0f) {
+//			if (vy < 0) {
+//				vy = 0.03f;
+//			}
+//		}
+//
+//		if (vy <= -0.07f) {
+//			vy = -0.07f;
+//		}
+//	}
+//}
