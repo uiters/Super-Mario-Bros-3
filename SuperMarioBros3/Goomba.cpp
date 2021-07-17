@@ -294,7 +294,7 @@ void CGoomba::SetState(int state)
 		vx = -vx;
 		ay = GOOMBA_GRAVITY;
 		StartDying(true);
-		SetType(IGNORE);
+		SetType(IGNORE_DEFINE);
 		break;
 	case GOOMBA_STATE_RED_JUMPING:
 		ay = -GOOMBA_GRAVITY;

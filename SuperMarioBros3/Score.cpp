@@ -9,7 +9,7 @@ CScore::CScore(int score)
 	isDestroyed = false;
 	start.Start();
 	state = score;
-	SetType(IGNORE);
+	SetType(IGNORE_DEFINE);
 }
 void CScore::GetBoundingBox(float& l, float& t, float& r, float& b)
 {

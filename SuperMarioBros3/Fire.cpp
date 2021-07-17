@@ -13,7 +13,7 @@ CFireBullet::CFireBullet(float x, float y) : CGameObject()
 	this->x = x;
 	this->y = y;
 	animation_set = CAnimationSets::GetInstance()->Get(FIRE_BULLET_ANI_ID);
-	type = IGNORE;
+	type = IGNORE_DEFINE;
 }
 
 void CFireBullet::FilterCollision(

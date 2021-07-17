@@ -7,7 +7,7 @@ CPiece::CPiece(float nx, float ny)
 	vy = ny * PIECE_SPEED;
 	isDestroyed = false;
 	appearTimer.Start();
-	SetType(IGNORE);
+	SetType(IGNORE_DEFINE);
 }
 void CPiece::GetBoundingBox(float& l, float& t, float& r, float& b)
 {

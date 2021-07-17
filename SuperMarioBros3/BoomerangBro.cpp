@@ -221,7 +221,7 @@ void CBoomerangBrother::SetState(int state)
 		break;
 	case BOOMERANG_BROTHER_STATE_DIE:
 		vy = -BOOMERANG_BROTHER_DEFLECT_SPEED;
-		type = IGNORE;
+		type = IGNORE_DEFINE;
 		DemolishBoomerang();
 		break;
 	}

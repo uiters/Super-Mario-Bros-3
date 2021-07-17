@@ -401,6 +401,6 @@ public:
 	CTanooki* getTail() { return tail; }
 	void AddLife(int l = 1) { this->life += l; }
 	void AddMoney(int m = 1) { this->money += m; }
-	void AddScore(int ox, int oy, int s = 100, bool isEnemy = false, bool showScore = true);
+	void AddScore(float ox, float oy, int s = 100, bool isEnemy = false, bool showScore = true);
 	void TelePort();
 };

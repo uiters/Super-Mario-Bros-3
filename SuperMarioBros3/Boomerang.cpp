@@ -10,7 +10,7 @@ CBoomerang::CBoomerang(float x, float y)
 	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
 	LPANIMATION_SET tmp_ani_set = animation_sets->Get(BOOMERANG_ANI_ID);
 	SetAnimationSet(tmp_ani_set);
-	type = IGNORE;
+	type = IGNORE_DEFINE;
 	//DebugOut(L"CBoomerang construcor::\n");
 
 }

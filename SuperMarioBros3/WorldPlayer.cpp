@@ -72,8 +72,6 @@ void CWorldPlayer::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		//
 		// Collision logic with other objects
 		//
-		float oLeft, oTop, oRight, oBottom;
-		float mLeft, mTop, mRight, mBottom;
 		SetState(PLAYER_STATE_IDLE);
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{

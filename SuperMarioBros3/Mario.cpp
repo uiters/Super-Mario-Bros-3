@@ -620,7 +620,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				//card
 				else if (dynamic_cast<CCard*>(e->obj))
 				{
-					srand(time(NULL));
+					srand((unsigned int)time(NULL));
 					int id = rand() % 3 + 1;
 					e->obj->vy = -CARD_SPEED;
 					e->obj->SetState(id);
@@ -1273,7 +1273,7 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
 	}
 }
 
-void CMario::AddScore(int ox, int oy, int s, bool isEnemy, bool showscore)
+void CMario::AddScore(float ox, float oy, int s, bool isEnemy, bool showscore)
 {
 	if (isEnemy)
 	{
@@ -1289,7 +1289,7 @@ void CMario::AddScore(int ox, int oy, int s, bool isEnemy, bool showscore)
 	}
 	else
 		countKill = 0;
-	s = pow(2, countKill) * s;
+	s = int(pow(2, countKill) * s);
 	this->score += s;
 	if (showscore)
 	{

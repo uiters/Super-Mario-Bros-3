@@ -51,7 +51,6 @@ void Camera::Update(DWORD dt, int typeCamera, float& countx)
 	CGame* game = CGame::GetInstance();
 	// Update camera to follow mario
 	float cx, cy, mapHeight, mapWidth;
-	float r, l, t, b;
 	int sceneId = game->GetCurrentScene()->GetId();
 	HUD* hud = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetHUD();
 	CMap* currentMap = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetMap();

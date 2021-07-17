@@ -3,7 +3,7 @@
 #include "PlayScene.h"
 CAbyss::CAbyss()
 {
-	type = IGNORE;
+	type = IGNORE_DEFINE;
 }
 void CAbyss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {

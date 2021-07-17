@@ -276,7 +276,7 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 			break;
 		case OBJECT_TYPE_COIN:
 			obj = new CCoin(tag);
-			obj->SetType(IGNORE);
+			obj->SetType(IGNORE_DEFINE);
 			break;
 		case OBJECT_TYPE_CARD:
 			obj = new CCard();

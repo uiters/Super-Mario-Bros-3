@@ -181,19 +181,19 @@ void CQuestionBrick::CreateItem(int itemtype)
 	if (itemtype == ITEM_COIN)
 	{
 		item = new CCoin(COIN_TYPE_INBRICK);
-		item->SetType(IGNORE);
+		item->SetType(IGNORE_DEFINE);
 		tmp_ani_set = animation_sets->Get(COIN_ANI_SET_ID);
 	}
 	else if (itemtype == ITEM_MUSHROOM_RED || itemtype == ITEM_MUSHROOM_GREEN)
 	{
 		item = new CMushroom();
-		item->SetType(IGNORE);
+		item->SetType(IGNORE_DEFINE);
 		tmp_ani_set = animation_sets->Get(MUSHROOM_ANI_SET_ID);
 	}
 	else if (itemtype == ITEM_LEAF)
 	{
 		item = new CLeaf();
-		item->SetType(IGNORE);
+		item->SetType(IGNORE_DEFINE);
 		tmp_ani_set = animation_sets->Get(LEAF_ANI_SET_ID);
 	}
 	else if (itemtype == ITEM_SWITCH)

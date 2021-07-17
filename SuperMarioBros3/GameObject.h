@@ -10,7 +10,7 @@
 #include "Utils.h"
 #define STATIC	0
 #define MOVING	1
-#define IGNORE	2
+#define IGNORE_DEFINE	2
 
 #define PUSHBACK 0.4f
 #define VIEWPORT_PUSHBACK	16

@@ -81,9 +81,9 @@ void CFirePlant::Update(DWORD dt,
 		float l, r;
 		mario->GetBoundingBox(l, mTop, r, mBottom);
 
-		int mWidth = r - l;
+		float mWidth = r - l;
 
-		if ((floor(mario->x) + (float)mWidth + PIRANHAPLANT_ACTIVE_RANGE <= x
+		if ((floor(mario->x) + mWidth + PIRANHAPLANT_ACTIVE_RANGE <= x
 			|| ceil(mario->x) >= x + PIRANHAPLANT_BBOX_WIDTH + PIRANHAPLANT_ACTIVE_RANGE)
 			&& state == PIRANHAPLANT_STATE_INACTIVE && !delayTimer.IsStarted())
 			SetState(PIRANHAPLANT_STATE_DARTING);
@@ -103,7 +103,7 @@ void CFirePlant::Update(DWORD dt,
 }
 void CFirePlant::Render()
 {
-	int ani = PIRANHAPLANT_ANI_DEATH;
+	int ani = FIRE_PIRANHAPLANT_ANI_DEATH;
 	if (state != PIRANHAPLANT_STATE_DEATH && !dyingTimer.IsStarted())
 	{
 		if (Up)
@@ -135,12 +135,12 @@ void CFirePlant::SetState(int _state)
 		break;
 	case PIRANHAPLANT_STATE_DEATH:
 		vy = 0;
-		SetType(IGNORE);
+		SetType(IGNORE_DEFINE);
 		dyingTimer.Start();
 		break;
 	case PIRANHAPLANT_STATE_INACTIVE:
 		vy = 0;
-		SetType(IGNORE);
+		SetType(IGNORE_DEFINE);
 		break;
 	}
 }

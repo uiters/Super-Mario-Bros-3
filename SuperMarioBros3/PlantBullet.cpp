@@ -27,7 +27,7 @@ CPlantBullet::CPlantBullet(float bx, float by, bool Up, bool Right)
 		x = bx - BULLET_BBOX_WIDTH;
 		vx = -BULLET_SPEED_X;
 	}
-	SetType(IGNORE);
+	SetType(IGNORE_DEFINE);
 }
 void CPlantBullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {

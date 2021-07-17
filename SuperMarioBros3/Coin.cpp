@@ -12,7 +12,7 @@ CCoin::CCoin(int tag) : CGameObject() {
 	if (tag == COIN_TYPE_TRANSFORM)
 		appearTimer.Start();
 	SetState(COIN_STATE_IDLE);
-	SetType(IGNORE);
+	SetType(IGNORE_DEFINE);
 }
 void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {

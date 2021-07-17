@@ -111,7 +111,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (isHold)
 		{
 			y = mario->y + KOOPAS_BBOX_SHELL_HEIGHT / 2;
-			float tmp = mario->vx;
+			int tmp = (int)mario->vx;
 			if (tmp < 0)
 				tmp = -1;
 			if (tmp > 0)
@@ -421,7 +421,7 @@ void CKoopas::SetState(int state)
 	case KOOPAS_STATE_DEATH:
 		vy = -KOOPAS_DIE_DEFLECT_SPEED;
 		vx = 0;
-		SetType(IGNORE);
+		SetType(IGNORE_DEFINE);
 		respawnTimer.Start();
 		break;
 	}
