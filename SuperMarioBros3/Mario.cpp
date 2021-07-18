@@ -458,14 +458,17 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						if (goomba->GetState() != GOOMBA_STATE_DIE)
 						{
 							AddScore(goomba->x, goomba->y, 100, true);
-							if (goomba->tag != GOOMBA_RED)
+							if (goomba->tag == GOOMBA_NORMAL)
 							{
 								goomba->SetState(GOOMBA_STATE_DIE);
 								vy = -MARIO_JUMP_DEFLECT_SPEED;
 							}
 							else
 							{
-								goomba->SetTag(GOOMBA_RED_NORMAL);
+								if (goomba->tag == GOOMBA_RED)
+									goomba->SetTag(GOOMBA_RED_NORMAL);
+								else if (goomba->tag == GOOMBA_SUPER)
+									goomba->SetTag(GOOMBA_NORMAL);
 								goomba->SetState(GOOMBA_STATE_WALKING);
 								vy = -MARIO_JUMP_DEFLECT_SPEED;
 							}

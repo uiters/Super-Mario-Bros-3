@@ -28,26 +28,11 @@ void CTinyGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 	float mLeft, mTop, mRight, mBottom;
 	float oLeft, oTop, oRight, oBottom;
-
+	GetBoundingBox(oLeft, oTop, oRight, oBottom);
 	if (mario != NULL) {
 		mario->GetBoundingBox(mLeft, mTop, mRight, mBottom);
 		if (isColliding(mLeft, mTop, mRight, mBottom)) {
-			if (x <= mario->x) {
-				x = mario->x;
-				ax = 0.002f;
-			}
-			else if (x >= mario->x + MARIO_BIG_BBOX_WIDTH - POOP_GOOMBA_BBOX_WIDTH) {
-				ax = -0.002f;
-				x = mario->x + MARIO_BIG_BBOX_WIDTH - POOP_GOOMBA_BBOX_WIDTH;
-			}
-			if (y >= mario->y + MARIO_BIG_BBOX_HEIGHT - POOP_GOOMBA_BBOX_HEIGHT) {
-				ay = -0.003f;
-				y = mario->y + MARIO_BIG_BBOX_HEIGHT - POOP_GOOMBA_BBOX_HEIGHT;
-			}
-			if (y <= mario->y) {
-				ay = 0.003f;
-				y = mario->y;
-			}
+			mario->Attacked();
 		}
 	}
 }

@@ -17,8 +17,8 @@
 #define GOOMBA_TIME_DIYING				250
 #define GOOMBA_TIME_DIYING_BY_TAIL		1000
 // SUPER GOOMBA
-#define GOOMBA_BIG_TIME_WALKING		500
-#define GOOMBA_BIG_TIME_READY_FLY	5000
+#define GOOMBA_BIG_TIME_WALKING		1000
+#define GOOMBA_BIG_TIME_READY_FLY	500
 #define GOOMBA_BIG_TIME_DROP	1000
 
 #define GOOMBA_RED_JUMPING_STACKS	3
@@ -93,6 +93,6 @@ public:
 	virtual void Render();
 	void StartDying(bool l = false) { dyingTimer.Start(); if (l) isWhackedDying = true; else isDying = true; }
 	void HandleBigGoomba();
-	void SetSpeedDirection(int b);
+	void SetSpeedDirection(float b);
 	void CreatePoopGoomba();
 };
