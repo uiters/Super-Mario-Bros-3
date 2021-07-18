@@ -2,11 +2,21 @@
 #include "Mario.h"
 #include "PlayScene.h"
 
+void CTinyGoomba::GetBoundingBox(float& left, float& top, float& right, float& bottom)
+{
+	left = x;
+	top = y;
+	right = x + POOP_GOOMBA_BBOX_WIDTH;
+	bottom = y + POOP_GOOMBA_BBOX_HEIGHT;
+}
+
 void CTinyGoomba::Render() {
-	animation_set->at(POOP_GOOMBA_ANI)->Render(x, y);
+	animation_set->at(9)->Render(x, y);
+	RenderBoundingBox(100);
 }
 
 void CTinyGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
+
 	CMario* mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	CGameObject::Update(dt);
 
@@ -22,14 +32,6 @@ void CTinyGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	if (mario != NULL) {
 		mario->GetBoundingBox(mLeft, mTop, mRight, mBottom);
 		if (isColliding(mLeft, mTop, mRight, mBottom)) {
-			isCollide = true;
-		}
-
-		if (isCollide) {
-			/*mario->isTakingPoopGoomba = true;*/
-			//this->x = mario->x;
-			DebugOut(L"[ma->y]::%f\n", mario->y);
-			DebugOut(L"[ma->bt]::%f\n", mBottom);
 			if (x <= mario->x) {
 				x = mario->x;
 				ax = 0.002f;

@@ -13,16 +13,11 @@
 
 class CTinyGoomba : public CGameObject {
 public:
-	bool isCollide = false;
 	CTinyGoomba() {
+		type = IGNORE_DEFINE;
 		ay = POOP_GOOMBA_GRAVITY;
 	}
 	virtual void Render();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
-	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom) {
-		left = x;
-		top = y;
-		right = x + POOP_GOOMBA_BBOX_WIDTH;
-		bottom = y + POOP_GOOMBA_BBOX_HEIGHT;
-	}
+	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 };

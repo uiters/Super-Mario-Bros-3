@@ -336,7 +336,6 @@ void CGoomba::SetState(int state)
 		goombaWalkingTimer.Start();
 		SetSpeedDirection(mario->x);
 		ay = GOOMBA_GRAVITY;
-		DebugOut(L"OK nha");
 		break;
 	case GOOMBA_SUPER_STATE_FLYING:
 		ay = -0.0005f;
@@ -348,41 +347,36 @@ void CGoomba::SetState(int state)
 }
 
 void CGoomba::HandleBigGoomba() {
+
 	if (tag == GOOMBA_SUPER) {
-		if (goombaWalkingTimer.IsStarted() && goombaWalkingTimer.ElapsedTime() >= GOOMBA_BIG_TIME_WALKING && !flyingTimer.IsStarted()) {
+
+		if (goombaWalkingTimer.ElapsedTime() >= GOOMBA_BIG_TIME_WALKING && goombaWalkingTimer.IsStarted() && !droppingTimer.IsStarted()) {
 			flyingTimer.Start();
-			y -= GOOMBA_BIG_BBOX_WINGS_HEIGHT - GOOMBA_BIG_BBOX_HEIGHT + 2;
 			goombaWalkingTimer.Reset();
-			DebugOut(L"[IN]goombaWalkingTimer::%d\n");
+			y -= GOOMBA_BIG_BBOX_WINGS_HEIGHT - GOOMBA_BIG_BBOX_HEIGHT + 2;
+			//DebugOut(L"Waling\n");
 		}
 
-		if (flyingTimer.IsStarted() && flyingTimer.ElapsedTime() >= GOOMBA_BIG_TIME_READY_FLY && !droppingTimer.IsStarted()) {
+		if (flyingTimer.ElapsedTime() >= GOOMBA_BIG_TIME_READY_FLY && flyingTimer.IsStarted() && !droppingTimer.IsStarted()) {
 			flyingTimer.Reset();
 			SetState(GOOMBA_SUPER_STATE_FLYING);
-			DebugOut(L"[IN]flyingTimer::%d\n");
-
+			//DebugOut(L"Fly\n");
 		}
 
-		if (droppingTimer.IsStarted() && droppingTimer.ElapsedTime() >= GOOMBA_BIG_TIME_DROP) {
-			DebugOut(L"[IN]droppingTimer::%d\n");
+		if (droppingTimer.IsStarted() && droppingTimer.ElapsedTime() >= GOOMBA_BIG_TIME_DROP && createTinyGoomba < MAX_TINY_GOOMBA) {
 			createTinyGoomba++;
 			CreatePoopGoomba();
 		}
 
 		if (createTinyGoomba > MAX_TINY_GOOMBA) {
-			ay = GOOMBA_GRAVITY;
 			droppingTimer.Reset();
 			createTinyGoomba = 0;
 			SetState(GOOMBA_SUPER_STATE_WALKING);
 		}
 
-		else if (createTinyGoomba <= MAX_TINY_GOOMBA && !droppingTimer.IsStarted()) {
-			droppingTimer.Start();
-		}
-
 		//DebugOut(L"[POOP_GOOMBA]::%d\n");
 
-		//! LIMIT Y
+		//LIMIT Y
 		if (y <= 300.0f) {
 			if (vy < 0) {
 				vy = 0.03f;
@@ -410,7 +404,11 @@ void CGoomba::CreatePoopGoomba() {
 	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
 	LPANIMATION_SET ani_set = animation_sets->Get(GOOMBA_ANISET_ID);
 	CTinyGoomba* pGoomba = new CTinyGoomba();
+
 	pGoomba->SetAnimationSet(ani_set);
 	pGoomba->SetPosition(x, y);
 	currentScene->GetUnit()->AddUnit(pGoomba, currentScene->GetGrid());
+
+	DebugOut(L"[POOP_GOOMBA]::\n");
+
 }

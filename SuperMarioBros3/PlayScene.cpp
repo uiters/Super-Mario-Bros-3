@@ -27,6 +27,7 @@
 #include "PlantBullet.h"
 #include "PlantBullet.h"
 #include "BackUp.h"
+#include "TinyGoomba.h"
 
 
 using namespace std;
@@ -463,7 +464,8 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CLeaf*> (obj) && obj->state == LEAF_STATE_FALLING
 			|| dynamic_cast<CScore*>(obj) || dynamic_cast<CPiece*>(obj)
 			|| dynamic_cast<CCard*>(obj)
-			|| dynamic_cast<CBoomerang*>(obj))
+			|| dynamic_cast<CBoomerang*>(obj)
+			|| dynamic_cast<CTinyGoomba*>(obj))
 			objectsRenderThird.push_back(obj);
 	}
 

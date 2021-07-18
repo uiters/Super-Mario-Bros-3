@@ -1310,6 +1310,6 @@ void CMario::TelePort() {
 	if (scene == 1)
 		SetPosition(2258, 50);
 	else if (scene == 3)
-		SetPosition(2108, 380);
+		SetPosition(2090, 380);
 
 }
