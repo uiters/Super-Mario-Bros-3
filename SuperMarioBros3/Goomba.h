@@ -17,8 +17,9 @@
 #define GOOMBA_TIME_DIYING				250
 #define GOOMBA_TIME_DIYING_BY_TAIL		1000
 // SUPER GOOMBA
-#define GOOMBA_BIG_TIME_WALKING		5000
+#define GOOMBA_BIG_TIME_WALKING		50
 #define GOOMBA_BIG_TIME_READY_FLY	5000
+#define GOOMBA_BIG_TIME_DROP	1000
 
 #define GOOMBA_RED_JUMPING_STACKS	3
 
@@ -44,8 +45,8 @@
 #define GOOMBA_STATE_RED_WINGSWALKING	500
 #define GOOMBA_STATE_YELLOW_WINGSWALKING 600
 // SUPER GOOMBA
-#define GOOMBA_STATE_FLYING				550
-#define GOOMBA_STATE_WINGSWALKING		600
+#define GOOMBA_SUPER_STATE_FLYING		550
+#define GOOMBA_SUPER_STATE_WALKING		600
 #define GOOMBA_STATE_WINGSJUMPING		650
 
 #define GOOMBA_NORMAL_ANI_WALKING		0
@@ -59,6 +60,8 @@
 #define GOOMBA_ANI_WALK	7
 #define GOOMBA_ANI_WING_WALK	8
 
+#define GOOMBA_ANISET_ID	2
+#define MAX_TINY_GOOMBA		4
 
 #define GOOMBA_NORMAL			0
 #define GOOMBA_RED				1
@@ -70,17 +73,26 @@ class CGoomba : public CGameObject
 	Timer dyingTimer;
 	Timer chasingTimer;
 	Timer walkingTimer;
+
 	bool isDying = false;
 	bool isWhackedDying = false;
 	bool isJumping = false;
 	bool isHighJumping = false;
 	int jumpingStacks = 0;
+	// super goomba
+	Timer flyingTimer;
+	Timer goombaWalkingTimer;
+	Timer droppingTimer;
+	int createTinyGoomba = 0;
+
 public:
-	CGoomba();
+	CGoomba(int tag);
 	virtual void SetState(int state);
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 	void StartDying(bool l = false) { dyingTimer.Start(); if (l) isWhackedDying = true; else isDying = true; }
-	//void HandleBigGoomba();
+	void HandleBigGoomba();
+	void SetSpeedDirection(int b);
+	void CreatePoopGoomba();
 };

@@ -216,10 +216,9 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 			DebugOut(L"[INFO] Player object created!\n");
 			break;
 		case OBJECT_TYPE_GOOMBA:
-			obj = new CGoomba();
+			obj = new CGoomba(tag);
 			obj->SetTag(tag);
 			obj->SetType(MOVING);
-
 			break;
 		case OBJECT_TYPE_BRICK:
 			obj = new CBrick();
@@ -280,7 +279,6 @@ void CPlayScene::ParseObjFromFile(LPCWSTR path)
 			break;
 		case OBJECT_TYPE_CARD:
 			obj = new CCard();
-			DebugOut(L"created card x=%f\n y=%f\n", x, y);
 			break;
 		case OBJECT_TYPE_PORTAL:
 		{

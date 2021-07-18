@@ -10,6 +10,11 @@ CBoomerangBrother::CBoomerangBrother()
 }
 void CBoomerangBrother::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
+	if (state == BOOMERANG_BROTHER_STATE_DIE)
+	{
+		left = top = right = bottom = 0;
+		return;
+	}
 	left = x;
 	top = y;
 	right = left + BOOMERANG_BROTHER_BBOX_WIDTH;

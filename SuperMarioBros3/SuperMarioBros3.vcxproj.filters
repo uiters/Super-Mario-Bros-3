@@ -184,6 +184,9 @@
     <ClCompile Include="IntroGround.cpp">
       <Filter>Map Objects\Bricks</Filter>
     </ClCompile>
+    <ClCompile Include="TinyGoomba.cpp">
+      <Filter>Map Objects\Enemies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Brick.h">
@@ -323,6 +326,9 @@
     </ClInclude>
     <ClInclude Include="IntroGround.h">
       <Filter>Map Objects\Bricks</Filter>
+    </ClInclude>
+    <ClInclude Include="TinyGoomba.h">
+      <Filter>Map Objects\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

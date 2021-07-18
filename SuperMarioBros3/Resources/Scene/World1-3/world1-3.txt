@@ -290,8 +290,8 @@
 4	1966	290	15	2	14
 4	1982	290	15	2	14
 # === Boomerang Koopas ===
-48	334	390	80	3	2
-48	1372	390	80	3	10
+#48	334	390	80	3	2
+#48	1372	390	80	3	10
 # --- SCENE PORTAL ----
 # x=542 y=368	startx=100 start y=418
 #type	x	y	ani	scene	tag start_x start_y	pipeUp	row	col

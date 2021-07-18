@@ -142,8 +142,11 @@ void Grid::Get(Camera* cam, vector<Unit*>& listUnits)
 {
 	float cam_x = cam->GetCameraPosition().x;
 	float cam_y = cam->GetCameraPosition().y;
-	int startCol = (int)((cam_x - VIEWPORT_PUSHBACK * 2) / CELL_WIDTH);
+	/*int startCol = (int)((cam_x - VIEWPORT_PUSHBACK * 2) / CELL_WIDTH);
 	int endCol = (int)ceil((cam_x + SCREEN_WIDTH + VIEWPORT_PUSHBACK * 2) / CELL_WIDTH);
+	int ENDCOL = (int)ceil((mapWidth) / CELL_WIDTH);*/
+	int startCol = int(cam_x / CELL_WIDTH);
+	int endCol = (int)ceil((cam_x + 272) / CELL_WIDTH);
 	int ENDCOL = (int)ceil((mapWidth) / CELL_WIDTH);
 	if (endCol > ENDCOL)
 		endCol = ENDCOL;
@@ -166,8 +169,10 @@ void Grid::Get(Camera* cam, vector<Unit*>& listUnits)
 			{
 				if (unit->GetObj()->isDestroyed == false)
 				{
+					/*DebugOut(L"ROW:: %d\n", i);
+					DebugOut(L"COL :: %d\n", j);*/
 					listUnits.push_back(unit);
-					unit = unit->next;			
+					unit = unit->next;
 				}
 				else
 				{

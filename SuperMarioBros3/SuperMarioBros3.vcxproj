@@ -185,6 +185,7 @@
     <ClCompile Include="Tanooki.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="TinyGoomba.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="WorldMapObject.cpp" />
     <ClCompile Include="WorldPlayer.cpp" />
@@ -233,6 +234,7 @@
     <ClInclude Include="Tanooki.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="TinyGoomba.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="WorldMapObject.h" />
     <ClInclude Include="WorldPlayer.h" />
