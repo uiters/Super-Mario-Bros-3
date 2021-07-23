@@ -13,7 +13,7 @@
 
 #include "PlayScene.h"
 
-CGame *game;
+CGame* game;
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -38,7 +38,7 @@ void Update(DWORD dt)
 }
 
 /*
-	Render a frame 
+	Render a frame
 */
 void Render()
 {
@@ -46,7 +46,7 @@ void Render()
 	LPDIRECT3DSURFACE9 bb = game->GetBackBuffer();
 	LPD3DXSPRITE spriteHandler = game->GetSpriteHandler();
 
-	if (d3ddv->BeginScene())
+	if (d3ddv->BeginScene() != NULL)
 	{
 		// Clear back buffer with a color
 		d3ddv->ColorFill(bb, NULL, BACKGROUND_COLOR);
@@ -97,7 +97,7 @@ HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int Sc
 			hInstance,
 			NULL);
 
-	if (!hWnd) 
+	if (!hWnd)
 	{
 		OutputDebugString(L"[ERROR] CreateWindow failed");
 		DWORD ErrCode = GetLastError();
@@ -135,12 +135,12 @@ int Run()
 			frameStart = now;
 
 			game->ProcessKeyboard();
-			
+
 			Update(dt);
 			Render();
 		}
 		else
-			Sleep(tickPerFrame - dt);	
+			Sleep(tickPerFrame - dt);
 	}
 
 	return 1;
@@ -156,7 +156,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	game->Load(L"Resources\\Scene\\mario-sample.txt");
 
-	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH*2, SCREEN_HEIGHT*2, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
+	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 
 	Run();
 

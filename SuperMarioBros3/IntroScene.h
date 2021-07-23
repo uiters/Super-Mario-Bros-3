@@ -56,7 +56,7 @@ public:
 	CMario* mario = nullptr;
 	CMario* luigi = nullptr;
 	CMario* player;*/
-	vector<LPGAMEOBJECT> objects;
+	vector<LPGAMEOBJECT> objects ;
 	LPANIMATION_SET BackGround;
 	LPANIMATION Three;
 	LPANIMATION_SET Arrow;

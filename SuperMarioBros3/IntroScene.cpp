@@ -17,6 +17,9 @@ CIntroScene::CIntroScene(int id, LPCWSTR filePath) :
 	CScene(id, filePath)
 {
 	key_handler = new IntroSceneKeyHandler(this);
+	BackGround = nullptr;
+	Three = nullptr;
+	Arrow = nullptr;
 	//StartScrolling();
 }
 

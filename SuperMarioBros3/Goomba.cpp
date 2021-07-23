@@ -350,45 +350,45 @@ void CGoomba::SetState(int state)
 
 void CGoomba::HandleBigGoomba() {
 
-	//if (tag == GOOMBA_SUPER) {
+	if (tag == GOOMBA_SUPER) {
 
-	//	if (goombaWalkingTimer.ElapsedTime() >= GOOMBA_BIG_TIME_WALKING && goombaWalkingTimer.IsStarted() && !droppingTimer.IsStarted()) {
-	//		flyingTimer.Start();
-	//		goombaWalkingTimer.Reset();
-	//		y -= GOOMBA_BIG_BBOX_WINGS_HEIGHT - GOOMBA_BIG_BBOX_HEIGHT + 2;
-	//		//DebugOut(L"Waling\n");
-	//	}
+		if (goombaWalkingTimer.ElapsedTime() >= GOOMBA_BIG_TIME_WALKING && goombaWalkingTimer.IsStarted() && !droppingTimer.IsStarted()) {
+			flyingTimer.Start();
+			goombaWalkingTimer.Reset();
+			y -= GOOMBA_BIG_BBOX_WINGS_HEIGHT - GOOMBA_BIG_BBOX_HEIGHT + 2;
+			//DebugOut(L"Waling\n");
+		}
 
-	//	if (flyingTimer.ElapsedTime() >= GOOMBA_BIG_TIME_READY_FLY && flyingTimer.IsStarted() && !droppingTimer.IsStarted()) {
-	//		flyingTimer.Reset();
-	//		SetState(GOOMBA_SUPER_STATE_FLYING);
-	//		//DebugOut(L"Fly\n");
-	//	}
+		if (flyingTimer.ElapsedTime() >= GOOMBA_BIG_TIME_READY_FLY && flyingTimer.IsStarted() && !droppingTimer.IsStarted()) {
+			flyingTimer.Reset();
+			SetState(GOOMBA_SUPER_STATE_FLYING);
+			//DebugOut(L"Fly\n");
+		}
 
-	//	if (droppingTimer.IsStarted() && droppingTimer.ElapsedTime() >= GOOMBA_BIG_TIME_DROP && createTinyGoomba < MAX_TINY_GOOMBA) {
-	//		droppingTimer.Start();
-	//		createTinyGoomba++;
-	//		CreatePoopGoomba();
-	//	}
-	//	else if (createTinyGoomba >= MAX_TINY_GOOMBA)
-	//	{
-	//		droppingTimer.Reset();
-	//		createTinyGoomba = 0;
-	//		SetState(GOOMBA_SUPER_STATE_WALKING);
-	//		//DebugOut(L"[LIMIT BOOM]::%d\n");
-	//	}
+		if (droppingTimer.IsStarted() && droppingTimer.ElapsedTime() >= GOOMBA_BIG_TIME_DROP && createTinyGoomba < MAX_TINY_GOOMBA) {
+			droppingTimer.Start();
+			createTinyGoomba++;
+			CreatePoopGoomba();
+		}
+		else if (createTinyGoomba >= MAX_TINY_GOOMBA)
+		{
+			droppingTimer.Reset();
+			createTinyGoomba = 0;
+			SetState(GOOMBA_SUPER_STATE_WALKING);
+			//DebugOut(L"[LIMIT BOOM]::%d\n");
+		}
 
-	//	//LIMIT Y
-	//	if (y <= 300.0f) {
-	//		if (vy < 0) {
-	//			vy = 0.03f;
-	//		}
-	//	}
+		//LIMIT Y
+		if (y <= 300.0f) {
+			if (vy < 0) {
+				vy = 0.03f;
+			}
+		}
 
-	//	if (vy <= -0.07f) {
-	//		vy = -0.07f;
-	//	}
-	//}
+		if (vy <= -0.07f) {
+			vy = -0.07f;
+		}
+	}
 }
 // SUPER GOOMBA ONLY
 void CGoomba::SetSpeedDirection(float condition) {

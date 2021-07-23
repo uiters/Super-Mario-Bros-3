@@ -63,6 +63,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 	key_handler = new CPlaySceneKeyHandler(this);
 	cam = Camera::GetInstance();
 	cam->SetCameraPosition(0, 0);
+	grid = nullptr;
+	unit = nullptr;
 }
 
 /*
