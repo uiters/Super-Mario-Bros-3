@@ -11,7 +11,7 @@
     <img src="https://travis-ci.org/cuongw/dotfiles.svg?branch=master"/>
   </a>
   
-  <a href="https://github.com/tvc12/Mega-Man-X3/blob/master/LICENSE">
+  <a href="#">
     <img src="https://img.shields.io/github/license/tvc12/Mega-Man-X3.svg"/>
   </a>
 </p>
@@ -26,11 +26,8 @@
   </h4>
 </div>
 
-
-![Uploading mario.gif…]()
-
 <p align="center">
-<img src="https://image.thanhnien.vn/1024/uploaded/duongntt/2020_09_16/super-mario-bros-3-title-screen-clean-no-menu_egxn.jpg" width="400"/>
+<img src="https://user-images.githubusercontent.com/43579640/126889778-6745b540-55d0-4e5d-8122-7d08a20e67dc.gif" width="400"/>
 </p>
 
 
