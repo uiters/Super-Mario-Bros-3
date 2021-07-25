@@ -12,7 +12,7 @@ void CTinyGoomba::GetBoundingBox(float& left, float& top, float& right, float& b
 
 void CTinyGoomba::Render() {
 	animation_set->at(9)->Render(x, y);
-	RenderBoundingBox(100);
+	RenderBoundingBox();
 }
 
 void CTinyGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {

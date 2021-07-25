@@ -1106,7 +1106,7 @@ void CMario::Render()
 	{
 		animation_set->at(ani)->Render(x, y, alpha);
 	}
-	RenderBoundingBox(100);
+	RenderBoundingBox();
 	if (tailTimer.IsStarted())
 		tail->Render();
 }

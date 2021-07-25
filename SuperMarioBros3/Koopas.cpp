@@ -388,7 +388,7 @@ void CKoopas::Render()
 	}
 	animation_set->at(ani)->Render(x, y);
 
-	RenderBoundingBox(75);
+	RenderBoundingBox();
 }
 
 void CKoopas::SetState(int state)
